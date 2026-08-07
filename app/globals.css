@@ -13,7 +13,8 @@ button, input, select { font:inherit; }
 .nav-links a:hover { opacity:.55; }
 .alpha { border:1px solid var(--ink); border-radius:99px; padding:7px 12px; font:500 10px "DM Mono"; letter-spacing:.08em; }
 .hero { min-height:680px; padding:105px 8vw 90px; position:relative; overflow:hidden; border-bottom:1px solid var(--line); }
-.hero:after { content:""; position:absolute; width:460px; height:460px; border:1px solid var(--line); border-radius:50%; right:-100px; bottom:-200px; box-shadow:0 0 0 55px var(--paper),0 0 0 56px var(--line),0 0 0 110px var(--paper),0 0 0 111px var(--line); }
+.hero:after { content:""; position:absolute; z-index:0; width:460px; height:460px; border:1px solid var(--line); border-radius:50%; right:-100px; bottom:-200px; box-shadow:0 0 0 55px var(--paper),0 0 0 56px var(--line),0 0 0 110px var(--paper),0 0 0 111px var(--line); pointer-events:none; }
+.hero > * { position:relative; z-index:2; }
 .eyebrow,.section-kicker { font:500 11px "DM Mono"; letter-spacing:.12em; text-transform:uppercase; display:flex; align-items:center; gap:12px; }
 .eyebrow span { width:32px; height:2px; background:var(--orange); }
 h1 { font-size:clamp(60px,9vw,132px); line-height:.86; letter-spacing:-.065em; max-width:1100px; margin:35px 0 36px; font-weight:600; }
@@ -21,7 +22,7 @@ h1 em,.method h2 em { font-family:"Playfair Display",serif; font-weight:600; col
 .lede { max-width:530px; font-size:19px; line-height:1.55; margin:0 0 36px; }
 .primary { display:inline-flex; gap:46px; align-items:center; background:var(--ink); color:white; padding:17px 20px; font:600 13px "DM Mono"; text-transform:uppercase; }
 .primary span { color:var(--lime); font-size:20px; }
-.hero-stamp { position:absolute; right:8vw; top:115px; width:150px; height:150px; border:1px solid var(--ink); border-radius:50%; display:flex; flex-direction:column; justify-content:center; align-items:center; transform:rotate(7deg); z-index:1; }
+.hero-stamp { position:absolute; right:8vw; top:115px; width:150px; height:150px; border:1px solid var(--ink); border-radius:50%; display:flex; flex-direction:column; justify-content:center; align-items:center; transform:rotate(7deg); z-index:3; }
 .hero-stamp span,.hero-stamp small { font:9px "DM Mono"; letter-spacing:.08em; }
 .hero-stamp strong { font:500 18px/1.1 "DM Mono"; text-align:center; margin:8px; }
 .estimator { padding:90px 8vw 105px; }
