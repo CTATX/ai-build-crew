@@ -44,6 +44,8 @@ The complete governed workflow works without an API key. The recommendation and 
 
 ## Evidence and artifacts
 
+- [Alpha v0.1.0 release notes](RELEASE_NOTES.md)
+- [Custom-domain setup](artifacts/CUSTOM_DOMAIN_SETUP.md)
 - [Evaluation results](EVALUATION.md)
 - [Future-state requirements](FUTURE_STATE.md)
 - [Original product requirements document](artifacts/ORIGINAL_PRD.md)
