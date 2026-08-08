@@ -7,6 +7,8 @@ AI Build Crew is a governed alpha decision workbench for product builders. It gu
 ## Alpha scope
 
 - Prompt-first fast, guided, and synthetic-example routes.
+- A persistent workload prompt with explicit input/output tokens per call.
+- An optional hard monthly budget ceiling; the system blocks rather than recommends an over-budget model.
 - Known / Assumed / Unknown provenance for every planning decision.
 - Low, expected, and high workload scenarios.
 - Explainable model eligibility based on task requirements and hard capability constraints.

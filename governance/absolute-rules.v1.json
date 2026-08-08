@@ -1,5 +1,5 @@
 {
-  "version": "governance-1.0.0",
+  "version": "governance-1.1.0",
   "effectiveDate": "2026-08-08",
   "owner": "CT",
   "rules": [
@@ -12,6 +12,7 @@
     { "id": "GOV-007", "severity": "WARN", "condition": "excessiveLoops", "message": "The workflow uses more than eight model calls per request." },
     { "id": "GOV-008", "severity": "BLOCK", "condition": "unsafeLoops", "message": "More than twenty model calls per request exceeds the alpha control limit." },
     { "id": "GOV-009", "severity": "BLOCK", "condition": "evaluationFailed", "message": "One or more deterministic evaluation cases failed." },
-    { "id": "GOV-010", "severity": "BLOCK", "condition": "auditMismatch", "message": "Independent cost recomputation did not match." }
+    { "id": "GOV-010", "severity": "BLOCK", "condition": "auditMismatch", "message": "Independent cost recomputation did not match." },
+    { "id": "GOV-011", "severity": "BLOCK", "condition": "budgetExceeded", "message": "No evidence-qualified model fits the stated monthly budget. Change the workload, budget, or requirements before proceeding." }
   ]
 }

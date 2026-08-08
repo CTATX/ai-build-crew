@@ -12,7 +12,7 @@ Evaluation date: August 8, 2026
 6. A manual comparison does not silently replace the recommended starting point.
 7. Stale pricing, failed evaluation, audit mismatch, unsafe loops, or no eligible model blocks finalization.
 8. Assumptions remain visible and create a warning.
-9. Candidate ordering cannot change the deterministic recommendation.
+9. Candidate ordering cannot change the deterministic recommendation, and a stated monthly ceiling cannot be exceeded.
 10. No AI key or generative endpoint is required.
 
 ## Results
@@ -27,6 +27,7 @@ Evaluation date: August 8, 2026
 | Governance fail-closed | Pass | High risk and unknown sensitivity require review; stale pricing and unsafe loops block. |
 | Capability boundary | Pass | Unsupported modality blocks instead of forcing a candidate. |
 | Ranking stability | Pass | Candidate order does not change the recommendation. |
+| Budget boundary | Pass | A ceiling below every evidence-qualified option blocks with GOV-011; a sufficient ceiling permits the same deterministic recommendation. |
 | Provider neutrality | Pass | Three providers are cost-visible; unevaluated Google and Anthropic entries cannot enter the recommendation ranking. |
 | Secret boundary | Pass | No key or generative route is required by the app or static hub. |
 

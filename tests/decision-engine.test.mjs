@@ -13,6 +13,7 @@ const base = Object.freeze({
   outputTokens: 650,
   cache: 20,
   calls: 1,
+  budget: 0,
   asOfDate: "2026-08-08",
   assumptions: [],
 });
@@ -75,4 +76,13 @@ test("candidate ordering cannot change deterministic recommendation", () => {
   assert.deepEqual(result.coverage.evaluatedProviders, ["OpenAI"]);
   assert.ok(result.catalogEligible.some((model) => model.id === "gemini-3.6-flash"));
   assert.ok(!result.eligible.some((model) => model.provider !== "OpenAI"));
+
+  const blocked = analyzeWorkload({ ...base, budget: 1 });
+  assert.equal(blocked.recommendation, null);
+  assert.equal(blocked.disposition, "BLOCKED");
+  assert.ok(blocked.governance.findings.some((finding) => finding.id === "GOV-011"));
+
+  const allowed = analyzeWorkload({ ...base, budget: 400 });
+  assert.equal(allowed.recommendation.id, "gpt-5.6-terra");
+  assert.ok(allowed.scenarios.expected.monthly <= 400);
 });

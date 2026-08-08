@@ -33,13 +33,14 @@ export default function Home() {
   const [outputTokens, setOutputTokens] = useState(650);
   const [cache, setCache] = useState(20);
   const [calls, setCalls] = useState(1);
+  const [budget, setBudget] = useState(0);
   const [assumptions, setAssumptions] = useState(["requests", "inputTokens", "outputTokens", "cache", "calls"]);
   const [selected, setSelected] = useState<string | null>(null);
   const [providerFilter, setProviderFilter] = useState("All");
   const [decision, setDecision] = useState("Not decided");
   const [overrideReason, setOverrideReason] = useState("");
 
-  const result = useMemo(() => analyzeWorkload({ task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, assumptions, asOfDate: "2026-08-08" }), [task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, assumptions]);
+  const result = useMemo(() => analyzeWorkload({ task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, budget, assumptions, asOfDate: "2026-08-08" }), [task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, budget, assumptions]);
   const active = models.find((model) => model.id === selected) ?? result.recommendation ?? models[0];
   const activeScenarios = { low: costFor(active, result.workload, 0.75), expected: costFor(active, result.workload, 1), high: costFor(active, result.workload, 1.35) };
   const visibleModels = providerFilter === "All" ? models : models.filter((model) => model.provider === providerFilter);
@@ -54,7 +55,7 @@ export default function Home() {
     if (route === "sample") {
       setIdea("A product team needs a recurring model to analyze product requirements and draft decision briefs.");
       setTask("Product analysis"); setRisk("Medium"); setDataSensitivity("Public"); setModality("text");
-      setRequests(1000); setInputTokens(2400); setOutputTokens(650); setCache(20); setCalls(1);
+      setRequests(1000); setInputTokens(2400); setOutputTokens(650); setCache(20); setCalls(1); setBudget(0);
       setAssumptions([]);
       setStage("estimate");
     } else if (route === "known") {
@@ -81,7 +82,7 @@ export default function Home() {
     <main>
       <nav className="topbar">
         <a className="brand" href="#top" aria-label="AI Build Crew home"><span className="brand-mark">A</span> AI Build Crew</a>
-        <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="#governance">Governance</a><a href="#artifacts">Artifacts</a></div>
+        <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="#governance">Governance</a><a href="#artifacts">Artifacts</a><a href="#about">About</a></div>
         <span className="alpha">Alpha · 02</span>
       </nav>
 
@@ -121,6 +122,7 @@ export default function Home() {
         <div className="section-kicker">02 / FREEZE THE WORKLOAD</div>
         <div className="workbench">
           <div className="inputs">
+            <div className="field wide prompt-input"><label htmlFor="workload-prompt">What are you building?</label><textarea id="workload-prompt" value={idea} onChange={(e) => { setIdea(e.target.value); setDecision("Not decided"); }} placeholder="Describe the product, user, workflow, and what the model needs to do." /><small>Context only—the confirmed fields below drive the calculation. The estimator never invents token or safety values from this text.</small></div>
             <div className="field wide"><label htmlFor="task">Work to perform</label><select id="task" value={task} onChange={(e) => { setTask(e.target.value); setSelected(null); setDecision("Not decided"); }}>{Object.keys(taskRequirements).map((item) => <option key={item}>{item}</option>)}</select></div>
             <div className="field"><label htmlFor="risk">Consequence of error</label><select id="risk" value={risk} onChange={(e) => { setRisk(e.target.value); setSelected(null); setDecision("Not decided"); }}><option>Low</option><option>Medium</option><option>High</option></select></div>
             <div className="field"><label htmlFor="data">Data class</label><select id="data" value={dataSensitivity} onChange={(e) => setDataSensitivity(e.target.value)}><option>Unknown</option><option>Public</option><option>Internal</option><option>Sensitive</option><option>Protected</option></select></div>
@@ -131,6 +133,7 @@ export default function Home() {
             <NumberField label="Output tokens / call" value={outputTokens} setValue={(v) => markKnown("outputTokens", v, setOutputTokens)} min={1} assumed={assumptions.includes("outputTokens")} />
             <NumberField label="Cached input %" value={cache} setValue={(v) => markKnown("cache", v, setCache)} min={0} max={100} assumed={assumptions.includes("cache")} />
             <NumberField label="Model calls / request" value={calls} setValue={(v) => markKnown("calls", v, setCalls)} min={1} max={50} assumed={assumptions.includes("calls")} />
+            <NumberField label="Maximum monthly budget" value={budget} setValue={(v) => { setBudget(v); setSelected(null); setDecision("Not decided"); }} min={0} prefix="$" hint="0 means no budget ceiling" />
             <div className="ledger wide"><b>PROVENANCE LEDGER</b><span>{assumptions.length ? `Assumed: ${assumptions.join(", ")}` : "Known: all planning values confirmed by CT"}</span><span>Unknown safety fields trigger review; they never default to safe.</span></div>
           </div>
 
@@ -145,6 +148,7 @@ export default function Home() {
               <div><small>EXPECTED / MONTH</small><strong>{money(activeScenarios.expected.monthly)}</strong></div>
               <div><small>HIGH / MONTH</small><strong>{money(activeScenarios.high.monthly)}</strong></div>
             </div>
+            <div className={`budget-status ${budget > 0 && activeScenarios.expected.monthly > budget ? "over" : ""}`}><span>{budget > 0 ? `Monthly ceiling ${money(budget)}` : "No monthly budget ceiling set"}</span>{budget > 0 && <strong>{activeScenarios.expected.monthly <= budget ? `${money(budget - activeScenarios.expected.monthly)} remaining` : `${money(activeScenarios.expected.monthly - budget)} over budget`}</strong>}</div>
             <div className="brief deterministic" aria-live="polite">{activeBrief}</div>
             <div className="version-line">Catalog {result.catalog.version} · Engine {result.audit.engineVersion} · Evidence {active.evidenceStatus}</div>
           </aside>
@@ -175,7 +179,8 @@ export default function Home() {
             const expected = costFor(model, result.workload, 1).monthly;
             const catalogFit = result.catalogEligible.some((item: { id: string }) => item.id === model.id);
             const rankFit = result.eligible.some((item: { id: string }) => item.id === model.id);
-            const status = !catalogFit ? "EXCLUDED" : rankFit ? "RANK-ELIGIBLE" : model.recommendationReady ? "BELOW RULE GATE" : "EVAL REQUIRED";
+            const overBudget = budget > 0 && expected > budget;
+            const status = !catalogFit ? "EXCLUDED" : overBudget && model.recommendationReady ? "OVER BUDGET" : rankFit ? "RANK-ELIGIBLE" : model.recommendationReady ? "BELOW RULE GATE" : "EVAL REQUIRED";
             return <button className={`table-row ${active.id === model.id ? "active" : ""}`} key={model.id} onClick={() => setSelected(model.id)}><span><i className={model.accent} />{model.name}</span><span>{model.provider}</span><span>{money(expected)}</span><span>{model.evidenceStatus}</span><span className={rankFit ? "fit" : catalogFit ? "pending" : "miss"}>{status}</span></button>;
           })}
         </div>
@@ -188,7 +193,12 @@ export default function Home() {
         <div className="artifact-links"><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/ORIGINAL_PRD.md">Original product PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/MAVEN_AGENTIC_AI_PRD.md">Maven AI PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_Build_Crew_Agentic_AI_PRD.xlsx">PRD workbook ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/WORKFLOW.md">Workflow ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/governance/GOVERNANCE_AND_EVALUATION.md">Governance ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/EVALUATION.md">Evaluation ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_BUILD_CREW_OVERVIEW.pptx">Presentation ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/DEMO_SCRIPT.md">2–3 minute script ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/BACKLOG.md">Provider backlog ↗</a></div>
       </section>
 
-      <footer><span>AI BUILD CREW · GOVERNED ALPHA</span><p><b>Authoritative:</b> sourced catalog fields and deterministic math. <b>Evaluated:</b> shared workload evidence. <b>Decision owner:</b> CT.</p><a href="#top">Back to top ↑</a></footer>
+      <section className="about-section" id="about">
+        <div className="section-kicker">06 / ABOUT THE LAB</div>
+        <div className="about-grid"><h2>Built for builders who want evidence before commitment.</h2><div><p>AI Build Crew turns a rough product idea into a transparent workload estimate, an evidence-gated model comparison, and a governed decision that stays human-owned.</p><p className="badlabz">Developed by <a href="https://badlabz.com">BadLabz.com ↗</a> :)</p></div></div>
+      </section>
+
+      <footer><span>AI BUILD CREW · BADLABZ.COM</span><p><b>Authoritative:</b> sourced catalog fields and deterministic math. <b>Evaluated:</b> shared workload evidence. <b>Decision owner:</b> CT.</p><a href="#top">Back to top ↑</a></footer>
     </main>
   );
 }
@@ -198,8 +208,8 @@ function GuidedQuestion(props: { index: number; task: string; setTask: (v: strin
   return <div className="guided-card"><span>QUESTION {current.number} OF 05</span><h3>{current.prompt}</h3>{current.id === "task" && <select value={props.task} onChange={(e) => props.setTask(e.target.value)}>{Object.keys(taskRequirements).map((item) => <option key={item}>{item}</option>)}</select>}{current.id === "risk" && <select value={props.risk} onChange={(e) => props.setRisk(e.target.value)}><option>Low</option><option>Medium</option><option>High</option></select>}{current.id === "data" && <><select value={props.dataSensitivity} onChange={(e) => props.setDataSensitivity(e.target.value)}><option>Unknown</option><option>Public</option><option>Internal</option><option>Sensitive</option><option>Protected</option></select><label className="guided-check"><input type="checkbox" checked={props.regulated} onChange={(e) => props.setRegulated(e.target.checked)} /> Regulated domain or decision</label></>}{current.id === "modality" && <select value={props.modality} onChange={(e) => props.setModality(e.target.value)}><option value="text">Text</option><option value="image">Image</option><option value="audio">Audio</option><option value="video">Video</option></select>}{current.id === "usage" && <p>Choose “Continue” to use the visible planning assumptions, or “Estimate now” to stop questioning and review them directly.</p>}<div className="guided-actions"><button onClick={props.advance}>Continue</button><button onClick={props.estimateNow}>Estimate now</button></div></div>;
 }
 
-function NumberField({ label, value, setValue, min, max, assumed }: { label: string; value: number; setValue: (value: number) => void; min: number; max?: number; assumed?: boolean }) {
-  return <div className="field"><label>{label} {assumed && <em>ASSUMED</em>}</label><div className="number-wrap"><input aria-label={label} type="number" value={value} min={min} max={max} onChange={(e) => setValue(Math.max(min, max ? Math.min(max, Number(e.target.value)) : Number(e.target.value)))} /><span>{label.includes("%") ? "%" : ""}</span></div></div>;
+function NumberField({ label, value, setValue, min, max, assumed, prefix, hint }: { label: string; value: number; setValue: (value: number) => void; min: number; max?: number; assumed?: boolean; prefix?: string; hint?: string }) {
+  return <div className="field"><label>{label} {assumed && <em>ASSUMED</em>}</label><div className="number-wrap">{prefix && <span>{prefix}</span>}<input aria-label={label} type="number" value={value} min={min} max={max} onChange={(e) => setValue(Math.max(min, max ? Math.min(max, Number(e.target.value)) : Number(e.target.value)))} /><span>{label.includes("%") ? "%" : ""}</span></div>{hint && <small className="field-hint">{hint}</small>}</div>;
 }
 
 function StatusStep({ number, name, status, detail }: { number: string; name: string; status: string; detail: string }) {

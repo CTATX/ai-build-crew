@@ -1,6 +1,6 @@
 # AI Build Crew governance and evaluation
 
-Authoritative version: 1.0  
+Authoritative version: 1.1  
 Effective date: 2026-08-08  
 Owner and final decision maker: CT
 
@@ -32,6 +32,7 @@ This operating model adapts the TeamOS discovery-first pattern: collect evidence
 10. Model-generated prose cannot change calculations, rule findings, status, or approval.
 11. The evaluation and governance functions cannot mutate the frozen workload or decision result.
 12. CT must approve, edit and rerun, reject, or provide an override reason before a decision is final.
+13. A stated monthly budget is a hard eligibility constraint; the system must block rather than recommend an evidence-qualified model above that ceiling.
 
 ## Specialist contracts
 
@@ -52,6 +53,7 @@ A result can be presented as `READY_FOR_CT_DECISION` only when:
 
 - required intake fields are present or transparently assumed;
 - at least one model is rule-eligible;
+- at least one evidence-qualified model fits the stated monthly budget when a ceiling is provided;
 - the catalog is within its freshness window;
 - cost recomputation matches;
 - evaluation contains no failed case;
