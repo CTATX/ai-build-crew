@@ -24,7 +24,7 @@ export default function Home() {
   const [question, setQuestion] = useState(0);
   const [idea, setIdea] = useState("");
   const [task, setTask] = useState("Product analysis");
-  const [risk, setRisk] = useState("Medium");
+  const [risk, setRisk] = useState("Unknown");
   const [dataSensitivity, setDataSensitivity] = useState("Unknown");
   const [modality, setModality] = useState("text");
   const [regulated, setRegulated] = useState(false);
@@ -34,14 +34,17 @@ export default function Home() {
   const [cache, setCache] = useState(20);
   const [calls, setCalls] = useState(1);
   const [budget, setBudget] = useState(0);
-  const [assumptions, setAssumptions] = useState(["requests", "inputTokens", "outputTokens", "cache", "calls"]);
+  const [assumptions, setAssumptions] = useState(["task", "risk", "modality", "requests", "inputTokens", "outputTokens", "cache", "calls"]);
   const [selected, setSelected] = useState<string | null>(null);
   const [providerFilter, setProviderFilter] = useState("All");
   const [decision, setDecision] = useState("Not decided");
   const [overrideReason, setOverrideReason] = useState("");
+  const [guidedAnswers, setGuidedAnswers] = useState<string[]>([]);
 
-  const result = useMemo(() => analyzeWorkload({ task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, budget, assumptions, asOfDate: "2026-08-08" }), [task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, budget, assumptions]);
+  const assessmentDate = new Date().toISOString().slice(0, 10);
+  const result = useMemo(() => analyzeWorkload({ task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, budget, assumptions, asOfDate: assessmentDate }), [task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, budget, assumptions, assessmentDate]);
   const active = models.find((model) => model.id === selected) ?? result.recommendation ?? models[0];
+  const comparisonOnly = Boolean(selected && !active.recommendationReady);
   const activeScenarios = { low: costFor(active, result.workload, 0.75), expected: costFor(active, result.workload, 1), high: costFor(active, result.workload, 1.35) };
   const visibleModels = providerFilter === "All" ? models : models.filter((model) => model.provider === providerFilter);
 
@@ -62,8 +65,27 @@ export default function Home() {
       setStage("estimate");
       setTimeout(() => document.querySelector("#estimator")?.scrollIntoView({ behavior: "smooth" }), 50);
     } else {
-      setStage("guided"); setQuestion(0);
+      setStage("guided"); setQuestion(0); setGuidedAnswers([]);
     }
+  }
+
+  function markGuidedAnswer(id: string) {
+    setGuidedAnswers((current) => current.includes(id) ? current : [...current, id]);
+    const field = id === "data" ? "dataSensitivity" : id;
+    setAssumptions((current) => current.filter((item) => item !== field));
+  }
+
+  function applyUsageProfile(profile: "experiment" | "pilot" | "launch" | "unknown") {
+    const values = profile === "experiment"
+      ? { requests: 25, input: 800, output: 200, calls: 1 }
+      : profile === "launch"
+        ? { requests: 2500, input: 3500, output: 800, calls: 2 }
+        : profile === "pilot"
+          ? { requests: 250, input: 2000, output: 500, calls: 1 }
+          : { requests: 100, input: 1500, output: 400, calls: 1 };
+    setRequests(values.requests); setInputTokens(values.input); setOutputTokens(values.output); setCalls(values.calls); setCache(0);
+    setAssumptions(["requests", "inputTokens", "outputTokens", "cache", "calls"]);
+    markGuidedAnswer("usage");
   }
 
   function advanceGuided() {
@@ -87,11 +109,11 @@ export default function Home() {
       </nav>
 
       <section className="hero" id="top">
-        <div className="eyebrow"><span /> Governed model economics</div>
-        <h1>Pick the right model.<br /><em>Prove the decision.</em></h1>
-        <p className="lede">A deterministic decision workflow for product people who need the cost, the trade-offs, and the governance evidence—not another pricing spreadsheet.</p>
-        <a className="primary" href="#intake">Start with what you know <span>↘</span></a>
-        <div className="hero-stamp"><span>RULESET</span><strong>1.0<br />LOCKED</strong><small>CT OWNS DECISION</small></div>
+        <div className="eyebrow"><span /> From idea to cost range</div>
+        <h1>Describe what you want to build.<br /><em>Get a model starting point.</em></h1>
+        <p className="lede">You do not need to know a model, token count, or technical architecture. AI Build Crew turns everyday product choices into a transparent monthly estimate, then checks the result before you decide.</p>
+        <a className="primary" href="#intake">Guide me to an estimate <span>↘</span></a>
+        <div className="hero-stamp"><span>RULESET</span><strong>1.1<br />LOCKED</strong><small>HUMAN-OWNED DECISION</small></div>
       </section>
 
       <section className="intake-section" id="intake">
@@ -99,46 +121,47 @@ export default function Home() {
         <div className="intake-shell">
           <div className="intake-copy">
             <h2>The prompt is the beginning.<br /><em>The rules finish the work.</em></h2>
-            <p>CT can bring a complete workload, a rough idea, or nothing more than a product question. The intake stops as soon as enough facts exist to estimate safely.</p>
-            <div className="control-line"><b>Fixed sequence</b><span>Facts → assumptions → estimate → eval → audit → governance → CT decision</span></div>
+            <p>Bring a complete workload, a rough idea, or a simple product question. The intake stops as soon as enough facts exist to estimate safely.</p>
+            <div className="control-line"><b>Fixed sequence</b><span>Facts → assumptions → estimate → evaluation → audit → governance → human decision</span></div>
           </div>
           <div className="prompt-card">
             {stage === "start" && <>
-              <label htmlFor="idea">CT, what are you considering building?</label>
-              <textarea id="idea" value={idea} onChange={(event) => setIdea(event.target.value)} placeholder="Example: I need to modernize a medical billing service and forecast the model, cost, and trade-offs…" />
+              <label htmlFor="idea">What are you thinking about building?</label>
+              <textarea id="idea" value={idea} onChange={(event) => setIdea(event.target.value)} placeholder="Example: A tool that reviews product requirements and drafts a decision brief for my team…" />
+              <p className="prompt-help">Use everyday language. This description stays context until you confirm the workload assumptions.</p>
               <div className="route-buttons">
-                <button onClick={() => startEstimate("known")}>I know the workload</button>
-                <button onClick={() => startEstimate("assisted")}>Help me shape it</button>
-                <button onClick={() => startEstimate("sample")}>Use a safe example</button>
+                <button onClick={() => startEstimate("assisted")}>Guide me to an estimate</button>
+                <button onClick={() => startEstimate("known")}>I already know my usage</button>
+                <button onClick={() => startEstimate("sample")}>Show me an example</button>
               </div>
             </>}
-            {stage === "guided" && <GuidedQuestion index={question} task={task} setTask={setTask} risk={risk} setRisk={setRisk} dataSensitivity={dataSensitivity} setDataSensitivity={setDataSensitivity} modality={modality} setModality={setModality} regulated={regulated} setRegulated={setRegulated} advance={advanceGuided} estimateNow={() => setStage("estimate")} />}
-            {stage === "estimate" && <div className="ready-card"><span>INTAKE READY</span><h3>{idea || "Workload details captured"}</h3><p>{assumptions.length ? `${assumptions.length} planning assumptions remain visible for CT review.` : "All planning fields are currently treated as CT-supplied."}</p><a href="#estimator">Run estimate, eval, audit, and governance ↓</a></div>}
+            {stage === "guided" && <GuidedQuestion index={question} answered={guidedAnswers.includes(guidedQuestions[question].id)} markAnswered={markGuidedAnswer} applyUsageProfile={applyUsageProfile} task={task} setTask={setTask} risk={risk} setRisk={setRisk} dataSensitivity={dataSensitivity} setDataSensitivity={setDataSensitivity} modality={modality} setModality={setModality} regulated={regulated} setRegulated={setRegulated} advance={advanceGuided} estimateNow={() => setStage("estimate")} />}
+            {stage === "estimate" && <div className="ready-card"><span>INTAKE READY</span><h3>{idea || "Workload details captured"}</h3><p>{assumptions.length ? `${assumptions.length} planning assumptions remain visible for your review.` : "All planning fields are currently treated as user-supplied."}</p><a href="#estimator">Review assumptions and run the checks ↓</a></div>}
           </div>
         </div>
       </section>
 
-      <section className="estimator" id="estimator">
+      <section className={`estimator ${stage !== "estimate" ? "pre-estimate-hidden" : ""}`} id="estimator" aria-hidden={stage !== "estimate"}>
         <div className="section-kicker">02 / FREEZE THE WORKLOAD</div>
         <div className="workbench">
           <div className="inputs">
-            <div className="field wide prompt-input"><label htmlFor="workload-prompt">What are you building?</label><textarea id="workload-prompt" value={idea} onChange={(e) => { setIdea(e.target.value); setDecision("Not decided"); }} placeholder="Describe the product, user, workflow, and what the model needs to do." /><small>Context only—the confirmed fields below drive the calculation. The estimator never invents token or safety values from this text.</small></div>
-            <div className="field wide"><label htmlFor="task">Work to perform</label><select id="task" value={task} onChange={(e) => { setTask(e.target.value); setSelected(null); setDecision("Not decided"); }}>{Object.keys(taskRequirements).map((item) => <option key={item}>{item}</option>)}</select></div>
-            <div className="field"><label htmlFor="risk">Consequence of error</label><select id="risk" value={risk} onChange={(e) => { setRisk(e.target.value); setSelected(null); setDecision("Not decided"); }}><option>Low</option><option>Medium</option><option>High</option></select></div>
-            <div className="field"><label htmlFor="data">Data class</label><select id="data" value={dataSensitivity} onChange={(e) => setDataSensitivity(e.target.value)}><option>Unknown</option><option>Public</option><option>Internal</option><option>Sensitive</option><option>Protected</option></select></div>
-            <div className="field"><label htmlFor="modality">Required modality</label><select id="modality" value={modality} onChange={(e) => setModality(e.target.value)}><option value="text">Text</option><option value="image">Image</option><option value="audio">Audio</option><option value="video">Video</option></select></div>
+            <div className="field wide prompt-input"><label htmlFor="workload-prompt">What are you building?</label><textarea id="workload-prompt" value={idea} onChange={(e) => { setIdea(e.target.value); setDecision("Not decided"); }} placeholder="Describe the product, user, workflow, and what the model needs to do." /><small>Your description provides context. Only the choices and assumptions you confirm below drive the calculation.</small></div>
+            <div className="field wide"><label htmlFor="task">Work to perform {assumptions.includes("task") && <em>ASSUMED</em>}</label><select id="task" value={task} onChange={(e) => { setTask(e.target.value); setAssumptions((current) => current.filter((item) => item !== "task")); setSelected(null); setDecision("Not decided"); }}>{Object.keys(taskRequirements).map((item) => <option key={item}>{item}</option>)}</select></div>
+            <div className="field"><label htmlFor="risk">Consequence of error {assumptions.includes("risk") && <em>ASSUMED</em>}</label><select id="risk" value={risk} onChange={(e) => { setRisk(e.target.value); setAssumptions((current) => current.filter((item) => item !== "risk")); setSelected(null); setDecision("Not decided"); }}><option>Unknown</option><option>Low</option><option>Medium</option><option>High</option></select></div>
+            <div className="field"><label htmlFor="data">Data class</label><select id="data" value={dataSensitivity} onChange={(e) => { setDataSensitivity(e.target.value); setAssumptions((current) => current.filter((item) => item !== "dataSensitivity")); }}><option>Unknown</option><option>Public</option><option>Internal</option><option>Sensitive</option><option>Protected</option></select></div>
+            <div className="field"><label htmlFor="modality">Required modality {assumptions.includes("modality") && <em>ASSUMED</em>}</label><select id="modality" value={modality} onChange={(e) => { setModality(e.target.value); setAssumptions((current) => current.filter((item) => item !== "modality")); }}><option value="text">Text</option><option value="image">Image</option><option value="audio">Audio</option><option value="video">Video</option></select></div>
             <div className="field checkbox-field"><label><input type="checkbox" checked={regulated} onChange={(e) => setRegulated(e.target.checked)} /> Regulated domain or decision</label></div>
-            <NumberField label="Requests / day" value={requests} setValue={(v) => markKnown("requests", v, setRequests)} min={1} assumed={assumptions.includes("requests")} />
-            <NumberField label="Input tokens / call" value={inputTokens} setValue={(v) => markKnown("inputTokens", v, setInputTokens)} min={1} assumed={assumptions.includes("inputTokens")} />
-            <NumberField label="Output tokens / call" value={outputTokens} setValue={(v) => markKnown("outputTokens", v, setOutputTokens)} min={1} assumed={assumptions.includes("outputTokens")} />
-            <NumberField label="Cached input %" value={cache} setValue={(v) => markKnown("cache", v, setCache)} min={0} max={100} assumed={assumptions.includes("cache")} />
-            <NumberField label="Model calls / request" value={calls} setValue={(v) => markKnown("calls", v, setCalls)} min={1} max={50} assumed={assumptions.includes("calls")} />
+            <NumberField label="Uses per day" value={requests} setValue={(v) => markKnown("requests", v, setRequests)} min={1} assumed={assumptions.includes("requests")} hint="How many times people or systems will ask the AI to do this job each day." />
+            <NumberField label="Information going in" value={inputTokens} setValue={(v) => markKnown("inputTokens", v, setInputTokens)} min={1} assumed={assumptions.includes("inputTokens")} hint="Measured in tokens. About 750 tokens is roughly one page of ordinary English." />
+            <NumberField label="Answer coming back" value={outputTokens} setValue={(v) => markKnown("outputTokens", v, setOutputTokens)} min={1} assumed={assumptions.includes("outputTokens")} hint="A short answer may be 100–300 tokens; a detailed page may be about 750." />
+            <NumberField label="Reusable input" value={cache} setValue={(v) => markKnown("cache", v, setCache)} min={0} max={100} assumed={assumptions.includes("cache")} hint="The percentage of repeated instructions a provider may bill at a cached rate." />
+            <NumberField label="AI steps per use" value={calls} setValue={(v) => markKnown("calls", v, setCalls)} min={1} max={50} assumed={assumptions.includes("calls")} hint="One answer is one step. Tool use or an agent loop may create several charged model calls." />
             <NumberField label="Maximum monthly budget" value={budget} setValue={(v) => { setBudget(v); setSelected(null); setDecision("Not decided"); }} min={0} prefix="$" hint="0 means no budget ceiling" />
-            <div className="ledger wide"><b>PROVENANCE LEDGER</b><span>{assumptions.length ? `Assumed: ${assumptions.join(", ")}` : "Known: all planning values confirmed by CT"}</span><span>Unknown safety fields trigger review; they never default to safe.</span></div>
+            <div className="ledger wide"><b>WHAT THIS ESTIMATE ASSUMES</b><span>{assumptions.length ? `Planning assumptions: ${assumptions.map((field) => ({ task: "work to perform", risk: "consequence of error", modality: "content type", requests: "uses per day", inputTokens: "information going in", outputTokens: "answer size", cache: "reusable input", calls: "AI steps" }[field] ?? field)).join(", ")}` : "Known: all planning values were confirmed by the user"}</span><span>Unknown safety fields trigger review; they never default to safe.</span></div>
           </div>
 
           <aside className="result-card">
-            <div className="result-label">{active.recommendationReady ? "Deterministic baseline" : "Catalog-only comparison"} · {result.disposition.replaceAll("_", " ")}</div>
+            <div className="result-label">{active.recommendationReady ? "Reproducible cost baseline" : "Catalog-only comparison"} · {(comparisonOnly ? "NOT EVALUATED" : result.disposition).replaceAll("_", " ")}</div>
             <div className={`model-orbit ${active.accent}`}><span>{active.name.split(" ").at(-1)?.slice(0, 1)}</span></div>
             <h2>{result.recommendation ? active.name : "No eligible model"}</h2>
             <p>{result.recommendation ? active.lane : "Stop and resolve the capability or policy gap."}</p>
@@ -149,28 +172,29 @@ export default function Home() {
               <div><small>HIGH / MONTH</small><strong>{money(activeScenarios.high.monthly)}</strong></div>
             </div>
             <div className={`budget-status ${budget > 0 && activeScenarios.expected.monthly > budget ? "over" : ""}`}><span>{budget > 0 ? `Monthly ceiling ${money(budget)}` : "No monthly budget ceiling set"}</span>{budget > 0 && <strong>{activeScenarios.expected.monthly <= budget ? `${money(budget - activeScenarios.expected.monthly)} remaining` : `${money(activeScenarios.expected.monthly - budget)} over budget`}</strong>}</div>
+            <div className="annual-cost"><span>12-month token forecast</span><strong>{money(costFor(active, result.workload, 1).annual)}</strong></div>
             <div className="brief deterministic" aria-live="polite">{activeBrief}</div>
             <div className="version-line">Catalog {result.catalog.version} · Engine {result.audit.engineVersion} · Evidence {active.evidenceStatus}</div>
           </aside>
         </div>
       </section>
 
-      <section className="pipeline-section" id="governance">
+      <section className={`pipeline-section ${stage !== "estimate" ? "pre-estimate-hidden" : ""}`} id="governance" aria-hidden={stage !== "estimate"}>
         <div className="section-kicker dark">03 / DOUBLE-CHECK THE RESULT</div>
         <div className="pipeline-head"><h2>No model grades<br />its own homework.</h2><p>Each specialist sees a frozen result, performs one job, and cannot rewrite another specialist’s output.</p></div>
         <div className="pipeline">
           <StatusStep number="01" name="Estimate" status={result.recommendation ? "PASS" : "BLOCK"} detail={result.recommendation ? "Three cost scenarios calculated" : "No rule-eligible model"} />
-          <StatusStep number="02" name="Evaluation" status={result.evaluation.status} detail={`${result.evaluation.checks.filter((item: { pass: boolean }) => item.pass).length}/${result.evaluation.checks.length} deterministic checks passed`} />
-          <StatusStep number="03" name="Audit" status={result.audit.status} detail="Expected cost independently recomputed" />
-          <StatusStep number="04" name="Governance" status={result.governance.status} detail={result.governance.findings.length ? result.governance.findings.map((item: { id: string }) => item.id).join(" · ") : "No findings"} />
+          <StatusStep number="02" name="Evaluation" status={comparisonOnly ? "NOT RUN" : result.evaluation.status} detail={comparisonOnly ? "Shared workload evidence is required" : `${result.evaluation.checks.filter((item: { pass: boolean }) => item.pass).length}/${result.evaluation.checks.length} deterministic checks passed`} />
+          <StatusStep number="03" name="Audit" status={comparisonOnly ? "NOT RUN" : result.audit.status} detail={comparisonOnly ? "No evaluated result to audit" : "Expected cost independently recomputed"} />
+          <StatusStep number="04" name="Governance" status={comparisonOnly ? "NOT APPLIED" : result.governance.status} detail={comparisonOnly ? "Catalog facts are not an approval" : result.governance.findings.length ? result.governance.findings.map((item: { id: string }) => item.id).join(" · ") : "No findings"} />
         </div>
         <div className="governance-findings">
           <div><h3>Rule findings</h3>{result.governance.findings.length ? result.governance.findings.map((finding: { id: string; severity: string; message: string }) => <p key={finding.id}><b>{finding.id} · {finding.severity}</b>{finding.message}</p>) : <p><b>PASS</b>No governance exception detected.</p>}</div>
-          <div className="decision-gate"><h3>CT decision gate</h3><p>CT owns the final judgment. A recommendation is evidence—not approval.</p><div className="decision-actions"><button disabled={result.disposition !== "READY_FOR_CT_DECISION"} onClick={() => setDecision("Approved by CT")}>Approve</button><button onClick={() => { setDecision("Edit and rerun"); document.querySelector("#estimator")?.scrollIntoView({ behavior: "smooth" }); }}>Edit & rerun</button><button onClick={() => setDecision("Escalated for review")}>Escalate</button></div><label>Override reason<input value={overrideReason} onChange={(e) => setOverrideReason(e.target.value)} placeholder="Required before recording an override" /></label><button className="record-override" disabled={!overrideReason.trim() || result.disposition !== "READY_FOR_CT_DECISION"} onClick={() => setDecision(`Overridden by CT: ${overrideReason}`)}>Record override</button><strong className="decision-state">{decision}</strong></div>
+          <div className="decision-gate"><h3>Human decision gate</h3><p>The recommendation is evidence—not approval. A person remains accountable for the final judgment.</p><div className="decision-actions"><button disabled={comparisonOnly || result.disposition !== "READY_FOR_HUMAN_DECISION"} onClick={() => setDecision("Approved by decision owner")}>Approve</button><button onClick={() => { setDecision("Edit and rerun"); document.querySelector("#estimator")?.scrollIntoView({ behavior: "smooth" }); }}>Edit & rerun</button><button onClick={() => setDecision("Escalated for review")}>Escalate</button></div><label>Override reason<input value={overrideReason} onChange={(e) => setOverrideReason(e.target.value)} placeholder="Required before recording a permitted override" /></label><button className="record-override" disabled={comparisonOnly || !overrideReason.trim() || result.disposition !== "READY_FOR_HUMAN_DECISION"} onClick={() => setDecision(`Override recorded: ${overrideReason}`)}>Record override</button><strong className="decision-state">{decision}</strong></div>
         </div>
       </section>
 
-      <section className="model-section" id="models">
+      <section className={`model-section ${stage !== "estimate" ? "pre-estimate-hidden" : ""}`} id="models" aria-hidden={stage !== "estimate"}>
         <div className="section-head"><div><div className="section-kicker dark">04 / UNDERSTAND THE TRADE-OFF</div><h2>Published facts first.<br />Shared evals next.</h2></div><p>Catalog fields can be compared now. Cross-provider ranking waits for the same representative workload to measure quality, reliability, latency, and actual cost.</p></div>
         <div className="catalog-control"><div><b>CATALOG COVERAGE</b><span>{result.coverage.providers.length} providers · {models.length} models · {result.coverage.evaluatedProviders.length} provider currently rank-eligible</span></div><div className="provider-filters">{["All", ...result.coverage.providers].map((provider) => <button key={provider} className={providerFilter === provider ? "active" : ""} onClick={() => setProviderFilter(provider)}>{provider}</button>)}</div></div>
         <div className="model-table">
@@ -190,7 +214,7 @@ export default function Home() {
       <section className="method artifacts" id="artifacts">
         <div className="section-kicker">05 / REVIEW THE EVIDENCE</div>
         <h2>The decision and<br /><em>its receipts.</em></h2>
-        <div className="artifact-links"><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/ORIGINAL_PRD.md">Original product PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/MAVEN_AGENTIC_AI_PRD.md">Maven AI PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_Build_Crew_Agentic_AI_PRD.xlsx">PRD workbook ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/WORKFLOW.md">Workflow ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/governance/GOVERNANCE_AND_EVALUATION.md">Governance ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/EVALUATION.md">Evaluation ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_BUILD_CREW_OVERVIEW.pptx">Presentation ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/DEMO_SCRIPT.md">2–3 minute script ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/BACKLOG.md">Provider backlog ↗</a></div>
+        <div className="artifact-links"><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/ORIGINAL_PRD.md">Original product PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/MAVEN_AGENTIC_AI_PRD.md">Maven AI PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_Build_Crew_Agentic_AI_PRD.xlsx">PRD workbook ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/WORKFLOW.md">Workflow ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/TEAM_OS.md">TeamOS ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/governance/GOVERNANCE_AND_EVALUATION.md">Governance ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/EVALUATION.md">Evaluation ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/PRODUCTIZATION_AUDIT.md">Product audit ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_BUILD_CREW_OVERVIEW.pptx">Presentation ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/DEMO_SCRIPT.md">2–3 minute script ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/BACKLOG.md">Provider backlog ↗</a></div>
       </section>
 
       <section className="about-section" id="about">
@@ -198,14 +222,15 @@ export default function Home() {
         <div className="about-grid"><h2>Built for builders who want evidence before commitment.</h2><div><p>AI Build Crew turns a rough product idea into a transparent workload estimate, an evidence-gated model comparison, and a governed decision that stays human-owned.</p><p className="badlabz">Developed by <a href="https://badlabz.com">BadLabz.com ↗</a> :)</p></div></div>
       </section>
 
-      <footer><span>AI BUILD CREW · BADLABZ.COM</span><p><b>Authoritative:</b> sourced catalog fields and deterministic math. <b>Evaluated:</b> shared workload evidence. <b>Decision owner:</b> CT.</p><a href="#top">Back to top ↑</a></footer>
+      <footer><span>AI BUILD CREW · BADLABZ.COM</span><p><b>Authoritative:</b> sourced catalog fields and reproducible math. <b>Evaluated:</b> shared workload evidence. <b>Decision owner:</b> human.</p><a href="#top">Back to top ↑</a></footer>
     </main>
   );
 }
 
-function GuidedQuestion(props: { index: number; task: string; setTask: (v: string) => void; risk: string; setRisk: (v: string) => void; dataSensitivity: string; setDataSensitivity: (v: string) => void; modality: string; setModality: (v: string) => void; regulated: boolean; setRegulated: (v: boolean) => void; advance: () => void; estimateNow: () => void }) {
+function GuidedQuestion(props: { index: number; answered: boolean; markAnswered: (id: string) => void; applyUsageProfile: (profile: "experiment" | "pilot" | "launch" | "unknown") => void; task: string; setTask: (v: string) => void; risk: string; setRisk: (v: string) => void; dataSensitivity: string; setDataSensitivity: (v: string) => void; modality: string; setModality: (v: string) => void; regulated: boolean; setRegulated: (v: boolean) => void; advance: () => void; estimateNow: () => void }) {
   const current = guidedQuestions[props.index];
-  return <div className="guided-card"><span>QUESTION {current.number} OF 05</span><h3>{current.prompt}</h3>{current.id === "task" && <select value={props.task} onChange={(e) => props.setTask(e.target.value)}>{Object.keys(taskRequirements).map((item) => <option key={item}>{item}</option>)}</select>}{current.id === "risk" && <select value={props.risk} onChange={(e) => props.setRisk(e.target.value)}><option>Low</option><option>Medium</option><option>High</option></select>}{current.id === "data" && <><select value={props.dataSensitivity} onChange={(e) => props.setDataSensitivity(e.target.value)}><option>Unknown</option><option>Public</option><option>Internal</option><option>Sensitive</option><option>Protected</option></select><label className="guided-check"><input type="checkbox" checked={props.regulated} onChange={(e) => props.setRegulated(e.target.checked)} /> Regulated domain or decision</label></>}{current.id === "modality" && <select value={props.modality} onChange={(e) => props.setModality(e.target.value)}><option value="text">Text</option><option value="image">Image</option><option value="audio">Audio</option><option value="video">Video</option></select>}{current.id === "usage" && <p>Choose “Continue” to use the visible planning assumptions, or “Estimate now” to stop questioning and review them directly.</p>}<div className="guided-actions"><button onClick={props.advance}>Continue</button><button onClick={props.estimateNow}>Estimate now</button></div></div>;
+  const choose = (value: string, setter: (value: string) => void) => { setter(value); props.markAnswered(current.id); };
+  return <div className="guided-card"><span>QUESTION {current.number} OF 05</span><h3>{current.prompt}</h3>{current.id === "task" && <select value={props.answered ? props.task : ""} onChange={(e) => choose(e.target.value, props.setTask)}><option value="" disabled>Choose the closest job</option>{Object.keys(taskRequirements).map((item) => <option key={item}>{item}</option>)}</select>}{current.id === "risk" && <select value={props.answered ? props.risk : ""} onChange={(e) => choose(e.target.value, props.setRisk)}><option value="" disabled>Choose what fits best</option><option>Low</option><option>Medium</option><option>High</option></select>}{current.id === "data" && <><select value={props.answered ? props.dataSensitivity : ""} onChange={(e) => choose(e.target.value, props.setDataSensitivity)}><option value="" disabled>Choose a data type—even “Unknown”</option><option>Unknown</option><option>Public</option><option>Internal</option><option>Sensitive</option><option>Protected</option></select><label className="guided-check"><input type="checkbox" checked={props.regulated} onChange={(e) => props.setRegulated(e.target.checked)} /> This supports a regulated domain or decision</label></>}{current.id === "modality" && <select value={props.answered ? props.modality : ""} onChange={(e) => choose(e.target.value, props.setModality)}><option value="" disabled>Choose what the AI must understand</option><option value="text">Text</option><option value="image">Images</option><option value="audio">Audio</option><option value="video">Video</option></select>}{current.id === "usage" && <><p>Choose a planning stage. You can inspect and edit every technical assumption before the calculation.</p><div className="profile-buttons"><button onClick={() => props.applyUsageProfile("experiment")}>Experiment<small>About 25 uses/day</small></button><button onClick={() => props.applyUsageProfile("pilot")}>Pilot<small>About 250 uses/day</small></button><button onClick={() => props.applyUsageProfile("launch")}>Launch<small>About 2,500 uses/day</small></button><button onClick={() => props.applyUsageProfile("unknown")}>Not sure<small>Use a visible starter profile</small></button></div></>}<div className="guided-actions"><button disabled={!props.answered} onClick={props.advance}>Continue</button><button onClick={props.estimateNow}>Estimate now with visible assumptions</button></div></div>;
 }
 
 function NumberField({ label, value, setValue, min, max, assumed, prefix, hint }: { label: string; value: number; setValue: (value: number) => void; min: number; max?: number; assumed?: boolean; prefix?: string; hint?: string }) {

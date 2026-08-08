@@ -1,6 +1,6 @@
 {
   "version": "product-factory-intake-1.0.0",
-  "persona": "CT, a product person forecasting the right build model, operating cost, and trade-offs.",
+  "persona": "A first-time product builder forecasting a model starting point, operating cost, and trade-offs.",
   "questions": [
     { "id": "Q1", "field": "task", "prompt": "What job must the model perform?", "help": "Choose the closest recurring workflow." },
     { "id": "Q2", "field": "risk", "prompt": "What happens if the model is wrong?", "help": "Use High for consequential or hard-to-reverse outcomes." },

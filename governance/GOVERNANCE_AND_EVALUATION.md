@@ -2,7 +2,7 @@
 
 Authoritative version: 1.1  
 Effective date: 2026-08-08  
-Owner and final decision maker: CT
+Owner and final decision maker: Human decision owner
 
 ## Control statement
 
@@ -10,7 +10,7 @@ AI Build Crew organizes workload facts, applies reproducible calculations and ru
 
 The required sequence is:
 
-**Facts → Assumptions → Estimate → Eligibility → Evaluation → Audit → Governance → CT decision**
+**Facts → Assumptions → Estimate → Eligibility → Evaluation → Audit → Governance → human decision**
 
 Never:
 
@@ -31,7 +31,7 @@ This operating model adapts the TeamOS discovery-first pattern: collect evidence
 9. Provider sponsorship and commercial preference cannot change eligibility or ranking.
 10. Model-generated prose cannot change calculations, rule findings, status, or approval.
 11. The evaluation and governance functions cannot mutate the frozen workload or decision result.
-12. CT must approve, edit and rerun, reject, or provide an override reason before a decision is final.
+12. A human decision owner must approve, edit and rerun, reject, or provide an override reason before a decision is final.
 13. A stated monthly budget is a hard eligibility constraint; the system must block rather than recommend an evidence-qualified model above that ceiling.
 
 ## Specialist contracts
@@ -45,11 +45,11 @@ This operating model adapts the TeamOS discovery-first pattern: collect evidence
 | Auditor | Independently recompute totals and verify versions/provenance | Waive a mismatch |
 | Governance | Return PASS, WARN, REVIEW_REQUIRED, or BLOCK with rule IDs | Alter price, score, or evidence |
 | Presenter | Render structured results into fixed language | Add new claims |
-| CT decision gate | Approve, edit/rerun, override with reason, reject, or escalate | Delegate final accountability to the system |
+| Human decision gate | Approve, edit/rerun, record a permitted override with reason, reject, or escalate | Delegate final accountability to the system |
 
 ## Release gate
 
-A result can be presented as `READY_FOR_CT_DECISION` only when:
+A result can be presented as `READY_FOR_HUMAN_DECISION` only when:
 
 - required intake fields are present or transparently assumed;
 - at least one model is rule-eligible;
@@ -65,7 +65,7 @@ High-risk and regulated cases may be estimated but remain `REVIEW_REQUIRED` and 
 
 Before release, verify:
 
-- CT is the named first user and decision owner.
+- The target user and human decision owner are explicit.
 - Facts, assumptions, unknowns, and conclusions are separated.
 - The PRD, workflow, app, eval report, presentation, and script describe the same behavior.
 - No planned capability is reported as completed.

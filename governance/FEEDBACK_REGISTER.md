@@ -1,6 +1,6 @@
 # Feedback and control register
 
-Owner: CT  
+Owner: Product owner
 Review date: August 8, 2026
 
 | Feedback / risk | Classification | Product control | Verification |
@@ -11,7 +11,7 @@ Review date: August 8, 2026
 | Audit and governance need separate authority. | Absolute | Auditor verifies evidence/invariants; governance applies absolute rules; neither selects. | Agent contracts and rule-ID findings. |
 | The user may not have enough ideas or workload knowledge. | Requirement | Prompt-first intake offers guided, fast, and synthetic routes with “I don’t know.” | Guided-flow user test. |
 | Stop asking when the user knows enough. | Requirement | A completeness check runs after each answer; Estimate now is always available. | Intake transition tests (next iteration). |
-| The first-user persona must use the corrected name CT. | Absolute content rule | CT is the named first user and final decision owner in every artifact. | Repository text scan. |
+| Product authority must not be hard-coded to a named person. | Absolute content rule | Reusable product controls use user, human reviewer, or human decision owner. | Repository text scan. |
 | Original and Maven PRDs were missing from GitHub. | Release blocker | Both Markdown PRDs and the workbook live under `artifacts/`; README links are internal. | Link and file check. |
 | Workflow, PPT, and a 2–3 minute script are required. | Deliverable | Publish all three as versioned repository artifacts. | Release checklist. |
 | Other providers must be preserved. | Requirement delivered in catalog alpha | Google Gemini and Anthropic Claude are now cost-visible with evidence states; neither can enter ranking before shared evals. | Provider-neutral regression assertion and catalog review. |
@@ -24,5 +24,5 @@ Review date: August 8, 2026
 - **Consolidated:** PRD, Maven template rendering, workflow, governance, and evaluation now use one shared product vocabulary.
 - **Retained:** cost transparency, model comparison, future watchlist/network-value ideas.
 - **Retired:** optional generative decision brief and duplicated GitHub Pages calculator logic.
-- **Corrected:** all first-user references use CT.
+- **Corrected:** reusable product authority is person-neutral; the prior named-user version remains preserved in the locked Git baseline.
 - **Open evidence:** any additional class feedback not captured in this register must be added verbatim, classified, and mapped before final class submission.

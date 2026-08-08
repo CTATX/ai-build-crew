@@ -1,0 +1,33 @@
+{
+  "release": "v0.2.0-rc.1",
+  "status": "draft-release-candidate",
+  "preparedAt": "2026-08-08",
+  "baselineTag": "alpha-baseline-2026-08-08",
+  "baselineCommit": "cd7a8282a6964a049221e31c9682f8dd694d7efe",
+  "releaseBranch": "agent/productized-alpha",
+  "releaseCommit": "assigned-after-review-and-merge",
+  "versions": {
+    "catalog": "model-catalog-1.0.0",
+    "governance": "governance-1.1.0",
+    "engine": "decision-engine-1.2.0",
+    "teamOS": "1.0"
+  },
+  "verification": {
+    "automatedTestsPassed": 11,
+    "automatedTestsFailed": 0,
+    "productionBuild": "pass",
+    "lint": "pass",
+    "presentationOverflow": "pass",
+    "personNeutralArtifactScan": "pass",
+    "liveSitesDeployment": "pending-release-approval"
+  },
+  "sha256": {
+    "artifacts/AI_BUILD_CREW_OVERVIEW.pptx": "61e7883d705791417143c2d4fa52b87e2af604066331854dcda5e024e3d62baf",
+    "artifacts/AI_Build_Crew_Agentic_AI_PRD.xlsx": "6e833a108b485995025fcc983b8f06f17cb07afb730cf97e548f4b2fe8f211be",
+    "artifacts/ORIGINAL_PRD.md": "661880eedd3f67c6fd32e70f713aa50bb8409d510e1e4f532d1ae5c1c64e1beb",
+    "artifacts/MAVEN_AGENTIC_AI_PRD.md": "24b73cfebfb71ea230aee6d47af78b416fcbf79dc1924e28a64739d25dc4b702",
+    "governance/absolute-rules.v1.json": "cfeca707fed23017e89119c5a8ebb7ff314336ec3b3e1fbbaeb5d1401665f70f",
+    "data/model-catalog.v1.json": "02eb58a203206e5616a232d095abf094aaee39efea773eaf2a8b0c7b50d3c7c4",
+    "TEAM_OS.md": "37cbca31c5a7cc8f83eeca47970e856d70db723c9d26f9950a7ee85c0df56a13"
+  }
+}

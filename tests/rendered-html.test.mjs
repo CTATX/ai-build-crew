@@ -13,8 +13,9 @@ test("renders the AI Build Crew estimator", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /AI Build Crew/);
-  assert.match(html, /Pick the right model/);
-  assert.match(html, /Requests \/ day/);
+  assert.match(html, /Describe what you want to build/);
+  assert.match(html, /Uses per day/);
+  assert.match(html, /Guide me to an estimate/);
   assert.match(html, /GPT-5\.6 Luna/);
   assert.doesNotMatch(html, /Your site is taking shape/);
 });

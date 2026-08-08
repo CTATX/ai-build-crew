@@ -32,7 +32,7 @@ Exit when the same input plus versions produces the same result and hash.
 2. Evaluator checks fixed formulas and cases; it cannot edit the result.
 3. Auditor verifies evidence, versions, invariants, and non-mutation.
 4. Governance applies absolute rules; it cannot recommend or waive findings.
-5. CT approves, edits, rejects, escalates, or records a permitted override.
+5. The human decision owner approves, edits, rejects, escalates, or records a permitted override.
 
 Exit only when evaluation passes, audit matches, governance does not block, and the human decision is explicit.
 
@@ -60,7 +60,7 @@ Publish a private or narrow alpha, use synthetic/non-sensitive data, monitor sto
 - [ ] Deterministic and governance regression cases pass.
 - [ ] High-risk and unknown-data cases fail closed.
 - [ ] No secrets or protected content enter static assets or logs.
-- [ ] CT owns the final decision.
+- [ ] A human owns the final decision.
 - [ ] PRDs, evaluation, governance, deck, script, and backlog agree.
 - [ ] Live links and repository links resolve.
 - [ ] Next learning and stop conditions are recorded.

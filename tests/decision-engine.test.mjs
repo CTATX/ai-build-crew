@@ -44,6 +44,12 @@ test("unknown data sensitivity fails closed to human review", () => {
   assert.ok(result.governance.findings.some((finding) => finding.id === "GOV-004"));
 });
 
+test("unknown consequence of error fails closed to human review", () => {
+  const result = analyzeWorkload({ ...base, risk: "Unknown" });
+  assert.equal(result.disposition, "REVIEW_REQUIRED");
+  assert.ok(result.governance.findings.some((finding) => finding.id === "GOV-012"));
+});
+
 test("unsupported modality blocks instead of forcing a model", () => {
   const result = analyzeWorkload({ ...base, modality: "image" });
   assert.equal(result.recommendation, null);

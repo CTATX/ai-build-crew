@@ -46,5 +46,5 @@ An external agent is software supply-chain input, not trusted governance. Before
 4. Run in a sandbox with synthetic data and least privilege.
 5. Test prompt injection, data exfiltration, unauthorized writes, rule bypass, and output mutation.
 6. Map it to one hard-bordered role; reject agents that combine recommendation, evaluation, and approval.
-7. Require evaluation, audit, and governance evidence before CT accepts it.
+7. Require evaluation, audit, and governance evidence before a human decision owner accepts it.
 8. Re-review on every update and retain a rollback path.

@@ -4,7 +4,7 @@ These are deterministic specialist roles, not autonomous language models. Their 
 
 ## Intake agent
 
-Asks the Product Faculty questions in a fixed order. Stops as soon as minimum facts are complete or CT selects “Estimate now.” Missing numeric values may use named planning assumptions; missing safety fields may not default to safe.
+Asks the Product Faculty questions in a fixed order. Stops as soon as minimum facts are complete or the user selects “Estimate now.” Missing numeric values may use named planning assumptions; missing safety fields may not default to safe.
 
 ## Evaluation agent
 
@@ -18,6 +18,6 @@ Recomputes expected cost and verifies catalog, rule, engine, and evaluation vers
 
 Applies absolute rules and returns `PASS`, `WARN`, `REVIEW_REQUIRED`, or `BLOCK` with rule IDs. It cannot waive its own rules.
 
-## CT decision gate
+## Human decision gate
 
-CT owns the final decision: approve, edit and rerun, override with a reason, reject, or escalate. High-risk and regulated cases cannot be self-approved by the alpha.
+The human decision owner approves, edits and reruns, records a permitted override with a reason, rejects, or escalates. High-risk and regulated cases cannot be self-approved by the Alpha.

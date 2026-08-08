@@ -11,7 +11,7 @@
 - [ ] Audit did not detect mutation, missing evidence, or version mismatch.
 - [ ] Governance findings include rule IDs and a final disposition.
 - [ ] Review and block conditions remain visible.
-- [ ] CT’s decision and any permitted override rationale are explicit.
+- [ ] The human decision and any permitted override rationale are explicit.
 
 ## Per release
 

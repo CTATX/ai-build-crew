@@ -1,7 +1,7 @@
 # AI Build Crew — Product Requirements Document
 
 Version: 1.0  
-Owner and first user: CT  
+Owner: Product owner
 Status: Governed alpha  
 Date: August 8, 2026
 
@@ -15,7 +15,7 @@ Model selection is fragmented across pricing pages, capability claims, and perso
 
 ## User and job
 
-The first user is CT, a product person who must rapidly evaluate build ideas and make a defensible model and budget decision. The broader user is any builder, product manager, or team lead planning an AI-enabled workflow.
+The first user is a product builder who is unfamiliar with AI model economics and must rapidly evaluate a build idea, forecast cost, and make a defensible model and budget decision. The broader user is any builder, product manager, or team lead planning an AI-enabled workflow.
 
 When considering an AI feature, the user wants to move from a rough idea to a costed, reviewable decision without becoming a pricing or model expert.
 
@@ -25,7 +25,7 @@ When considering an AI feature, the user wants to move from a rough idea to a co
 - Distinguish user facts, named assumptions, and unknowns.
 - Recommend the least expensive rule-eligible model from a versioned catalog.
 - Show low, expected, and high workload scenarios and alternative-model deltas.
-- Run independent evaluation, audit, and governance checks before CT decides.
+- Run independent evaluation, audit, and governance checks before a human decides.
 - Reproduce the same result for the same normalized input, catalog, and rule versions.
 
 ## Non-goals for the alpha
@@ -38,19 +38,19 @@ When considering an AI feature, the user wants to move from a rough idea to a co
 
 ## Experience
 
-The product opens with: “CT, what are you considering building?” The user chooses one route:
+The product opens with: “What are you thinking about building?” The user chooses one route:
 
 1. **I know the workload** — go directly to structured capture.
 2. **Help me shape it** — answer one Product Factory question at a time.
 3. **Use a safe example** — load a versioned synthetic workload.
 
-The guided route asks about the job, consequence of error, data class, modality, and usage. “I don’t know” is valid. “Estimate now” is always available. When minimum facts are present—or CT chooses to proceed—the intake stops and the product presents a Known / Assumed / Unknown ledger for confirmation.
+The guided route asks about the job, consequence of error, data class, modality, and usage. “I don’t know” is valid. “Estimate now” is always available. When minimum facts are present—or the user chooses to proceed—the intake stops and the product presents a Known / Assumed / Unknown ledger for confirmation.
 
 The deterministic pipeline then runs:
 
-`Estimate → Eligibility → Evaluation → Audit → Governance → CT decision`
+`Estimate → Eligibility → Evaluation → Audit → Governance → human decision`
 
-Results show the recommendation, alternatives, low/expected/high cost, exclusion reasons, evaluation evidence, governance rule IDs, and CT’s available decision actions.
+Results show the recommendation, alternatives, low/expected/high cost, exclusion reasons, evaluation evidence, governance rule IDs, and the human decision actions.
 
 ## Functional requirements
 
@@ -76,7 +76,7 @@ The recommendation and approval path contains no generative model call. The same
 - **Evaluation Agent:** tests a frozen result; cannot mutate it.
 - **Audit Agent:** verifies formulas, versions, and evidence; cannot waive findings.
 - **Governance Agent:** applies absolute rules and returns PASS, WARN, REVIEW_REQUIRED, or BLOCKED; cannot choose a model.
-- **CT Decision Gate:** CT approves, edits, rejects, escalates, or records a justified override.
+- **Human Decision Gate:** the accountable person approves, edits, rejects, escalates, or records a justified permitted override.
 
 ## Measurement
 
@@ -96,12 +96,12 @@ The recommendation and approval path contains no generative model call. The same
 6. High-risk, regulated, sensitive, or unknown-data cases require review.
 7. Stale pricing, failed evaluation, or audit mismatch blocks finalization.
 8. Assumptions remain visible and create at least a warning.
-9. CT—not the system—owns the final decision.
+9. A human—not the system—owns the final decision.
 10. The repository publishes the PRDs, workflow, evaluation, governance, backlog, deck, and demo script.
 
 ## Launch plan
 
-Use CT as the first user on three real planning decisions and at least two synthetic failure cases. Record time-to-estimate, confidence before/after, misunderstood fields, and missing costs. Revise the question order and default scenarios from evidence before adding providers.
+Use a first-time product builder on three real planning decisions and at least two synthetic failure cases. Record time-to-estimate, confidence before/after, misunderstood fields, and missing costs. Revise the question order and default scenarios from evidence before adding providers.
 
 ## Future state
 

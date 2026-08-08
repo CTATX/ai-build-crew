@@ -1,8 +1,8 @@
 # AI Build Crew
 
-**Pick the right model. Know the cost.**
+**Describe an idea. Get a monthly cost range and a model starting point.**
 
-AI Build Crew is a governed alpha decision workbench for product builders. It guides an incomplete idea into a transparent workload estimate, recommends the least expensive rule-eligible model, and runs independent evaluation, audit, and governance checks before CT makes the decision.
+AI Build Crew is a governed alpha decision workbench for product builders. It guides an incomplete idea into a transparent workload estimate, recommends the least expensive rule-eligible model, and runs independent evaluation, audit, and governance checks before a human decision owner decides.
 
 ## Alpha scope
 
@@ -15,7 +15,7 @@ AI Build Crew is a governed alpha decision workbench for product builders. It gu
 - Published catalog comparison across three OpenAI, two Google Gemini, and three Anthropic Claude models.
 - Cross-provider quality ranking held back until every provider runs the same workload evaluation.
 - Independent deterministic evaluation, audit, and governance stages.
-- A CT decision gate; high-risk and uncertain safety cases fail closed.
+- A human decision gate; high-risk and uncertain safety cases fail closed.
 
 Every catalog field carries a source date and evidence state. The catalog was checked against published [OpenAI](https://developers.openai.com/api/docs/models), [Google Gemini](https://ai.google.dev/api/models), and [Anthropic Claude](https://platform.claude.com/docs/en/api/models/list) documentation on August 8, 2026.
 
@@ -44,7 +44,12 @@ The complete governed workflow works without an API key. The recommendation and 
 
 ## Evidence and artifacts
 
-- [Alpha v0.1.0 release notes](RELEASE_NOTES.md)
+- [Productized Alpha release notes](RELEASE_NOTES.md)
+- [Release manifest](RELEASE_MANIFEST.json)
+- [Productization audit](artifacts/PRODUCTIZATION_AUDIT.md)
+- [GitHub and Sites release workflow](artifacts/GIT_SITES_RELEASE_WORKFLOW.md)
+- [Deployment record](artifacts/DEPLOYMENT_RECORD.md)
+- [TeamOS specialist workflow](TEAM_OS.md)
 - [Custom-domain setup](artifacts/CUSTOM_DOMAIN_SETUP.md)
 - [Evaluation results](EVALUATION.md)
 - [Future-state requirements](FUTURE_STATE.md)
@@ -60,7 +65,7 @@ The complete governed workflow works without an API key. The recommendation and 
 
 ## Publishing model
 
-The full application is deployed on OpenAI Sites. The `docs/` build is a key-free GitHub Pages artifact hub. Both are safe to publish because no AI credential is required.
+OpenAI Sites is the application runtime and custom-domain target. The `docs/` build is a key-free GitHub Pages artifact hub. The productized release is published to both only after they point to the same audited Git commit.
 
 ## Repeatable delivery loop
 
