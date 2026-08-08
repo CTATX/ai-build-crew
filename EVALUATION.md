@@ -1,29 +1,35 @@
 # Alpha evaluation
 
-Evaluation date: August 7, 2026
+Evaluation date: August 8, 2026
 
 ## Acceptance criteria
 
 1. The app renders the estimator without a credential.
-2. Cost changes immediately when a workload input changes.
+2. Same normalized inputs and versions produce an identical result.
 3. Cached input is priced separately from uncached input.
 4. Low-complexity, low-risk work chooses the lowest-cost eligible tier.
-5. Higher-risk or more complex work raises the quality gate before comparing cost.
+5. Higher-risk, regulated, sensitive, or unknown-data work requires human review.
 6. A manual comparison does not silently replace the recommended starting point.
-7. If the OpenAI call or key is unavailable, the user receives a deterministic explanation instead of an error.
-8. The OpenAI key never enters client code or GitHub Pages.
+7. Stale pricing, failed evaluation, audit mismatch, unsafe loops, or no eligible model blocks finalization.
+8. Assumptions remain visible and create a warning.
+9. Candidate ordering cannot change the deterministic recommendation.
+10. No AI key or generative endpoint is required.
 
 ## Results
 
 | Check | Result | Evidence |
 |---|---|---|
-| Production build | Pass | Five build stages completed; `/` and `/api/recommend` emitted. |
+| Production build | Pass | Five build stages completed; credential-free `/` emitted. |
 | Server render | Pass | Automated test found the product title, estimator inputs, and model catalog. |
 | Starter removal | Pass | Automated test confirmed starter placeholder copy is absent. |
-| Secret boundary | Pass | API key is read only in the server route; static demo has no API request. |
-| Failure fallback | Pass | Server route returns a rules-based brief when key/network/model access fails. |
+| Determinism | Pass | Same frozen input and versions produced identical structured output. |
+| Scenario ordering | Pass | Low ≤ expected ≤ high. |
+| Governance fail-closed | Pass | High risk and unknown sensitivity require review; stale pricing and unsafe loops block. |
+| Capability boundary | Pass | Unsupported modality blocks instead of forcing a candidate. |
+| Ranking stability | Pass | Candidate order does not change the recommendation. |
+| Secret boundary | Pass | No key or generative route is required by the app or static hub. |
 
-Automated suite: 1 test passed, 0 failed. Formula and recommendation boundary cases are represented directly in the alpha interface and should be expanded into a dedicated regression suite after user testing.
+Automated suite: **10 tests passed, 0 failed**. This includes nine decision/governance regression cases and one rendered-app smoke test.
 
 ## First-user test script
 

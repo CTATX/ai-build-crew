@@ -4,7 +4,7 @@ These ideas are intentionally preserved outside the alpha so they remain visible
 
 ## Product expansion
 
-- Live, normalized pricing feeds across multiple model providers.
+- Versioned catalog adapters for Google Gemini and Anthropic Claude, followed by live normalized pricing feeds across multiple providers.
 - A pinned-model watchlist with price, capability, latency, and deprecation alerts.
 - Recommendations that use measured evaluation scores rather than broad quality tiers.
 - Workload import from IDEs, agent traces, invoices, and observability platforms.
@@ -26,3 +26,6 @@ These ideas are intentionally preserved outside the alpha so they remain visible
 - Medical, financial, legal, and other high-stakes policy profiles.
 - Organization controls for approved models, data residency, retention, and budget thresholds.
 - Versioned pricing snapshots so every historical estimate remains reproducible.
+- A reviewed-agent import path: license and provenance check, pinned commit, permission inspection, sandbox, adversarial eval, governance approval, and rollback.
+
+Detailed priority, acceptance criteria, and provider expansion are maintained in [the backlog](artifacts/BACKLOG.md).

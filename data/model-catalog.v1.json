@@ -1,0 +1,13 @@
+{
+  "version": "openai-catalog-2026-08-07",
+  "sourceDate": "2026-08-07",
+  "freshnessDays": 45,
+  "currency": "USD",
+  "unit": "per 1M tokens",
+  "source": "https://developers.openai.com/api/docs/models",
+  "models": [
+    { "id": "gpt-5.6-luna", "provider": "OpenAI", "name": "GPT-5.6 Luna", "lane": "Fast, repeatable work", "input": 0.2, "cached": 0.02, "output": 1.2, "quality": 1, "modalities": ["text"], "contextTokens": 400000, "accent": "lime" },
+    { "id": "gpt-5.6-terra", "provider": "OpenAI", "name": "GPT-5.6 Terra", "lane": "Balanced product work", "input": 2, "cached": 0.2, "output": 12, "quality": 2, "modalities": ["text"], "contextTokens": 400000, "accent": "violet" },
+    { "id": "gpt-5.6-sol", "provider": "OpenAI", "name": "GPT-5.6 Sol", "lane": "Complex, high-stakes work", "input": 5, "cached": 0.5, "output": 30, "quality": 3, "modalities": ["text"], "contextTokens": 400000, "accent": "orange" }
+  ]
+}

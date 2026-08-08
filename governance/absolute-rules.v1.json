@@ -1,0 +1,17 @@
+{
+  "version": "governance-1.0.0",
+  "effectiveDate": "2026-08-08",
+  "owner": "CT",
+  "rules": [
+    { "id": "GOV-001", "severity": "BLOCK", "condition": "noEligibleModel", "message": "No model clears the capability and policy gates." },
+    { "id": "GOV-002", "severity": "REVIEW_REQUIRED", "condition": "highRisk", "message": "High-consequence work requires CT and domain review." },
+    { "id": "GOV-003", "severity": "REVIEW_REQUIRED", "condition": "regulated", "message": "Regulated work cannot be autonomously approved." },
+    { "id": "GOV-004", "severity": "REVIEW_REQUIRED", "condition": "sensitiveData", "message": "Sensitive or protected data requires privacy and security review." },
+    { "id": "GOV-005", "severity": "BLOCK", "condition": "staleCatalog", "message": "Pricing is outside the approved freshness window." },
+    { "id": "GOV-006", "severity": "WARN", "condition": "assumptionsPresent", "message": "The estimate contains assumptions that CT must confirm." },
+    { "id": "GOV-007", "severity": "WARN", "condition": "excessiveLoops", "message": "The workflow uses more than eight model calls per request." },
+    { "id": "GOV-008", "severity": "BLOCK", "condition": "unsafeLoops", "message": "More than twenty model calls per request exceeds the alpha control limit." },
+    { "id": "GOV-009", "severity": "BLOCK", "condition": "evaluationFailed", "message": "One or more deterministic evaluation cases failed." },
+    { "id": "GOV-010", "severity": "BLOCK", "condition": "auditMismatch", "message": "Independent cost recomputation did not match." }
+  ]
+}

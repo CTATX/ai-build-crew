@@ -2,16 +2,17 @@
 
 **Pick the right model. Know the cost.**
 
-AI Build Crew is an alpha decision workbench for product builders. It estimates token spend for a real workload, applies a task-complexity and consequence-of-error threshold, and recommends the least expensive model in the catalog that clears that quality bar.
+AI Build Crew is a governed alpha decision workbench for product builders. It guides an incomplete idea into a transparent workload estimate, recommends the least expensive rule-eligible model, and runs independent evaluation, audit, and governance checks before CT makes the decision.
 
 ## Alpha scope
 
-- Adjustable workload assumptions: daily requests, input/output tokens, cached input, and model calls per request.
-- Per-request, monthly, annual, and planning-range estimates.
-- Explainable model eligibility based on task complexity and error consequence.
+- Prompt-first fast, guided, and synthetic-example routes.
+- Known / Assumed / Unknown provenance for every planning decision.
+- Low, expected, and high workload scenarios.
+- Explainable model eligibility based on task requirements and hard capability constraints.
 - Side-by-side comparison of GPT-5.6 Luna, Terra, and Sol.
-- Optional AI decision brief through a server-only OpenAI API call.
-- Safe deterministic fallback when the API is unavailable.
+- Independent deterministic evaluation, audit, and governance stages.
+- A CT decision gate; high-risk and uncertain safety cases fail closed.
 
 Pricing is a dated snapshot, not a guarantee. The catalog was checked against the [OpenAI model catalog](https://developers.openai.com/api/docs/models) on August 7, 2026.
 
@@ -23,7 +24,7 @@ cost per request = calls × ((uncached input tokens × input price)
                   + (output tokens × output price)) ÷ 1,000,000
 
 monthly cost = cost per request × requests per day × 30
-planning range = 80% to 125% of monthly cost
+low / expected / high = versioned workload scenarios
 ```
 
 Non-token storage, retrieval, web search, tools, infrastructure, and third-party charges are intentionally excluded from the alpha and clearly disclosed in the interface.
@@ -33,23 +34,28 @@ Non-token storage, retrieval, web search, tools, infrastructure, and third-party
 Requires Node.js 22+ and pnpm.
 
 1. Install packages: `pnpm install`
-2. Copy `.env.example` to `.env.local` and add `OPENAI_API_KEY` if you want AI-generated explanations.
-3. Start: `pnpm dev`
-4. Visit `http://localhost:3000`
+2. Start: `pnpm dev`
+3. Visit `http://localhost:3000`
 
-The calculator and recommendations work without an API key. Never place a key in browser code or commit an `.env` file.
+The complete governed workflow works without an API key. The recommendation and approval path contains no generative model call.
 
 ## Evidence and artifacts
 
 - [Evaluation results](EVALUATION.md)
 - [Future-state requirements](FUTURE_STATE.md)
-- [Product requirements document](../maven-capstone/AI_BUILD_CREW_PRD.md)
-- [Repeatable Maven workflow](../maven-capstone/REPEATABLE_WORKFLOW.md)
-- [Builder Badge workbook](../outputs/019fd2e2-8e6f-7403-ae44-7480ddd7ecfc/AI_Build_Crew_Agentic_AI_PRD.xlsx)
+- [Original product requirements document](artifacts/ORIGINAL_PRD.md)
+- [Maven / Product Faculty PRD](artifacts/MAVEN_AGENTIC_AI_PRD.md)
+- [Builder Badge workbook](artifacts/AI_Build_Crew_Agentic_AI_PRD.xlsx)
+- [Repeatable governed workflow](WORKFLOW.md)
+- [Governance and evaluation specification](governance/GOVERNANCE_AND_EVALUATION.md)
+- [Feedback register](governance/FEEDBACK_REGISTER.md)
+- [Product backlog](artifacts/BACKLOG.md)
+- [Overview presentation](artifacts/AI_BUILD_CREW_OVERVIEW.pptx)
+- [2–3 minute demo script](artifacts/DEMO_SCRIPT.md)
 
 ## Publishing model
 
-The full application is deployed on OpenAI Sites, where the API key remains a protected server secret. The `docs/` build is a key-free GitHub Pages demo: it performs the same transparent cost calculation but does not call OpenAI. This separation avoids exposing credentials in a static site.
+The full application is deployed on OpenAI Sites. The `docs/` build is a key-free GitHub Pages artifact hub. Both are safe to publish because no AI credential is required.
 
 ## Repeatable delivery loop
 
