@@ -109,10 +109,10 @@ export default function Home() {
       </nav>
 
       <section className="hero" id="top">
-        <div className="eyebrow"><span /> From idea to model-usage cost range</div>
-        <h1>Describe what you want to build.<br /><em>Get a model starting point.</em></h1>
-        <p className="lede">You do not need to know a model, token count, or technical architecture. AI Build Crew turns everyday product choices into a transparent monthly model-usage estimate, then checks the result before you decide.</p>
-        <a className="primary" href="#intake">Guide me to an estimate <span>↘</span></a>
+        <div className="eyebrow"><span /> Defensible model decisions</div>
+        <h1>Pick the right model.<br /><em>Know the cost.</em></h1>
+        <p className="lede"><strong>A decision workbench for builders who need a defensible model choice—not another pricing spreadsheet.</strong> Start with an everyday description; you do not need to know a model, token count, or technical architecture.</p>
+        <a className="primary" href="#intake">Start with an idea <span>↘</span></a>
         <div className="hero-stamp"><span>RULESET</span><strong>1.2<br />LOCKED</strong><small>HUMAN-OWNED DECISION</small></div>
       </section>
 
@@ -120,8 +120,8 @@ export default function Home() {
         <div className="section-kicker">01 / START WITH WHAT YOU KNOW</div>
         <div className="intake-shell">
           <div className="intake-copy">
-            <h2>The prompt is the beginning.<br /><em>The rules finish the work.</em></h2>
-            <p>Bring a complete workload, a rough idea, or a simple product question. Use the five-question guide, enter known usage directly, or stop early and review every remaining assumption.</p>
+            <h2>Describe what you want to build.<br /><em>Get a model starting point.</em></h2>
+            <p>You do not need to know a model, token count, or technical architecture. AI Build Crew turns everyday product choices into a transparent monthly model-usage estimate, then checks the result before you decide.</p>
             <div className="control-line"><b>Fixed sequence</b><span>Facts → assumptions → estimate → evaluation → audit → governance → human decision</span></div>
           </div>
           <div className="prompt-card">
