@@ -71,4 +71,8 @@ test("candidate ordering cannot change deterministic recommendation", () => {
   const result = analyzeWorkload(base);
   assert.equal(result.recommendation.id, "gpt-5.6-terra");
   assert.equal(result.audit.status, "MATCH");
+  assert.deepEqual(result.coverage.providers, ["Anthropic", "Google", "OpenAI"]);
+  assert.deepEqual(result.coverage.evaluatedProviders, ["OpenAI"]);
+  assert.ok(result.catalogEligible.some((model) => model.id === "gemini-3.6-flash"));
+  assert.ok(!result.eligible.some((model) => model.provider !== "OpenAI"));
 });

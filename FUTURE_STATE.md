@@ -4,7 +4,8 @@ These ideas are intentionally preserved outside the alpha so they remain visible
 
 ## Product expansion
 
-- Versioned catalog adapters for Google Gemini and Anthropic Claude, followed by live normalized pricing feeds across multiple providers.
+- Automated catalog refresh adapters for the implemented OpenAI, Google Gemini, and Anthropic Claude schema, followed by live normalized pricing feeds.
+- Shared live evaluations across providers with explicit start, synthetic defaults, run budget, and concurrency limits.
 - A pinned-model watchlist with price, capability, latency, and deprecation alerts.
 - Recommendations that use measured evaluation scores rather than broad quality tiers.
 - Workload import from IDEs, agent traces, invoices, and observability platforms.

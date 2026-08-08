@@ -10,11 +10,12 @@ AI Build Crew is a governed alpha decision workbench for product builders. It gu
 - Known / Assumed / Unknown provenance for every planning decision.
 - Low, expected, and high workload scenarios.
 - Explainable model eligibility based on task requirements and hard capability constraints.
-- Side-by-side comparison of GPT-5.6 Luna, Terra, and Sol.
+- Published catalog comparison across three OpenAI, two Google Gemini, and three Anthropic Claude models.
+- Cross-provider quality ranking held back until every provider runs the same workload evaluation.
 - Independent deterministic evaluation, audit, and governance stages.
 - A CT decision gate; high-risk and uncertain safety cases fail closed.
 
-Pricing is a dated snapshot, not a guarantee. The catalog was checked against the [OpenAI model catalog](https://developers.openai.com/api/docs/models) on August 7, 2026.
+Every catalog field carries a source date and evidence state. The catalog was checked against published [OpenAI](https://developers.openai.com/api/docs/models), [Google Gemini](https://ai.google.dev/api/models), and [Anthropic Claude](https://platform.claude.com/docs/en/api/models/list) documentation on August 8, 2026.
 
 ## Cost method
 
@@ -27,7 +28,7 @@ monthly cost = cost per request × requests per day × 30
 low / expected / high = versioned workload scenarios
 ```
 
-Non-token storage, retrieval, web search, tools, infrastructure, and third-party charges are intentionally excluded from the alpha and clearly disclosed in the interface.
+The normalized estimate includes standard token input, cached-read, and output fields. Provider-specific cache writes, cache storage, grounding/search, tools, batch modes, regional premiums, infrastructure, and human review remain explicit coverage gaps.
 
 ## Run locally
 

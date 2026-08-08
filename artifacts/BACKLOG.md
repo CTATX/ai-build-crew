@@ -2,9 +2,11 @@
 
 The alpha remains intentionally narrow. This backlog preserves future value without weakening current release gates.
 
-## P1 — provider-neutral comparison
+## P1 — provider-neutral comparison (catalog alpha complete)
 
-- Add versioned catalog adapters for Google Gemini and Anthropic Claude with official source date, input/output/cache price, supported modalities, context, availability, and regional constraints.
+- [x] Add Google Gemini and Anthropic Claude records to the versioned normalized catalog with sources, price fields, modalities, context, tools, availability, and evidence status.
+- [x] Make external models cost-visible but ineligible for ranking until shared evaluation evidence exists.
+- [ ] Automate provider model-list and pricing refresh with change review before publication.
 - Replace the single quality tier with workload-specific measured eval scores and confidence intervals.
 - Normalize provider differences without implying false equivalence; show missing or incomparable fields.
 - Add provider filters, a pinned-model watchlist, and price/capability/deprecation alerts.
@@ -12,7 +14,7 @@ The alpha remains intentionally narrow. This backlog preserves future value with
 
 Acceptance: the same normalized workload is evaluated by one published schema; unsupported or stale entries are excluded; every displayed price has a source date; provider preference is disclosed but never masquerades as quality evidence.
 
-## P2 — real task evaluation
+## P2 — shared live evaluation (next build)
 
 - Bring user-owned provider keys through server-side secret storage only.
 - Run a small, consented evaluation set against eligible models; keep prompts synthetic until data controls are approved.

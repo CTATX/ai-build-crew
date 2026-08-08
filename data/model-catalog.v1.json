@@ -1,13 +1,25 @@
 {
-  "version": "openai-catalog-2026-08-07",
-  "sourceDate": "2026-08-07",
+  "version": "provider-neutral-catalog-2026-08-08",
+  "sourceDate": "2026-08-08",
   "freshnessDays": 45,
   "currency": "USD",
   "unit": "per 1M tokens",
-  "source": "https://developers.openai.com/api/docs/models",
+  "method": "Published catalog facts are comparable. Cross-provider quality is not inferred; a provider becomes rank-eligible only after shared workload evaluation.",
+  "sources": [
+    { "provider": "OpenAI", "models": "https://developers.openai.com/api/docs/models", "pricing": "https://developers.openai.com/api/docs/pricing" },
+    { "provider": "Google", "models": "https://ai.google.dev/api/models", "pricing": "https://ai.google.dev/gemini-api/docs/pricing" },
+    { "provider": "Anthropic", "models": "https://platform.claude.com/docs/en/api/models/list", "pricing": "https://platform.claude.com/docs/en/about-claude/pricing" }
+  ],
   "models": [
-    { "id": "gpt-5.6-luna", "provider": "OpenAI", "name": "GPT-5.6 Luna", "lane": "Fast, repeatable work", "input": 0.2, "cached": 0.02, "output": 1.2, "quality": 1, "modalities": ["text"], "contextTokens": 400000, "accent": "lime" },
-    { "id": "gpt-5.6-terra", "provider": "OpenAI", "name": "GPT-5.6 Terra", "lane": "Balanced product work", "input": 2, "cached": 0.2, "output": 12, "quality": 2, "modalities": ["text"], "contextTokens": 400000, "accent": "violet" },
-    { "id": "gpt-5.6-sol", "provider": "OpenAI", "name": "GPT-5.6 Sol", "lane": "Complex, high-stakes work", "input": 5, "cached": 0.5, "output": 30, "quality": 3, "modalities": ["text"], "contextTokens": 400000, "accent": "orange" }
+    { "id": "gpt-5.6-luna", "provider": "OpenAI", "name": "GPT-5.6 Luna", "lane": "Fast, repeatable work", "input": 0.2, "cached": 0.02, "output": 1.2, "quality": 1, "recommendationReady": true, "evidenceStatus": "HEURISTIC BASELINE", "modalities": ["text"], "contextTokens": 400000, "tools": ["function calling"], "availability": "OpenAI API", "sourceDate": "2026-08-07", "accent": "lime" },
+    { "id": "gpt-5.6-terra", "provider": "OpenAI", "name": "GPT-5.6 Terra", "lane": "Balanced product work", "input": 2, "cached": 0.2, "output": 12, "quality": 2, "recommendationReady": true, "evidenceStatus": "HEURISTIC BASELINE", "modalities": ["text"], "contextTokens": 400000, "tools": ["function calling"], "availability": "OpenAI API", "sourceDate": "2026-08-07", "accent": "violet" },
+    { "id": "gpt-5.6-sol", "provider": "OpenAI", "name": "GPT-5.6 Sol", "lane": "Complex, high-stakes work", "input": 5, "cached": 0.5, "output": 30, "quality": 3, "recommendationReady": true, "evidenceStatus": "HEURISTIC BASELINE", "modalities": ["text"], "contextTokens": 400000, "tools": ["function calling"], "availability": "OpenAI API", "sourceDate": "2026-08-07", "accent": "orange" },
+
+    { "id": "gemini-3.6-flash", "provider": "Google", "name": "Gemini 3.6 Flash", "lane": "Multimodal speed, agents, and grounding", "input": 1.5, "cached": 0.15, "output": 7.5, "quality": null, "recommendationReady": false, "evidenceStatus": "CATALOG ONLY · EVAL REQUIRED", "modalities": ["text", "image", "audio", "video"], "contextTokens": 1000000, "tools": ["function calling", "search grounding", "code execution", "computer use"], "availability": "Gemini Developer API · GA", "sourceDate": "2026-08-08", "accent": "cyan", "pricingNotes": "Standard tier; grounding and cache storage are additional charges." },
+    { "id": "gemini-3.5-flash-lite", "provider": "Google", "name": "Gemini 3.5 Flash-Lite", "lane": "High-volume multimodal automation", "input": 0.3, "cached": 0.03, "output": 2.5, "quality": null, "recommendationReady": false, "evidenceStatus": "CATALOG ONLY · EVAL REQUIRED", "modalities": ["text", "image", "audio", "video"], "contextTokens": 1000000, "tools": ["function calling", "search grounding", "code execution"], "availability": "Gemini Developer API · GA", "sourceDate": "2026-08-08", "accent": "cyan", "pricingNotes": "Standard tier; grounding and cache storage are additional charges." },
+
+    { "id": "claude-opus-5", "provider": "Anthropic", "name": "Claude Opus 5", "lane": "Complex agentic coding and enterprise work", "input": 5, "cached": 0.5, "output": 25, "quality": null, "recommendationReady": false, "evidenceStatus": "CATALOG ONLY · EVAL REQUIRED", "modalities": ["text", "image"], "contextTokens": 1000000, "tools": ["tool use", "computer use", "web search"], "availability": "Claude API · global", "sourceDate": "2026-08-08", "accent": "sand", "pricingNotes": "Cache read shown; cache writes, tools, batch, fast mode, and residency can change total cost." },
+    { "id": "claude-sonnet-5", "provider": "Anthropic", "name": "Claude Sonnet 5", "lane": "Frontier intelligence at scale", "input": 2, "cached": 0.2, "output": 10, "quality": null, "recommendationReady": false, "evidenceStatus": "CATALOG ONLY · EVAL REQUIRED", "modalities": ["text", "image"], "contextTokens": 1000000, "tools": ["tool use", "computer use", "web search"], "availability": "Claude API · global", "sourceDate": "2026-08-08", "accent": "sand", "pricingNotes": "Promotional standard price through August 31, 2026; cache writes, tools, batch, and residency can change total cost." },
+    { "id": "claude-haiku-4.5", "provider": "Anthropic", "name": "Claude Haiku 4.5", "lane": "Cost-sensitive, high-volume reasoning", "input": 1, "cached": 0.1, "output": 5, "quality": null, "recommendationReady": false, "evidenceStatus": "CATALOG ONLY · EVAL REQUIRED", "modalities": ["text", "image"], "contextTokens": 200000, "tools": ["tool use", "computer use", "web search"], "availability": "Claude API · global", "sourceDate": "2026-08-08", "accent": "sand", "pricingNotes": "Cache read shown; cache writes, tools, batch, and residency can change total cost." }
   ]
 }

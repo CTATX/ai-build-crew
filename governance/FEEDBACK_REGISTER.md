@@ -14,7 +14,7 @@ Review date: August 8, 2026
 | The first-user persona must use the corrected name CT. | Absolute content rule | CT is the named first user and final decision owner in every artifact. | Repository text scan. |
 | Original and Maven PRDs were missing from GitHub. | Release blocker | Both Markdown PRDs and the workbook live under `artifacts/`; README links are internal. | Link and file check. |
 | Workflow, PPT, and a 2–3 minute script are required. | Deliverable | Publish all three as versioned repository artifacts. | Release checklist. |
-| Other providers must be preserved. | Future requirement | Google Gemini and Anthropic Claude lead the provider-neutral P1 backlog. | Backlog review. |
+| Other providers must be preserved. | Requirement delivered in catalog alpha | Google Gemini and Anthropic Claude are now cost-visible with evidence states; neither can enter ranking before shared evals. | Provider-neutral regression assertion and catalog review. |
 | Imported GitHub agents may create supply-chain risk. | Absolute governance | Pin, inspect, sandbox, adversarially test, hard-border, approve, and re-review. | Import checklist. |
 | Medical billing is a valid high-value future use case. | Safety constraint | High-risk, regulated, sensitive, and unknown-data work requires human review; alpha is not a medical production decision tool. | Governance regression cases. |
 

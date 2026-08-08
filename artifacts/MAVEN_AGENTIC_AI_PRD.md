@@ -47,7 +47,7 @@ Date: August 8, 2026
 | Eval cases | Same-input determinism, scenario ordering, high risk, unknown sensitivity, unsupported modality, stale pricing, assumptions, loop thresholds, candidate-order invariance, and render smoke test. |
 | Eval result | 10 passed, 0 failed on August 8, 2026. |
 | Iteration | Removed the generative recommendation route; added provenance, guided intake, versioned rules/catalog, independent checks, and fail-closed dispositions. |
-| Known limitations | OpenAI-only heuristic catalog; no measured quality, latency, tool, storage, retrieval, infrastructure, or human-review costs; decisions are not yet persisted. |
+| Known limitations | Three-provider catalog comparison is implemented, but only the OpenAI baseline has heuristic rank eligibility. Google and Anthropic remain catalog-only until shared task evals measure quality, reliability, and latency. Tool, storage, retrieval, infrastructure, and human-review costs are incomplete; decisions are not yet persisted. |
 
 ## Deploy
 

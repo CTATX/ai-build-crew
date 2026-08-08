@@ -24,7 +24,7 @@ Target length: about 2 minutes 30 seconds.
 
 ## 2:10–2:30 — Evidence and next step
 
-“The current alpha passes ten automated cases, including determinism, scenario ordering, fail-closed medical-risk behavior, stale pricing, and unsupported modality. It is intentionally OpenAI-only today. Next, I will add Google and Anthropic through the same normalized catalog and evaluate real task quality, latency, and full-system cost. The value is not just a cheaper estimate—it is a decision a builder can explain, reproduce, and govern.”
+“The current alpha passes ten automated cases and now compares published catalog facts across OpenAI, Google, and Anthropic. The system does not invent cross-provider quality: Google and Anthropic remain cost-visible but unranked until the same representative cases measure quality, reliability, latency, and actual cost. The value is not just a cheaper estimate—it is a decision a builder can explain, reproduce, and govern.”
 
 ## Demo operator checklist
 

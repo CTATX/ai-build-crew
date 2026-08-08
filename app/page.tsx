@@ -35,12 +35,14 @@ export default function Home() {
   const [calls, setCalls] = useState(1);
   const [assumptions, setAssumptions] = useState(["requests", "inputTokens", "outputTokens", "cache", "calls"]);
   const [selected, setSelected] = useState<string | null>(null);
+  const [providerFilter, setProviderFilter] = useState("All");
   const [decision, setDecision] = useState("Not decided");
   const [overrideReason, setOverrideReason] = useState("");
 
   const result = useMemo(() => analyzeWorkload({ task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, assumptions, asOfDate: "2026-08-08" }), [task, risk, dataSensitivity, modality, regulated, requests, inputTokens, outputTokens, cache, calls, assumptions]);
   const active = models.find((model) => model.id === selected) ?? result.recommendation ?? models[0];
   const activeScenarios = { low: costFor(active, result.workload, 0.75), expected: costFor(active, result.workload, 1), high: costFor(active, result.workload, 1.35) };
+  const visibleModels = providerFilter === "All" ? models : models.filter((model) => model.provider === providerFilter);
 
   function markKnown(field: string, value: number, setter: (value: number) => void) {
     setter(value);
@@ -71,6 +73,9 @@ export default function Home() {
   }
 
   const brief = deterministicBrief(result);
+  const activeBrief = active.recommendationReady
+    ? brief
+    : `${active.name} is cost-visible from published ${active.provider} catalog data. It is not ranked against the baseline until the shared workload evaluation supplies quality, reliability, and latency evidence.${active.pricingNotes ? ` ${active.pricingNotes}` : ""}`;
 
   return (
     <main>
@@ -130,18 +135,18 @@ export default function Home() {
           </div>
 
           <aside className="result-card">
-            <div className="result-label">Deterministic result · {result.disposition.replaceAll("_", " ")}</div>
+            <div className="result-label">{active.recommendationReady ? "Deterministic baseline" : "Catalog-only comparison"} · {result.disposition.replaceAll("_", " ")}</div>
             <div className={`model-orbit ${active.accent}`}><span>{active.name.split(" ").at(-1)?.slice(0, 1)}</span></div>
             <h2>{result.recommendation ? active.name : "No eligible model"}</h2>
             <p>{result.recommendation ? active.lane : "Stop and resolve the capability or policy gap."}</p>
-            {selected && selected !== result.recommendation?.id && <div className="override">Comparison only · rule recommendation: {result.recommendation?.name ?? "none"}</div>}
+            {selected && selected !== result.recommendation?.id && <div className="override">Comparison only · evaluated-baseline recommendation: {result.recommendation?.name ?? "none"}</div>}
             <div className="cost-grid">
               <div><small>LOW / MONTH</small><strong>{money(activeScenarios.low.monthly)}</strong></div>
               <div><small>EXPECTED / MONTH</small><strong>{money(activeScenarios.expected.monthly)}</strong></div>
               <div><small>HIGH / MONTH</small><strong>{money(activeScenarios.high.monthly)}</strong></div>
             </div>
-            <div className="brief deterministic" aria-live="polite">{brief}</div>
-            <div className="version-line">Catalog {result.catalog.version} · Engine {result.audit.engineVersion}</div>
+            <div className="brief deterministic" aria-live="polite">{activeBrief}</div>
+            <div className="version-line">Catalog {result.catalog.version} · Engine {result.audit.engineVersion} · Evidence {active.evidenceStatus}</div>
           </aside>
         </div>
       </section>
@@ -162,17 +167,19 @@ export default function Home() {
       </section>
 
       <section className="model-section" id="models">
-        <div className="section-head"><div><div className="section-kicker dark">04 / UNDERSTAND THE TRADE-OFF</div><h2>What do I lose<br />by choosing another?</h2></div><p>Models are “rule-eligible,” not universally best. Measured workload quality is a future evaluation layer.</p></div>
+        <div className="section-head"><div><div className="section-kicker dark">04 / UNDERSTAND THE TRADE-OFF</div><h2>Published facts first.<br />Shared evals next.</h2></div><p>Catalog fields can be compared now. Cross-provider ranking waits for the same representative workload to measure quality, reliability, latency, and actual cost.</p></div>
+        <div className="catalog-control"><div><b>CATALOG COVERAGE</b><span>{result.coverage.providers.length} providers · {models.length} models · {result.coverage.evaluatedProviders.length} provider currently rank-eligible</span></div><div className="provider-filters">{["All", ...result.coverage.providers].map((provider) => <button key={provider} className={providerFilter === provider ? "active" : ""} onClick={() => setProviderFilter(provider)}>{provider}</button>)}</div></div>
         <div className="model-table">
-          <div className="table-row header"><span>MODEL</span><span>QUALITY RULE</span><span>EXPECTED</span><span>DELTA</span><span>FIT</span></div>
-          {models.map((model) => {
+          <div className="table-row header"><span>MODEL</span><span>PROVIDER</span><span>EXPECTED</span><span>EVIDENCE</span><span>FIT</span></div>
+          {visibleModels.map((model) => {
             const expected = costFor(model, result.workload, 1).monthly;
-            const baseline = result.scenarios?.expected.monthly ?? 0;
-            const fit = result.eligible.some((item: { id: string }) => item.id === model.id);
-            return <button className={`table-row ${active.id === model.id ? "active" : ""}`} key={model.id} onClick={() => setSelected(model.id)}><span><i className={model.accent} />{model.name}</span><span>{model.quality} / 3</span><span>{money(expected)}</span><span>{expected >= baseline ? `+${money(expected - baseline)}` : `−${money(baseline - expected)}`}</span><span className={fit ? "fit" : "miss"}>{fit ? "RULE-ELIGIBLE" : "EXCLUDED"}</span></button>;
+            const catalogFit = result.catalogEligible.some((item: { id: string }) => item.id === model.id);
+            const rankFit = result.eligible.some((item: { id: string }) => item.id === model.id);
+            const status = !catalogFit ? "EXCLUDED" : rankFit ? "RANK-ELIGIBLE" : model.recommendationReady ? "BELOW RULE GATE" : "EVAL REQUIRED";
+            return <button className={`table-row ${active.id === model.id ? "active" : ""}`} key={model.id} onClick={() => setSelected(model.id)}><span><i className={model.accent} />{model.name}</span><span>{model.provider}</span><span>{money(expected)}</span><span>{model.evidenceStatus}</span><span className={rankFit ? "fit" : catalogFit ? "pending" : "miss"}>{status}</span></button>;
           })}
         </div>
-        <p className="source-note">OpenAI pricing snapshot dated August 7, 2026. Rule quality is a transparent alpha heuristic, not a measured universal benchmark. Google, Anthropic, OpenRouter, and Bedrock are groomed backlog items.</p>
+        <p className="source-note">Catalog checked August 8, 2026 against <a href="https://developers.openai.com/api/docs/models">OpenAI</a>, <a href="https://ai.google.dev/api/models">Google Gemini</a>, and <a href="https://platform.claude.com/docs/en/api/models/list">Anthropic Claude</a> model documentation and their published pricing. Expected cost includes token input, cached-read, and output fields shown in the catalog; model-specific cache writes, storage, grounding, tools, batch modes, regional premiums, and infrastructure remain itemized coverage gaps.</p>
       </section>
 
       <section className="method artifacts" id="artifacts">
@@ -181,7 +188,7 @@ export default function Home() {
         <div className="artifact-links"><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/ORIGINAL_PRD.md">Original product PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/MAVEN_AGENTIC_AI_PRD.md">Maven AI PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_Build_Crew_Agentic_AI_PRD.xlsx">PRD workbook ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/WORKFLOW.md">Workflow ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/governance/GOVERNANCE_AND_EVALUATION.md">Governance ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/EVALUATION.md">Evaluation ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_BUILD_CREW_OVERVIEW.pptx">Presentation ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/DEMO_SCRIPT.md">2–3 minute script ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/BACKLOG.md">Provider backlog ↗</a></div>
       </section>
 
-      <footer><span>AI BUILD CREW · GOVERNED ALPHA</span><p>Facts before interpretation. Cost after eligibility. Human judgment at the gate.</p><a href="#top">Back to top ↑</a></footer>
+      <footer><span>AI BUILD CREW · GOVERNED ALPHA</span><p><b>Authoritative:</b> sourced catalog fields and deterministic math. <b>Evaluated:</b> shared workload evidence. <b>Decision owner:</b> CT.</p><a href="#top">Back to top ↑</a></footer>
     </main>
   );
 }

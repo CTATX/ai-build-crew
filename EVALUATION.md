@@ -27,6 +27,7 @@ Evaluation date: August 8, 2026
 | Governance fail-closed | Pass | High risk and unknown sensitivity require review; stale pricing and unsafe loops block. |
 | Capability boundary | Pass | Unsupported modality blocks instead of forcing a candidate. |
 | Ranking stability | Pass | Candidate order does not change the recommendation. |
+| Provider neutrality | Pass | Three providers are cost-visible; unevaluated Google and Anthropic entries cannot enter the recommendation ranking. |
 | Secret boundary | Pass | No key or generative route is required by the app or static hub. |
 
 Automated suite: **10 tests passed, 0 failed**. This includes nine decision/governance regression cases and one rendered-app smoke test.

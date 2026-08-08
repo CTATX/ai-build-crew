@@ -31,7 +31,7 @@ When considering an AI feature, the user wants to move from a rough idea to a co
 ## Non-goals for the alpha
 
 - Choosing for the human or silently approving high-risk use cases.
-- Claiming vendor-neutral coverage before other provider catalogs are integrated.
+- Claiming cross-provider quality or reliability equivalence before shared task evaluations exist.
 - Including storage, retrieval, tool, infrastructure, or human-review charges.
 - Accepting secrets, protected health information, or production customer content.
 - Treating heuristic quality tiers as measured benchmark truth.
@@ -105,4 +105,4 @@ Use CT as the first user on three real planning decisions and at least two synth
 
 ## Future state
 
-Add provider-neutral catalogs, measured task evaluations, watchlists, price/deprecation alerts, workload imports, full system cost, team policies, and privacy-preserving benchmarking. These remain tracked in [BACKLOG.md](BACKLOG.md).
+The provider-neutral catalog now includes OpenAI, Google Gemini, and Anthropic Claude with explicit evidence states. Next add measured shared task evaluations, automated refresh, watchlists, price/deprecation alerts, workload imports, full system cost, team policies, and privacy-preserving benchmarking. These remain tracked in [BACKLOG.md](BACKLOG.md).
