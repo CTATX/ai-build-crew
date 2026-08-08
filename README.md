@@ -1,15 +1,15 @@
 # AI Build Crew
 
-**Describe an idea. Get a monthly cost range and a model starting point.**
+**Describe an AI workload. Get a monthly model-usage cost range and a model starting point.**
 
-AI Build Crew is a governed alpha decision workbench for product builders. It guides an incomplete idea into a transparent workload estimate, recommends the least expensive rule-eligible model, and runs independent evaluation, audit, and governance checks before a human decision owner decides.
+AI Build Crew is a governed alpha decision workbench for product builders. It guides an incomplete idea into a transparent model-usage estimate, recommends the least expensive rule-eligible model, and produces separate evaluation, audit, and governance findings before a human decision owner decides. It does not yet estimate software labor or complete application infrastructure cost.
 
 ## Alpha scope
 
 - Prompt-first fast, guided, and synthetic-example routes.
 - A persistent workload prompt with explicit input/output tokens per call.
 - An optional hard monthly budget ceiling; the system blocks rather than recommends an over-budget model.
-- Known / Assumed / Unknown provenance for every planning decision.
+- A visible field-level assumption ledger; a richer per-field provenance record remains planned.
 - Low, expected, and high workload scenarios.
 - Explainable model eligibility based on task requirements and hard capability constraints.
 - Published catalog comparison across three OpenAI, two Google Gemini, and three Anthropic Claude models.
@@ -17,7 +17,7 @@ AI Build Crew is a governed alpha decision workbench for product builders. It gu
 - Independent deterministic evaluation, audit, and governance stages.
 - A human decision gate; high-risk and uncertain safety cases fail closed.
 
-Every catalog field carries a source date and evidence state. The catalog was checked against published [OpenAI](https://developers.openai.com/api/docs/models), [Google Gemini](https://ai.google.dev/api/models), and [Anthropic Claude](https://platform.claude.com/docs/en/api/models/list) documentation on August 8, 2026.
+Every model record carries a source date and evidence state, with provider-level source references. Field-level price provenance remains planned. The catalog was checked against published [OpenAI](https://developers.openai.com/api/docs/models), [Google Gemini](https://ai.google.dev/api/models), and [Anthropic Claude](https://platform.claude.com/docs/en/api/models/list) documentation on August 8, 2026.
 
 ## Cost method
 
@@ -45,6 +45,10 @@ The complete governed workflow works without an API key. The recommendation and 
 ## Evidence and artifacts
 
 - [Productized Alpha release notes](RELEASE_NOTES.md)
+- [Audited v0.1.0 release record](artifacts/RELEASE_v0.1.0_AUDIT.md)
+- [Capability and channel audit](artifacts/CAPABILITY_AND_CHANNEL_AUDIT.md)
+- [Comparable market discovery](artifacts/MARKET_DISCOVERY.md)
+- [Self-test cycle](artifacts/SELF_TEST_CYCLE.md)
 - [Release manifest](RELEASE_MANIFEST.json)
 - [Productization audit](artifacts/PRODUCTIZATION_AUDIT.md)
 - [GitHub and Sites release workflow](artifacts/GIT_SITES_RELEASE_WORKFLOW.md)

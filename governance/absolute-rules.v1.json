@@ -1,5 +1,5 @@
 {
-  "version": "governance-1.1.0",
+  "version": "governance-1.2.0",
   "effectiveDate": "2026-08-08",
   "owner": "Human decision owner",
   "rules": [
@@ -14,6 +14,8 @@
     { "id": "GOV-009", "severity": "BLOCK", "condition": "evaluationFailed", "message": "One or more deterministic evaluation cases failed." },
     { "id": "GOV-010", "severity": "BLOCK", "condition": "auditMismatch", "message": "Independent cost recomputation did not match." },
     { "id": "GOV-011", "severity": "BLOCK", "condition": "budgetExceeded", "message": "No evidence-qualified model fits the stated monthly budget. Change the workload, budget, or requirements before proceeding." },
-    { "id": "GOV-012", "severity": "REVIEW_REQUIRED", "condition": "unknownRisk", "message": "Unknown consequences of error require human review before approval." }
+    { "id": "GOV-012", "severity": "REVIEW_REQUIRED", "condition": "unknownRisk", "message": "Unknown consequences of error require human review before approval." },
+    { "id": "GOV-013", "severity": "REVIEW_REQUIRED", "condition": "unknownRegulatoryStatus", "message": "Unknown regulatory status requires human review before approval." },
+    { "id": "GOV-014", "severity": "REVIEW_REQUIRED", "condition": "unknownTask", "message": "An uncertain model job requires human review before approval." }
   ]
 }

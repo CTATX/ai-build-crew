@@ -30,6 +30,7 @@ test("low expected and high scenarios are ordered", () => {
   assert.equal(result.evaluation.status, "PASS");
   assert.ok(result.scenarios.low.monthly < result.scenarios.expected.monthly);
   assert.ok(result.scenarios.expected.monthly < result.scenarios.high.monthly);
+  assert.equal(result.scenarios.expected.annual, result.scenarios.expected.monthly * 12);
 });
 
 test("high-risk work requires review and cannot be ready", () => {
@@ -48,6 +49,9 @@ test("unknown consequence of error fails closed to human review", () => {
   const result = analyzeWorkload({ ...base, risk: "Unknown" });
   assert.equal(result.disposition, "REVIEW_REQUIRED");
   assert.ok(result.governance.findings.some((finding) => finding.id === "GOV-012"));
+  const uncertainJob = analyzeWorkload({ ...base, task: "Not sure" });
+  assert.equal(uncertainJob.disposition, "REVIEW_REQUIRED");
+  assert.ok(uncertainJob.governance.findings.some((finding) => finding.id === "GOV-014"));
 });
 
 test("unsupported modality blocks instead of forcing a model", () => {
@@ -67,6 +71,9 @@ test("assumptions remain visible and create a warning", () => {
   const result = analyzeWorkload({ ...base, assumptions: ["requests", "inputTokens"] });
   assert.deepEqual(result.assumptions, ["inputTokens", "requests"]);
   assert.equal(result.governance.status, "WARN");
+  const unknownRegulation = analyzeWorkload({ ...base, assumptions: ["regulated"] });
+  assert.equal(unknownRegulation.disposition, "REVIEW_REQUIRED");
+  assert.ok(unknownRegulation.governance.findings.some((finding) => finding.id === "GOV-013"));
 });
 
 test("excessive agent loops warn and unsafe loops block", () => {
