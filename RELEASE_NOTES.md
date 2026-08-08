@@ -1,6 +1,6 @@
-# AI Build Crew v0.2.0-rc.1 — Productized Alpha
+# AI Build Crew v0.2.0-rc.2 — Productized Alpha
 
-Status: **Validated release candidate; not yet deployed to production**
+Status: **Deployed and smoke-tested release candidate**
 
 Prepared: August 8, 2026
 
@@ -12,12 +12,12 @@ AI Build Crew is a prompt-first, pre-build decision workbench for product builde
 
 | Channel | Version observed | Status |
 |---|---|---|
-| Sites production | Alpha 01 | Earlier three-model OpenAI calculator; no prompt-first intake |
-| GitHub Pages | v0.1 artifact hub | Governed artifacts published, but older personalized copy remains visible |
-| GitHub `main` | v0.1 governed source | Prompt routes and governed engine exist in source; not synchronized to Sites |
-| GitHub release-candidate branch | v0.2.0-rc.1 | Beginner-first, person-neutral candidate described below |
+| Sites production | v0.2.0-rc.2 | Prompt-first Alpha 02 deployed and browser smoke-tested |
+| GitHub Pages | v0.2.0-rc.2 | Person-neutral public product/about page; internal work-step checklist removed |
+| GitHub `main` | v0.2.0-rc.2 | Same reviewed application, public page, and release evidence |
+| Custom domain | v0.2.0-rc.2 | Active with HTTPS; access remains owner-controlled pending an explicit public-access decision |
 
-“Included in this candidate” does not mean “available in production.” Production claims begin only after the exact reviewed commit is deployed and smoke-tested on both Sites and GitHub Pages.
+The immutable tag `v0.2.0-rc.2` resolves the exact source deployed to GitHub Pages and Sites. The earlier `alpha-baseline-2026-08-08` tag remains the rollback reference.
 
 ## Included in this candidate
 
@@ -42,7 +42,7 @@ AI Build Crew is a prompt-first, pre-build decision workbench for product builde
 - A person-neutral scan passes across active text, workbook, and presentation content.
 - PowerPoint overflow checks pass.
 
-These checks verify the candidate package. They do not prove that Sites production has been updated.
+Production browser verification confirmed the prompt control, Alpha 02 marker, guided first question, explicit-answer gate, person-neutral copy, and the public landing-page capability story. The unused hosted OpenAI API secret was removed before the final deployment.
 
 ## Service capability boundary
 

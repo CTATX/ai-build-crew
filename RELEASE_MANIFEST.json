@@ -1,11 +1,11 @@
 {
-  "release": "v0.2.0-rc.1",
-  "status": "draft-release-candidate",
+  "release": "v0.2.0-rc.2",
+  "status": "deployed-release-candidate",
   "preparedAt": "2026-08-08",
   "baselineTag": "alpha-baseline-2026-08-08",
   "baselineCommit": "cd7a8282a6964a049221e31c9682f8dd694d7efe",
-  "releaseBranch": "agent/productized-alpha",
-  "releaseCommit": "assigned-after-review-and-merge",
+  "releaseBranch": "main",
+  "releaseCommit": "resolved-by-immutable-tag:v0.2.0-rc.2",
   "versions": {
     "catalog": "provider-neutral-catalog-2026-08-08",
     "governance": "governance-1.2.0",
@@ -19,7 +19,11 @@
     "lint": "pass",
     "presentationOverflow": "pass",
     "personNeutralArtifactScan": "pass",
-    "liveSitesDeployment": "pending-release-approval"
+    "browserCycles": "pass",
+    "githubPagesDeployment": "pass",
+    "liveSitesDeployment": "pass",
+    "customDomainHttps": "pass-access-controlled",
+    "unusedHostedApiSecret": "removed"
   },
   "sha256": {
     "artifacts/AI_BUILD_CREW_OVERVIEW.pptx": "61e7883d705791417143c2d4fa52b87e2af604066331854dcda5e024e3d62baf",
