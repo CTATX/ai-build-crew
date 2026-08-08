@@ -2,7 +2,7 @@
 
 **Describe an AI workload. Get a monthly model-usage cost range and a model starting point.**
 
-AI Build Crew is a governed alpha decision workbench for product builders. It guides an incomplete idea into a transparent model-usage estimate, recommends the least expensive rule-eligible model, and produces separate evaluation, audit, and governance findings before a human decision owner decides. It does not yet estimate software labor or complete application infrastructure cost.
+AI Build Crew is a governed decision workbench for product builders. It guides an incomplete idea into a transparent model-usage estimate, recommends the least expensive rule-eligible model, and produces separate evaluation, audit, and governance findings before a human decision owner decides. It does not yet estimate software labor or complete application infrastructure cost.
 
 ## Alpha scope
 
