@@ -1,4 +1,4 @@
-# AI Build Crew v0.2.0-rc.6 — Faculty Control Alignment
+# AI Build Crew v0.2.0-rc.7 — Clean Product Narrative
 
 Prepared and release-audited: August 9, 2026
 
@@ -15,6 +15,8 @@ This revision also closes first-user interpretation gaps: required formats are m
 The estimator no longer includes the coursework and release-evidence section. Submission artifacts remain available in the GitHub repository and artifact hub, while the product page now stays focused on intake, estimate, governance, comparison, and the product's public purpose.
 
 The final PRD incorporates faculty control feedback explicitly: deterministic calculation accuracy against a known answer key is the primary metric; the ranking rubric states its gates and weights; operating thresholds have stop actions; and rollback restores the last immutable release instead of moving history.
+
+The landing experience now removes coursework-style numeric framing from the opening section and removes the About-section label while retaining its product and BadLabz attribution copy. Estimate sections 02–04 remain available after the user starts an estimate.
 
 ## What changed
 
@@ -62,7 +64,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Release channels
 
-The release is complete only when immutable tag `v0.2.0-rc.6`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.5` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
+The release is complete only when immutable tag `v0.2.0-rc.7`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.6` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
 
 ## Next increments
 

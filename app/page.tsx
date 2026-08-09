@@ -106,7 +106,7 @@ export default function Home() {
       <nav className="topbar">
         <a className="brand" href="#top" aria-label="AI Build Crew home"><span className="brand-mark">A</span> AI Build Crew</a>
         <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="#governance">Governance</a><a href="#about">About</a></div>
-        <span className="alpha">Release candidate · 06</span>
+        <span className="alpha">Release candidate · 07</span>
       </nav>
 
       <section className="hero" id="top">
@@ -118,7 +118,7 @@ export default function Home() {
       </section>
 
       <section className="intake-section" id="intake">
-        <div className="section-kicker">01 / START WITH WHAT YOU KNOW</div>
+        <div className="section-kicker">START WITH WHAT YOU KNOW</div>
         <div className="intake-shell">
           <div className="intake-copy">
             <h2>Describe what you want to build.<br /><em>Get a model starting point.</em></h2>
@@ -218,7 +218,6 @@ export default function Home() {
       </section>
 
       <section className="about-section" id="about">
-        <div className="section-kicker">05 / ABOUT THE LAB</div>
         <div className="about-grid"><h2>Built for builders who want evidence before commitment.</h2><div><p>AI Build Crew turns a rough product idea into a transparent workload estimate, an evidence-gated model comparison, and a governed decision that stays human-owned.</p><p className="badlabz">Developed by <a href="https://badlabz.com">BadLabz.com ↗</a> :)</p></div></div>
       </section>
 

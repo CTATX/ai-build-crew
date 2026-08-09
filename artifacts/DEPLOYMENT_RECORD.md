@@ -1,6 +1,6 @@
 # AI Build Crew deployment record
 
-Release candidate: `v0.2.0-rc.6`
+Release candidate: `v0.2.0-rc.7`
 
 Status: **Release locked; live evidence is recorded on the GitHub release after same-commit verification**
 
@@ -8,9 +8,9 @@ Prepared: August 9, 2026
 
 | Control | Locked value |
 |---|---|
-| Rollback release | `v0.2.0-rc.5` at `1866cf421cff429de349bd978512e50def2bd91d` |
+| Rollback release | `v0.2.0-rc.6` at `a3f82787c5007b013b5a41a5354e91b3464eafb7` |
 | Original baseline | `alpha-baseline-2026-08-08` at `cd7a8282a6964a049221e31c9682f8dd694d7efe` |
-| Release source | Immutable tag `v0.2.0-rc.6` on `main` |
+| Release source | Immutable tag `v0.2.0-rc.7` on `main` |
 | GitHub Pages | `https://ctatx.github.io/ai-build-crew/` |
 | Sites application | `https://ai-build-crew.ctatx.chatgpt.site/` |
 | Primary custom domain | `https://aibuildcrew.badlabz.com/` |
@@ -22,4 +22,4 @@ Prepared: August 9, 2026
 | Browser smoke target | Prompt, multi-format selection, workflow-step guidance, optional ceiling, model-switch explanation, cost-per-completed-task spread, COST-001, GOV-009/GOV-015 language, artifact links, and public access |
 | Hosted secrets | No application secret required by the deterministic release |
 
-The GitHub release for `v0.2.0-rc.6` is the authoritative live-deployment record. It must name the exact tag commit, GitHub Pages result, Sites result, custom-domain result, smoke checks, and rollback target. Never move an approved tag. Roll back Sites to its prior saved version and use a normal Git revert when needed.
+The GitHub release for `v0.2.0-rc.7` is the authoritative live-deployment record. It must name the exact tag commit, GitHub Pages result, Sites result, custom-domain result, smoke checks, and rollback target. Never move an approved tag. Roll back Sites to its prior saved version and use a normal Git revert when needed.
