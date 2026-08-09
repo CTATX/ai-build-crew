@@ -24,6 +24,8 @@ test("renders the AI Build Crew estimator", async () => {
   assert.match(html, /Result needed/);
   assert.match(html, /Checker steps/);
   assert.match(html, /cost-per-completed-task range/);
+  assert.match(html, /AI_Build_Crew_Agentic_AI_PRD_COST_CONTRACT\.xlsx/);
+  assert.match(html, /AI_BUILD_CREW_COST_CONTRACT_VIDEO_REVIEW\.pptx/);
   assert.doesNotMatch(html, /Answer coming back/);
   assert.match(html, /Guide me to an estimate/);
   assert.match(html, /GPT-5\.6 Luna/);
