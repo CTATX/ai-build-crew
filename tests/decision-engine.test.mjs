@@ -110,6 +110,15 @@ test("multi-format requirements are conjunctive and never silently reduced", () 
   assert.equal(textAndAudio.disposition, "BLOCKED");
 });
 
+test("four-format inventory workflow blocks without emitting a fallback model cost", () => {
+  const result = analyzeWorkload({ ...base, task: "Classification & extraction", risk: "Low", modalities: ["video", "image", "text", "audio"] });
+  assert.equal(result.recommendation, null);
+  assert.equal(result.scenarios, null);
+  assert.deepEqual(result.catalogEligible.map((model) => model.provider), ["Google", "Google"]);
+  assert.match(deterministicBrief(result), /no candidate is evaluation-ready/i);
+  assert.match(deterministicBrief(result), /No fallback cost is emitted/);
+});
+
 test("unknown workflow steps receive a visible deterministic recommendation", () => {
   const suggested = analyzeWorkload({ ...base, primarySteps: 0, checkerSteps: -1, assumptions: ["primarySteps", "checkerSteps"] });
   assert.equal(suggested.workflowSuggestion.applied, true);

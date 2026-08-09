@@ -1,4 +1,4 @@
-# AI Build Crew v0.2.0-rc.7 — Clean Product Narrative
+# AI Build Crew v0.2.0-rc.8 — Useful Decision Output
 
 Prepared and release-audited: August 9, 2026
 
@@ -18,13 +18,17 @@ The final PRD incorporates faculty control feedback explicitly: deterministic ca
 
 The landing experience now removes coursework-style numeric framing from the opening section and removes the About-section label while retaining its product and BadLabz attribution copy. Estimate sections 02–04 remain available after the user starts an estimate.
 
+The former human decision gate is now a point-in-time report outcome. A user can record a disposition and optional note, then download a dated Markdown snapshot of the workload, assumptions, cost spread, model evidence, rule findings, and reproducibility versions without saving the idea to a database.
+
+The failure-impact question now uses explicit risk language. A four-format inventory workflow test also exposed and corrected a misleading blocked state: when no evaluated model clears the combined capability gates, the app emits no fallback model cost. It identifies catalog-capable candidates awaiting evaluation and explains when the workload should be split into specialist stages.
+
 ## What changed
 
 - Removed output tokens as a user input; COST-001 rejects the field if it reaches the engine.
 - Added result-shape inputs: label or field, short answer, detailed answer, and long artifact.
 - Separated primary AI steps from checker steps.
 - Added deterministic workflow-step guidance when the builder does not know the architecture.
-- Made required formats multi-select and conjunctive: every selected format must be supported.
+- Made required formats multi-select and conjunctive for one model step: every selected format must be supported together.
 - Added model-specific output-length and retry distributions.
 - Reframed the cost-per-completed-task field as an optional user-supplied affordability ceiling; it filters but never creates the estimate.
 - Added a visible recommendation-sensitivity explanation and explicit zero-model-call runtime disclosure.
@@ -33,6 +37,8 @@ The landing experience now removes coursework-style numeric framing from the ope
 - Added GOV-015 so heuristic behavior profiles remain visibly unmeasured until repeated live evaluations replace them.
 - Updated the original PRD, Maven/Product Faculty PRD, Builder Badge workbook, TeamOS workflow, governance documents, four-minute script, and eight-slide recording deck.
 - Added release-gate automation for build, test, lint, and drift checks.
+- Added a downloadable point-in-time Markdown decision report; the application still stores nothing server-side.
+- Removed fallback costs from blocked results and added a four-format inventory regression case.
 
 ## Catalog release audit
 
@@ -42,7 +48,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Verified evidence
 
-- 18 automated checks pass and 0 fail.
+- 21 automated checks pass and 0 fail.
 - Production build and lint pass.
 - Same-input deterministic results and stable ranking pass.
 - COST-001 through COST-006 pass.
@@ -64,13 +70,13 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Release channels
 
-The release is complete only when immutable tag `v0.2.0-rc.7`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.6` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
+The release is complete only when immutable tag `v0.2.0-rc.8`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.7` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
 
 ## Next increments
 
 1. Measure task-by-model output, retry, checker, success, latency, and actual-charge distributions using budget-capped synthetic cases.
 2. Add reviewed catalog refresh and price-change history.
-3. Add explicit local export and clear-session controls before any cloud persistence.
+3. Add clear-session controls and optional JSON export before any cloud persistence.
 4. Add authenticated saved forecasts and user-owned deletion/export.
 5. Add forecast-versus-actual tracking, then shared Google and Anthropic live evaluation.
 

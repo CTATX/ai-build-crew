@@ -17,7 +17,7 @@ test("renders the AI Build Crew estimator", async () => {
   assert.match(html, /Know the cost/);
   assert.match(html, /Describe what you want to build/);
   assert.match(html, /Get a model starting point/);
-  assert.match(html, /Release candidate · 07/);
+  assert.match(html, /Release candidate · 08/);
   assert.doesNotMatch(html, /01 \/ START WITH WHAT YOU KNOW/);
   assert.doesNotMatch(html, /ABOUT THE LAB/);
   assert.match(html, /1\.3/);
@@ -30,6 +30,10 @@ test("renders the AI Build Crew estimator", async () => {
   assert.doesNotMatch(html, /AI_Build_Crew_Agentic_AI_PRD_COST_CONTRACT\.xlsx/);
   assert.doesNotMatch(html, /Answer coming back/);
   assert.match(html, /Guide me to an estimate/);
+  assert.match(html, /Impact if the model fails/);
+  assert.match(html, /Point-in-time decision report/);
+  assert.match(html, /Download point-in-time report/);
+  assert.doesNotMatch(html, /Human decision gate/);
   assert.match(html, /GPT-5\.6 Luna/);
   assert.doesNotMatch(html, /Your site is taking shape/);
 });
