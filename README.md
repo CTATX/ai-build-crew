@@ -48,6 +48,7 @@ The complete governed workflow works without an API key. The recommendation and 
 - [Audited v0.1.0 release record](artifacts/RELEASE_v0.1.0_AUDIT.md)
 - [Capability and channel audit](artifacts/CAPABILITY_AND_CHANNEL_AUDIT.md)
 - [Comparable market discovery](artifacts/MARKET_DISCOVERY.md)
+- [Multi-agent provider platform plan](artifacts/MULTI_AGENT_PROVIDER_PLATFORM_PLAN.md)
 - [Self-test cycle](artifacts/SELF_TEST_CYCLE.md)
 - [Release manifest](RELEASE_MANIFEST.json)
 - [Productization audit](artifacts/PRODUCTIZATION_AUDIT.md)
