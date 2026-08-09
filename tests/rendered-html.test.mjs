@@ -17,7 +17,7 @@ test("renders the AI Build Crew estimator", async () => {
   assert.match(html, /Know the cost/);
   assert.match(html, /Describe what you want to build/);
   assert.match(html, /Get a model starting point/);
-  assert.match(html, /Release candidate · 05/);
+  assert.match(html, /Release candidate · 06/);
   assert.match(html, /1\.3/);
   assert.match(html, /What are you thinking about building/);
   assert.match(html, /Uses per day/);

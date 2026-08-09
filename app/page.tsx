@@ -106,7 +106,7 @@ export default function Home() {
       <nav className="topbar">
         <a className="brand" href="#top" aria-label="AI Build Crew home"><span className="brand-mark">A</span> AI Build Crew</a>
         <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="#governance">Governance</a><a href="#about">About</a></div>
-        <span className="alpha">Release candidate · 05</span>
+        <span className="alpha">Release candidate · 06</span>
       </nav>
 
       <section className="hero" id="top">

@@ -1,11 +1,11 @@
 {
-  "release": "v0.2.0-rc.5",
+  "release": "v0.2.0-rc.6",
   "status": "release-candidate-locked",
   "preparedAt": "2026-08-09",
-  "baselineTag": "v0.2.0-rc.4",
-  "baselineCommit": "a2edc42ceafe5739b272064d800460117f6f10c7",
+  "baselineTag": "v0.2.0-rc.5",
+  "baselineCommit": "1866cf421cff429de349bd978512e50def2bd91d",
   "releaseBranch": "main",
-  "releaseCommit": "resolved-by-immutable-tag:v0.2.0-rc.5",
+  "releaseCommit": "resolved-by-immutable-tag:v0.2.0-rc.6",
   "versions": {
     "catalog": "provider-neutral-catalog-2026-08-09",
     "costContract": "cost-contract-1.0.0",
@@ -30,9 +30,9 @@
   },
   "sha256": {
     "artifacts/AI_BUILD_CREW_COST_CONTRACT_VIDEO_REVIEW.pptx": "4defca4b1fff0a6a5ea95b936d03478bf58b15e3d31f6ce129770f375c040f6f",
-    "artifacts/AI_Build_Crew_Agentic_AI_PRD_COST_CONTRACT.xlsx": "7b8016a42c73055e1fdad090d6642789766ebaf7b2399c5d327f5a17d6bc3cb9",
+    "artifacts/AI_Build_Crew_Agentic_AI_PRD_COST_CONTRACT.xlsx": "1b9fd5ac633ef2aa265ab08e50c49493a1fbb44caad47183e21e5971210e669f",
     "artifacts/ORIGINAL_PRD.md": "b726ddc4bd1c7df25eb27b289f9dfb03fc0792723f31c79b9ea8d031960ba2a7",
-    "artifacts/MAVEN_AGENTIC_AI_PRD.md": "6c5081725864af68846bef3d03b683bdef12d9ee2e3cc61905b3da23315adc7d",
+    "artifacts/MAVEN_AGENTIC_AI_PRD.md": "0d372b36620ccef029eaa1bf1a167ff156a61cc6ca6488ce733f7b95350b9662",
     "governance/absolute-rules.v1.json": "2b03096c24b77adb6c1be234b8060d47e6741ab219a471a96243812611f49e84",
     "config/cost-estimation-rules.v1.json": "b86e83cac9a215553dd4ff8f5c148f877a7480963305f4e16ec8868d6004c490",
     "data/model-catalog.v1.json": "424a410817790ddc08c66604421b227e0c405e766e97279c2e81f516da128cd4",

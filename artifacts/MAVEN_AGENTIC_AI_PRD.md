@@ -3,7 +3,7 @@
 Owner: Product owner
 Agent name: AI Build Crew  
 Workflow: A builder describes an AI workload; the system separates facts from assumptions, estimates scenario cost, selects the least expensive rule-eligible model, runs evaluation/audit/governance checks, and returns the decision to a human.
-Date: August 8, 2026
+Date: August 9, 2026
 
 ## Discover
 
@@ -19,7 +19,7 @@ Date: August 8, 2026
 | Synthetic data | Versioned fictional workloads with no secrets or protected content. |
 | Safe-fail data | Unknown sensitivity never defaults to safe; sensitive or regulated work requires human review. |
 | Human boundary | A human owns approval. High-risk, regulated, sensitive, or unknown-data cases cannot self-approve. |
-| Success metric | First estimate in under three minutes; user can explain the recommendation; all regression and governance cases pass. |
+| Success metric | Primary: 100% of controlled cost cases match the known answer key at engine precision; any mismatch blocks release. Safety: zero fabricated price/capability claims and zero unsafe ready states. Secondary usability target: first estimate in under three minutes with one assumption and one alternative explained. |
 
 ## Design
 
@@ -28,6 +28,7 @@ Date: August 8, 2026
 | Agent definition | A deterministic workload-estimation and model-decision workbench—not an autonomous purchaser or approver. |
 | Agent role | Intake Orchestrator, Estimator/Selector, Cost Evaluation Specialist, Evaluator, Auditor, Governance checker, deterministic Presenter, Human Decision Gate. |
 | Target workflow | Prompt → route → guided or fast capture → Known/Assumed/Unknown confirmation → estimate → independent cost evaluation → eligibility → evaluation → audit → governance → human decision → export. |
+| Ranking rubric | Capability, context, every required format, freshness, risk/regulation, and minimum quality are pass/fail gates. Among surviving evaluated candidates, likely cost per completed task has 100% ranking weight. Latency and quality above the threshold have 0% weight until shared measured evidence exists. |
 | Agent loop | One versioned question at a time; stop when minimum facts are present or the user selects Estimate now. Evaluation, audit, and governance run once against a frozen result. |
 | Inputs/context | Task, consequence of error, data class, regulation, every required format, completed tasks/day, input size, desired result shape, cache rate, optional per-task affordability ceiling, context requirement, and field provenance. Output tokens are a model distribution, never a workload input. When primary/checker steps are unknown, a deterministic workflow rule recommends a visible starting architecture for confirmation. |
 | Tools/actions | Versioned model catalog, deterministic cost engine, eligibility rules, fixed eval cases, governance rules, audit recorder, and deterministic templates. |
@@ -45,7 +46,7 @@ Date: August 8, 2026
 | User interaction | Mouse or keyboard; every unknown and assumption remains visible; Estimate now provides a fast escape from discovery. |
 | Demo-safe data | A synthetic support-classification workload with Internal data and configurable usage. |
 | Eval cases | Same-input determinism, model-owned output distributions, retry/checker inclusion, corrupted-ledger detection, governance propagation, scenario ordering, high risk, unknown sensitivity, conjunctive multi-format requirements, unknown-step workflow guidance, Luna/Terra/Sol tier switching, stale pricing, assumptions, loop thresholds, candidate-order invariance, and render smoke. |
-| Eval result | 15 passed, 0 failed on August 8, 2026. Published prices are dated facts; output and retry distributions remain planning heuristics until repeated live evaluation measures them. |
+| Eval result | 18 passed, 0 failed on August 9, 2026. Published prices are dated facts; output and retry distributions remain planning heuristics until repeated live evaluation measures them. |
 | Iteration | Removed the generative recommendation route; added provenance, guided intake, versioned rules/catalog, independent checks, and fail-closed dispositions. |
 | Known limitations | Three-provider catalog comparison is implemented, but only the OpenAI baseline has heuristic rank eligibility. Google and Anthropic remain catalog-only until shared task evals measure quality, reliability, and latency. Tool, storage, retrieval, infrastructure, and human-review costs are incomplete; decisions are not yet persisted. |
 
@@ -56,7 +57,7 @@ Date: August 8, 2026
 | Working demo | Full app on OpenAI Sites; artifact hub on GitHub Pages; source and evidence in GitHub. |
 | Pilot readiness | Ready for a small Alpha on synthetic or non-sensitive planning inputs. Not production-ready for medical billing decisions. |
 | Rollout | First-time-builder tests → synthetic failure tests → three real planning sessions → question/default revision → provider expansion. |
-| Monitoring | Test pass rate, decision disposition counts, time-to-estimate, assumption rate, overrides, review/block causes, catalog freshness, and documentation drift. |
+| Monitoring | Hard stops: any controlled-case answer-key mismatch blocks release; one confirmed fabricated capability/price rolls back the candidate catalog; catalog age beyond its freshness limit blocks. After actual-charge integration, absolute forecast variance above 20% across the first 30 comparable completed tasks pauses profile promotion. Rollback restores the previous immutable release/Sites version, preserves failed evidence, and uses a normal Git revert rather than moving a tag. |
 | Stop conditions | Any formula regression, stale catalog, policy mismatch, secret/PHI exposure, unsupported capability selection, or high-risk auto-approval. |
 | Demo steps | Enter an idea, choose Guide me to an estimate, answer or skip questions, freeze workload, review the recommendation and tradeoffs, inspect evaluation/audit/governance, and show human decision ownership. |
 | Demo narrative | AI Build Crew reduces guesswork without hiding uncertainty. Deterministic math and independent gates make the decision explainable and repeatable. |
