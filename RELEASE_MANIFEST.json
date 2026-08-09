@@ -1,11 +1,11 @@
 {
-  "release": "v0.2.0-rc.4",
+  "release": "v0.2.0-rc.5",
   "status": "release-candidate-locked",
   "preparedAt": "2026-08-09",
-  "baselineTag": "v0.2.0-rc.3",
-  "baselineCommit": "c44a22bb873b889eb8fc334d4cc12626997c8b9b",
+  "baselineTag": "v0.2.0-rc.4",
+  "baselineCommit": "a2edc42ceafe5739b272064d800460117f6f10c7",
   "releaseBranch": "main",
-  "releaseCommit": "resolved-by-immutable-tag:v0.2.0-rc.4",
+  "releaseCommit": "resolved-by-immutable-tag:v0.2.0-rc.5",
   "versions": {
     "catalog": "provider-neutral-catalog-2026-08-09",
     "costContract": "cost-contract-1.0.0",

@@ -105,8 +105,8 @@ export default function Home() {
     <main>
       <nav className="topbar">
         <a className="brand" href="#top" aria-label="AI Build Crew home"><span className="brand-mark">A</span> AI Build Crew</a>
-        <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="#governance">Governance</a><a href="#artifacts">Artifacts</a><a href="#about">About</a></div>
-        <span className="alpha">Release candidate · 04</span>
+        <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="#governance">Governance</a><a href="#about">About</a></div>
+        <span className="alpha">Release candidate · 05</span>
       </nav>
 
       <section className="hero" id="top">
@@ -217,15 +217,8 @@ export default function Home() {
         <p className="source-note">Catalog checked August 9, 2026 against <a href="https://developers.openai.com/api/docs/models/compare">OpenAI</a>, <a href="https://ai.google.dev/gemini-api/docs/pricing">Google Gemini</a>, and <a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic Claude</a> model and pricing documentation. Price fields are published facts. Output-length and retry distributions are versioned planning heuristics until live evaluation replaces them with measured distributions; cache writes, storage, grounding, tools, batch modes, regional premiums, long-context premiums, and infrastructure remain itemized coverage gaps.</p>
       </section>
 
-      <section className="method artifacts" id="artifacts">
-        <div className="section-kicker">05 / REVIEW THE EVIDENCE</div>
-        <h2>The decision and<br /><em>its receipts.</em></h2>
-        <p className="artifact-intro">The public evidence set reports capability and limits without publishing the internal delivery playbook on this page.</p>
-        <div className="artifact-links"><a href="https://github.com/CTATX/ai-build-crew/blob/main/RELEASE_NOTES.md">Release record ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/CAPABILITY_AND_CHANNEL_AUDIT.md">Capability audit ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_Build_Crew_Agentic_AI_PRD_COST_CONTRACT.xlsx">AI PRD workbook ↗</a><a href="https://github.com/CTATX/ai-build-crew/blob/main/artifacts/MAVEN_AGENTIC_AI_PRD.md">Maven AI PRD ↗</a><a href="https://github.com/CTATX/ai-build-crew/raw/main/artifacts/AI_BUILD_CREW_COST_CONTRACT_VIDEO_REVIEW.pptx">Presentation ↗</a><a href="https://github.com/CTATX/ai-build-crew">Source repository ↗</a></div>
-      </section>
-
       <section className="about-section" id="about">
-        <div className="section-kicker">06 / ABOUT THE LAB</div>
+        <div className="section-kicker">05 / ABOUT THE LAB</div>
         <div className="about-grid"><h2>Built for builders who want evidence before commitment.</h2><div><p>AI Build Crew turns a rough product idea into a transparent workload estimate, an evidence-gated model comparison, and a governed decision that stays human-owned.</p><p className="badlabz">Developed by <a href="https://badlabz.com">BadLabz.com ↗</a> :)</p></div></div>
       </section>
 

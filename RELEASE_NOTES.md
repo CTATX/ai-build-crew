@@ -1,4 +1,4 @@
-# AI Build Crew v0.2.0-rc.4 — Guided Workload Contract
+# AI Build Crew v0.2.0-rc.5 — Focused Estimator Experience
 
 Prepared and release-audited: August 9, 2026
 
@@ -11,6 +11,8 @@ Evaluation found that the earlier estimator treated output tokens as a user work
 This candidate corrects the decision contract. The user describes the result needed and the workflow steps. Each model supplies an evidence-labeled low, likely, and high output/retry profile. AI Build Crew reports and ranks low, likely, and high **cost per completed task**, with monthly volume shown only as secondary scale context.
 
 This revision also closes first-user interpretation gaps: required formats are multi-select; unknown primary/checker steps receive a visible deterministic recommendation; the affordability field is explicitly optional; and the result explains why the default case selects Terra and what switches the decision to Luna, Sol, or a blocked state.
+
+The estimator no longer includes the coursework and release-evidence section. Submission artifacts remain available in the GitHub repository and artifact hub, while the product page now stays focused on intake, estimate, governance, comparison, and the product's public purpose.
 
 ## What changed
 
@@ -58,7 +60,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Release channels
 
-The release is complete only when immutable tag `v0.2.0-rc.4`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.3` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
+The release is complete only when immutable tag `v0.2.0-rc.5`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.4` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
 
 ## Next increments
 
