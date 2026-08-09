@@ -14,6 +14,7 @@
 - [ ] Governance findings include rule IDs and a final disposition.
 - [ ] Review and block conditions remain visible.
 - [ ] The human decision and any permitted override rationale are explicit.
+- [ ] User-facing copy states the outcome, consequence, and next action without requiring internal architecture knowledge.
 
 ## Per release
 
@@ -26,3 +27,4 @@
 - [ ] Published artifact links resolve.
 - [ ] Static output contains no secret or server-only endpoint.
 - [ ] TeamOS documentation drift classification is current.
+- [ ] Internal specialist names, orchestration mechanics, and future architecture are absent from primary product copy or placed behind Details.

@@ -1,4 +1,4 @@
-# AI Build Crew v0.2.0-rc.9 — Useful Decision Output
+# AI Build Crew v0.2.0-rc.10 — Useful Decision Output
 
 Prepared and release-audited: August 9, 2026
 
@@ -23,6 +23,8 @@ The former human decision gate is now a point-in-time report outcome. A user can
 The failure-impact question now uses explicit risk language. A four-format inventory workflow test also exposed and corrected a misleading blocked state: when no evaluated model clears the combined capability gates, the app emits no fallback model cost. It identifies catalog-capable candidates awaiting evaluation and explains when the workload should be split into specialist stages.
 
 The guided format question now explicitly asks which formats one model must process together. Formats handled by separate capture, OCR/barcode, speech, retrieval, and agent stages are not silently collapsed into one impossible model requirement.
+
+The cost-check explanation now uses product language: AI Build Crew calculates the cost twice using fixed rules and stops when the answers disagree. It also states directly that these checks are software rules, not separate AI-model calls.
 
 ## What changed
 
@@ -72,7 +74,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Release channels
 
-The release is complete only when immutable tag `v0.2.0-rc.9`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.8` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
+The release is complete only when immutable tag `v0.2.0-rc.10`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.9` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
 
 ## Next increments
 

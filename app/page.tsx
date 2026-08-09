@@ -122,7 +122,7 @@ export default function Home() {
       <nav className="topbar">
         <a className="brand" href="#top" aria-label="AI Build Crew home"><span className="brand-mark">A</span> AI Build Crew</a>
         <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="#governance">Governance</a><a href="#about">About</a></div>
-        <span className="alpha">Release candidate · 09</span>
+        <span className="alpha">Release candidate · 10</span>
       </nav>
 
       <section className="hero" id="top">
@@ -214,7 +214,7 @@ export default function Home() {
 
       <section className={`pipeline-section ${stage !== "estimate" ? "pre-estimate-hidden" : ""}`} id="governance" aria-hidden={stage !== "estimate"}>
         <div className="section-kicker dark">03 / DOUBLE-CHECK THE RESULT</div>
-        <div className="pipeline-head"><h2>A recommendation<br />does not approve itself.</h2><p>The deterministic Cost Evaluation Specialist enforces the versioned cost contract and independently recomputes the frozen estimate. A failure blocks governance. Independent deployed LLM agents remain future work.</p></div>
+        <div className="pipeline-head"><h2>Check the math<br />before you use it.</h2><p>AI Build Crew calculates the cost twice using fixed rules. If the answers do not match, it stops instead of presenting the estimate as trustworthy. These checks are software rules—not separate AI models—so running the estimator itself uses no model tokens.</p></div>
         <div className="pipeline">
           <StatusStep number="01" name="Estimate" status={result.recommendation ? "PASS" : "BLOCK"} detail={result.recommendation ? "Three cost scenarios calculated" : "No rule-eligible model"} />
           <StatusStep number="02" name="Cost evaluation" status={comparisonOnly ? "NOT RUN" : result.costEvaluation.status} detail={comparisonOnly ? "Shared workload evidence is required" : `${result.costEvaluation.checks.filter((item: { pass: boolean }) => item.pass).length}/${result.costEvaluation.checks.length} hard cost checks passed`} />

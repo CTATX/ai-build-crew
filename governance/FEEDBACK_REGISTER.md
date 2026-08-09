@@ -21,6 +21,7 @@ Review date: August 8, 2026
 | One call per request hides retries and checker cost. | Absolute cost rule | Primary steps and checker steps are explicit workflow fields; model-specific retry multipliers apply before completed-task cost. | Checker/retry monotonicity test. |
 | Monthly cost creates false precision and hides unit economics. | Absolute reporting rule | Rank and headline low/likely/high cost per completed task; show monthly volume only as secondary scale context. | COST-005 and rendered-copy test. |
 | Cost evaluation must not reuse the estimator formula. | Absolute audit rule | Cost Evaluation Specialist uses an independent ledger implementation and a corrupted estimate must fail into GOV-009. | Corruption-injection and governance-propagation tests. |
+| The product experience must be written for the user, not the internal architecture. | Absolute content rule | Primary copy explains the result, consequence, and next action; specialist names, orchestration mechanics, and future-state implementation language stay behind Details. | Rendered-copy regression and per-release content audit. |
 
 ## Documentation evaluation
 

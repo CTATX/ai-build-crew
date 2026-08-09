@@ -36,6 +36,7 @@ This operating model adapts the TeamOS discovery-first pattern: collect evidence
 14. Output tokens are never accepted as a workload input. Output length is a model-specific low/likely/high distribution.
 15. Retry multipliers and checker steps are included before ranking. A single-call assumption cannot silently stand in for a completed task.
 16. The Cost Evaluation Specialist must independently recompute all three cost scenarios. Any contract or ledger failure blocks through the evaluation-failed governance rule.
+17. User-facing language must explain the decision, consequence, and next action in everyday product terms. Internal role names, orchestration mechanics, rule implementation, and future architecture stay behind a clearly labeled details boundary unless the user needs them to act.
 
 ## Specialist contracts
 
@@ -47,7 +48,7 @@ This operating model adapts the TeamOS discovery-first pattern: collect evidence
 | Evaluator | Run fixed formula, stability, and boundary checks | Rewrite the recommendation |
 | Auditor | Independently recompute totals and verify versions/provenance | Waive a mismatch |
 | Governance | Return PASS, WARN, REVIEW_REQUIRED, or BLOCK with rule IDs | Alter price, score, or evidence |
-| Presenter | Render structured results into fixed language | Add new claims |
+| Presenter | Render structured results into plain, outcome-focused language | Add new claims or expose internal architecture as primary product copy |
 | Human decision gate | Approve, edit/rerun, record a permitted override with reason, reject, or escalate | Delegate final accountability to the system |
 
 ## Release gate
@@ -73,6 +74,7 @@ Before release, verify:
 - Facts, assumptions, unknowns, and conclusions are separated.
 - The PRD, workflow, app, eval report, presentation, and script describe the same behavior.
 - No planned capability is reported as completed.
+- Primary product copy explains what the result means and what the user can do next without requiring knowledge of the internal architecture.
 - Removed controls are classified as consolidated, replaced, retired, weakened, or lost.
 - The authoritative rule, catalog, and evaluation versions are recorded.
 

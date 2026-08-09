@@ -1,11 +1,11 @@
 {
-  "release": "v0.2.0-rc.9",
+  "release": "v0.2.0-rc.10",
   "status": "release-candidate-locked",
   "preparedAt": "2026-08-09",
-  "baselineTag": "v0.2.0-rc.8",
-  "baselineCommit": "a5364fcefcd4b5cd0fcdcaea8d352fc482167e35",
+  "baselineTag": "v0.2.0-rc.9",
+  "baselineCommit": "0e5a6bf47136b07707db618f6eb4216a14669aa7",
   "releaseBranch": "main",
-  "releaseCommit": "resolved-by-immutable-tag:v0.2.0-rc.9",
+  "releaseCommit": "resolved-by-immutable-tag:v0.2.0-rc.10",
   "versions": {
     "catalog": "provider-neutral-catalog-2026-08-09",
     "costContract": "cost-contract-1.0.0",
@@ -14,7 +14,7 @@
     "teamOS": "1.0"
   },
   "verification": {
-    "automatedTestsPassed": 18,
+    "automatedTestsPassed": 22,
     "automatedTestsFailed": 0,
     "productionBuild": "pass",
     "lint": "pass",
