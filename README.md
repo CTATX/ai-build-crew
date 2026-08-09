@@ -1,5 +1,7 @@
 # AI Build Crew
 
+AI Build Crew is one governed Decision Orchestrator with deterministic specialist stages. It does not use an LLM to calculate, rank, audit, or approve an estimate; the current decision workflow therefore costs $0.00 in model tokens.
+
 **Describe an AI workload. Get a cost-per-completed-task range and a model starting point.**
 
 AI Build Crew is a governed decision workbench for product builders. It guides an incomplete idea into a transparent model-usage estimate, recommends the least expensive rule-eligible model, and produces separate evaluation, audit, and governance findings before a human decision owner decides. It does not yet estimate software labor or complete application infrastructure cost.

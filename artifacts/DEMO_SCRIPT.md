@@ -12,11 +12,11 @@ Target length: 3 minutes 45 seconds to 4 minutes.
 
 ## 1:00–1:35 — Start with the idea
 
-“The experience begins with an everyday description. I can take the guided path, enter what I already know, or use a safe example. The guided path asks about the job, consequence of error, data class, modality, and expected use. Before calculation, I review what is known, assumed, or unknown.”
+“The experience begins with an everyday description. I can take the guided path, enter what I already know, or use a safe example. The guided path asks about the job, consequence of error, data class, every required format, and expected use. Before calculation, I review what is known, assumed, or unknown.”
 
 ## 1:35–2:20 — Show the corrected cost model
 
-“The user describes the result needed—a label, short answer, detailed answer, or long artifact—but does not enter output tokens. Output length belongs to the model profile and appears as a low, likely, and high distribution. I also state the primary AI steps and checker steps. The model-specific retry multiplier is applied automatically. The main result is cost per completed task; projected monthly volume is secondary context.”
+“The user describes the result needed—a label, short answer, detailed answer, or long artifact—but does not enter output tokens. If I do not know the number of AI steps, a visible deterministic workflow rule recommends primary and checker steps for confirmation. Output length and retries belong to the model profile and appear as low, likely, and high distributions. The main result is cost per completed task; projected monthly volume is secondary context. An optional spending ceiling filters candidates only when I supply one.”
 
 “That distinction matters. The same request can generate materially different output on a reasoning tier, and a cheap first call may need a retry or checker. The range is a planning distribution, not a guarantee.”
 
@@ -43,4 +43,4 @@ Target length: 3 minutes 45 seconds to 4 minutes.
 5. Point to Cost Evaluation Specialist and `cost-contract-1.0.0`.
 6. Show GOV-015 so the heuristic evidence boundary is explicit.
 7. Change risk to High or data to Unknown and show human review.
-8. Close on 15/15 tests and the measured-distribution backlog.
+8. Close on 18/18 tests and the measured-distribution backlog.

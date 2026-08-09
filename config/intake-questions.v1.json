@@ -5,7 +5,7 @@
     { "id": "Q1", "field": "task", "prompt": "What job must the model perform?", "help": "Choose the closest recurring workflow." },
     { "id": "Q2", "field": "risk", "prompt": "What happens if the model is wrong?", "help": "Use High for consequential or hard-to-reverse outcomes." },
     { "id": "Q3", "field": "dataSensitivity", "prompt": "What data will the workflow handle?", "help": "Unknown never defaults to public." },
-    { "id": "Q4", "field": "modality", "prompt": "What must the model understand?", "help": "Unsupported modalities are excluded, not approximated." },
+    { "id": "Q4", "field": "modalities", "prompt": "Which formats must the workflow understand?", "help": "Select every required format: text, images, audio, and/or video. A model must support all selected formats; unsupported combinations are excluded, not approximated." },
     { "id": "Q5", "field": "usage", "prompt": "Do you know the workload size?", "help": "If yes, stop the interview and run the estimate. If no, use explicit planning assumptions." }
   ]
 }

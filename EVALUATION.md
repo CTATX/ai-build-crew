@@ -30,7 +30,11 @@ Evaluation date: August 9, 2026
 | Determinism | Pass | Same frozen input and versions produced identical structured output. |
 | Scenario ordering | Pass | Low ≤ expected ≤ high. |
 | Governance fail-closed | Pass | High risk, unknown risk, and unknown sensitivity require review; stale pricing and unsafe loops block. |
-| Capability boundary | Pass | Unsupported modality blocks instead of forcing a candidate. |
+| Capability boundary | Pass | Every selected format is required; an unsupported multi-format combination blocks instead of being silently reduced. |
+| Workflow guidance | Pass | Unknown primary/checker steps receive a visible deterministic recommendation based on task, consequence, data boundary, and regulation. |
+| Recommendation sensitivity | Pass | Classification/Low selects Luna, Product Analysis/Medium selects Terra, and Complex Reasoning/High selects Sol. |
+
+The current suite contains 18 passing automated checks. It validates the decision contract; it does not claim measured cross-provider task quality.
 | Ranking stability | Pass | Candidate order does not change the recommendation. |
 | Budget boundary | Pass | A ceiling below every evidence-qualified option blocks with GOV-011; a sufficient ceiling permits the same deterministic recommendation. |
 | Provider neutrality | Pass | Three providers are cost-visible; unevaluated Google and Anthropic entries cannot enter the recommendation ranking. |

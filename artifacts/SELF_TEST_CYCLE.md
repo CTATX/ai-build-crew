@@ -47,7 +47,7 @@ Required evaluation behavior:
 
 **Observed before this release:** production v0.2.0-rc.2 has the prompt-first flow, but still exposes the earlier output-token and monthly-first contract.
 
-**Expected governance response:** block the corrected-cost claim until the reviewed v0.2.0-rc.3 commit is deployed to both public channels and smoke-tested.
+**Expected governance response:** block the guided-workload claim until the reviewed v0.2.0-rc.4 commit is deployed to both public channels and smoke-tested.
 
 ## Acceptance for the next cycle
 

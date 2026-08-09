@@ -1,4 +1,4 @@
-# AI Build Crew v0.2.0-rc.3 — Governed Cost Contract
+# AI Build Crew v0.2.0-rc.4 — Guided Workload Contract
 
 Prepared and release-audited: August 9, 2026
 
@@ -10,13 +10,18 @@ Evaluation found that the earlier estimator treated output tokens as a user work
 
 This candidate corrects the decision contract. The user describes the result needed and the workflow steps. Each model supplies an evidence-labeled low, likely, and high output/retry profile. AI Build Crew reports and ranks low, likely, and high **cost per completed task**, with monthly volume shown only as secondary scale context.
 
+This revision also closes first-user interpretation gaps: required formats are multi-select; unknown primary/checker steps receive a visible deterministic recommendation; the affordability field is explicitly optional; and the result explains why the default case selects Terra and what switches the decision to Luna, Sol, or a blocked state.
+
 ## What changed
 
 - Removed output tokens as a user input; COST-001 rejects the field if it reaches the engine.
 - Added result-shape inputs: label or field, short answer, detailed answer, and long artifact.
 - Separated primary AI steps from checker steps.
+- Added deterministic workflow-step guidance when the builder does not know the architecture.
+- Made required formats multi-select and conjunctive: every selected format must be supported.
 - Added model-specific output-length and retry distributions.
-- Added a cost-per-completed-task ceiling instead of a monthly model budget.
+- Reframed the cost-per-completed-task field as an optional user-supplied affordability ceiling; it filters but never creates the estimate.
+- Added a visible recommendation-sensitivity explanation and explicit zero-model-call runtime disclosure.
 - Added a hard-bordered Cost Evaluation Specialist that independently recomputes all three cost ledgers without calling the estimator formula.
 - Added deliberate corruption testing: a one-cent mismatch fails evaluation and GOV-009 blocks governance.
 - Added GOV-015 so heuristic behavior profiles remain visibly unmeasured until repeated live evaluations replace them.
@@ -31,7 +36,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Verified evidence
 
-- 15 automated checks pass and 0 fail.
+- 18 automated checks pass and 0 fail.
 - Production build and lint pass.
 - Same-input deterministic results and stable ranking pass.
 - COST-001 through COST-006 pass.
@@ -53,7 +58,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Release channels
 
-The release is complete only when immutable tag `v0.2.0-rc.3`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.2` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
+The release is complete only when immutable tag `v0.2.0-rc.4`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.3` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
 
 ## Next increments
 

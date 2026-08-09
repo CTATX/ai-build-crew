@@ -101,6 +101,29 @@ test("modality without an evaluated baseline blocks instead of forcing a model",
   assert.ok(result.governance.findings.some((finding) => finding.id === "GOV-001"));
 });
 
+test("multi-format requirements are conjunctive and never silently reduced", () => {
+  const textAndImage = analyzeWorkload({ ...base, modalities: ["text", "image"] });
+  assert.deepEqual(textAndImage.workload.modalities, ["image", "text"]);
+  assert.ok(textAndImage.catalogEligible.every((model) => model.modalities.includes("text") && model.modalities.includes("image")));
+  const textAndAudio = analyzeWorkload({ ...base, modalities: ["text", "audio"] });
+  assert.equal(textAndAudio.recommendation, null);
+  assert.equal(textAndAudio.disposition, "BLOCKED");
+});
+
+test("unknown workflow steps receive a visible deterministic recommendation", () => {
+  const suggested = analyzeWorkload({ ...base, primarySteps: 0, checkerSteps: -1, assumptions: ["primarySteps", "checkerSteps"] });
+  assert.equal(suggested.workflowSuggestion.applied, true);
+  assert.equal(suggested.workload.primarySteps, 2);
+  assert.equal(suggested.workload.checkerSteps, 1);
+  assert.match(suggested.workflowSuggestion.rationale, /product analysis/i);
+});
+
+test("recommendation changes when the eligibility tier changes", () => {
+  assert.equal(analyzeWorkload({ ...base, task: "Classification & extraction", risk: "Low" }).recommendation.id, "gpt-5.6-luna");
+  assert.equal(analyzeWorkload(base).recommendation.id, "gpt-5.6-terra");
+  assert.equal(analyzeWorkload({ ...base, task: "Complex reasoning", risk: "High" }).recommendation.id, "gpt-5.6-sol");
+});
+
 test("stale pricing blocks finalization", () => {
   const result = analyzeWorkload({ ...base, asOfDate: "2027-01-01" });
   assert.equal(result.disposition, "BLOCKED");

@@ -15,7 +15,7 @@ The primary decision unit is low, likely, and high **cost per completed task**. 
 |---|---|---|
 | Application and deterministic engine | Result shape replaces output tokens; primary/checker steps and per-task ceiling are explicit; model-owned output/retry profiles drive three completed-task scenarios. | Updated locally |
 | Cost rules | COST-001 through COST-006 define the forbidden input, ordered distributions, workflow-step coverage, independent recomputation, primary reporting unit, and evidence labeling. | Updated locally |
-| Evaluation and governance | 15/15 automated checks pass, including deliberate ledger corruption and GOV-009 propagation; GOV-015 discloses heuristic evidence. | Verified locally |
+| Evaluation and governance | 18/18 automated checks pass, including deliberate ledger corruption, multi-format eligibility, workflow-step guidance, model-tier switching, and GOV-009 propagation; GOV-015 discloses heuristic evidence. | Verified locally |
 | Original PRD | Problem, workflow, output, evaluation, privacy, and limitations use the corrected contract. | Updated locally |
 | Maven / Product Faculty PRD Markdown | Discovery, Design, Develop, Deploy, and final checks use the corrected contract and person-neutral first-user language. | Updated locally |
 | Builder Badge workbook | All response cells are self-contained; the workbook contains no named-person decision authority and distinguishes published prices from heuristic behavior. | Rendered and verified |
@@ -25,7 +25,7 @@ The primary decision unit is low, likely, and high **cost per completed task**. 
 
 ## Verification completed
 
-- 15 automated application checks pass.
+- 18 automated application checks pass.
 - Production build and lint pass locally.
 - Workbook formula-error scan returns zero matches; the full sheet was rendered and visually reviewed.
 - Presentation overflow and template-fidelity checks pass with zero issues; all eight slides and all eight source-note blocks were reviewed.
