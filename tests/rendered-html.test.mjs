@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function render(path = "/") {
@@ -17,7 +18,7 @@ test("renders the AI Build Crew estimator", async () => {
   assert.match(html, /Know the cost/);
   assert.match(html, /Describe what you want to build/);
   assert.match(html, /Get a model starting point/);
-  assert.match(html, /Release candidate · 08/);
+  assert.match(html, /Release candidate · 09/);
   assert.doesNotMatch(html, /01 \/ START WITH WHAT YOU KNOW/);
   assert.doesNotMatch(html, /ABOUT THE LAB/);
   assert.match(html, /1\.3/);
@@ -36,4 +37,11 @@ test("renders the AI Build Crew estimator", async () => {
   assert.doesNotMatch(html, /Human decision gate/);
   assert.match(html, /GPT-5\.6 Luna/);
   assert.doesNotMatch(html, /Your site is taking shape/);
+});
+
+test("guided intake scopes formats to one model step", async () => {
+  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  assert.match(source, /Which formats must one model understand together\?/);
+  assert.match(source, /Select all formats that one model must process in the same step\./);
+  assert.doesNotMatch(source, /Which formats must the workflow understand\?/);
 });
