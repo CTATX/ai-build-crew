@@ -4,7 +4,7 @@
 
 AI Build Crew is a governed decision workbench for product builders. It guides an incomplete idea into a transparent model-usage estimate, recommends the least expensive rule-eligible model, and produces separate evaluation, audit, and governance findings before a human decision owner decides. It does not yet estimate software labor or complete application infrastructure cost.
 
-## Alpha scope
+## Current prototype scope
 
 - Prompt-first fast, guided, and synthetic-example routes.
 - A persistent workload prompt with explicit input size, result shape, primary steps, and checker steps. Output tokens are never accepted as workload input.
@@ -42,7 +42,7 @@ The complete governed workflow works without an API key. The recommendation and 
 
 ## Evidence and artifacts
 
-- [Productized Alpha release notes](RELEASE_NOTES.md)
+- [Governed cost-contract release notes](RELEASE_NOTES.md)
 - [Audited v0.1.0 release record](artifacts/RELEASE_v0.1.0_AUDIT.md)
 - [Capability and channel audit](artifacts/CAPABILITY_AND_CHANNEL_AUDIT.md)
 - [Comparable market discovery](artifacts/MARKET_DISCOVERY.md)

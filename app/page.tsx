@@ -106,7 +106,7 @@ export default function Home() {
       <nav className="topbar">
         <a className="brand" href="#top" aria-label="AI Build Crew home"><span className="brand-mark">A</span> AI Build Crew</a>
         <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="#governance">Governance</a><a href="#artifacts">Artifacts</a><a href="#about">About</a></div>
-        <span className="alpha">Alpha · 02</span>
+        <span className="alpha">Release candidate · 03</span>
       </nav>
 
       <section className="hero" id="top">
@@ -114,7 +114,7 @@ export default function Home() {
         <h1>Pick the right model.<br /><em>Know the cost.</em></h1>
         <p className="lede"><strong>A decision workbench for builders who need a defensible model choice—not another pricing spreadsheet.</strong> Start with an everyday description; you do not need to know a model, token count, or technical architecture.</p>
         <a className="primary" href="#intake">Start with an idea <span>↘</span></a>
-        <div className="hero-stamp"><span>RULESET</span><strong>1.2<br />LOCKED</strong><small>HUMAN-OWNED DECISION</small></div>
+        <div className="hero-stamp"><span>RULESET</span><strong>1.3<br />LOCKED</strong><small>HUMAN-OWNED DECISION</small></div>
       </section>
 
       <section className="intake-section" id="intake">
@@ -129,7 +129,7 @@ export default function Home() {
             {stage === "start" && <>
               <label htmlFor="idea">What are you thinking about building?</label>
               <textarea id="idea" value={idea} onChange={(event) => setIdea(event.target.value)} placeholder="Example: A tool that reviews product requirements and drafts a decision brief for my team…" />
-              <p className="prompt-help">Use everyday language. This description stays context until you confirm the workload assumptions. The Alpha estimates model token charges—not development labor or complete application infrastructure.</p>
+              <p className="prompt-help">Use everyday language. This description stays context until you confirm the workload assumptions. The workbench estimates model token charges—not development labor or complete application infrastructure.</p>
               <div className="route-buttons">
                 <button onClick={() => startEstimate("assisted")}>Guide me to an estimate</button>
                 <button onClick={() => startEstimate("known")}>I already know my usage</button>
