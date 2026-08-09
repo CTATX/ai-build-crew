@@ -10,13 +10,14 @@ Work in the order `FACT → CONTROL POINT → ACTION`. Separate facts, assumptio
 ## Hard-bordered workflow
 
 1. **Intake Orchestrator** records the idea and freezes Known / User guess / Profile assumption / Unknown fields. It does not recommend a model.
-2. **Estimator and Eligibility Agent** applies the versioned scenario engine, capability gates, policy gates, and ranking. It does not write persuasive prose or approve a decision.
-3. **Evaluation Agent** runs fixed cases against the frozen workload and result. It cannot mutate either.
-4. **Independent Audit Agent** recomputes costs, checks versions and hashes, and detects drift or mutation. It cannot waive a mismatch.
-5. **Governance Agent** applies absolute rules and returns `PASS`, `WARN`, `REVIEW_REQUIRED`, or `BLOCK` with rule IDs. It cannot recommend, alter evidence, or waive itself.
-6. **Presenter Agent** turns structured outputs into fixed plain language. It cannot add claims.
-7. **Human Decision Owner** approves, edits and reruns, rejects, escalates, or records a permitted override with rationale. A block cannot be overridden inside the Alpha.
-8. **Audit Recorder** stores the immutable decision record, evidence versions, checks, and release linkage. It never stores secrets, prompts, or protected content.
+2. **Estimator and Eligibility Agent** applies the versioned scenario engine, capability gates, policy gates, and cost-per-completed-task ranking. It does not write persuasive prose or approve a decision.
+3. **Cost Evaluation Specialist** enforces the versioned cost contract and independently recomputes low/likely/high cost without calling the estimator formula. It cannot edit the frozen result.
+4. **Evaluation Agent** runs the wider fixed cases against the frozen workload and result. It cannot mutate either.
+5. **Independent Audit Agent** checks versions, hashes, evidence, and drift or mutation. It cannot waive a mismatch.
+6. **Governance Agent** applies absolute rules and returns `PASS`, `WARN`, `REVIEW_REQUIRED`, or `BLOCK` with rule IDs. It cannot recommend, alter evidence, or waive itself.
+7. **Presenter Agent** turns structured outputs into fixed plain language. It cannot add claims.
+8. **Human Decision Owner** approves, edits and reruns, rejects, escalates, or records a permitted override with rationale. A block cannot be overridden inside the Alpha.
+9. **Audit Recorder** stores the immutable decision record, evidence versions, checks, and release linkage. It never stores secrets, prompts, or protected content.
 
 Run one specialist at a time unless a combined artifact explicitly requires parallel independent outputs. If a check fails, return to the earliest failed evidence stage rather than patching the final wording.
 

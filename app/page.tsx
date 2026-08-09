@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { analyzeWorkload, costFor, deterministicBrief, models, taskRequirements } from "@/lib/decision-engine.mjs";
+import { analyzeWorkload, costFor, deterministicBrief, models, responseProfiles, taskRequirements } from "@/lib/decision-engine.mjs";
 
 type Stage = "start" | "guided" | "estimate";
 
@@ -30,11 +30,12 @@ export default function Home() {
   const [regulatedStatus, setRegulatedStatus] = useState<"Unknown" | "No" | "Yes">("Unknown");
   const [requests, setRequests] = useState(1000);
   const [inputTokens, setInputTokens] = useState(2400);
-  const [outputTokens, setOutputTokens] = useState(650);
+  const [responseSize, setResponseSize] = useState("Detailed answer");
   const [cache, setCache] = useState(20);
-  const [calls, setCalls] = useState(1);
+  const [primarySteps, setPrimarySteps] = useState(1);
+  const [checkerSteps, setCheckerSteps] = useState(1);
   const [budget, setBudget] = useState(0);
-  const [assumptions, setAssumptions] = useState(["task", "risk", "dataSensitivity", "modality", "regulated", "requests", "inputTokens", "outputTokens", "cache", "calls", "budget"]);
+  const [assumptions, setAssumptions] = useState(["task", "risk", "dataSensitivity", "modality", "regulated", "requests", "inputTokens", "responseSize", "cache", "primarySteps", "checkerSteps", "budget"]);
   const [selected, setSelected] = useState<string | null>(null);
   const [providerFilter, setProviderFilter] = useState("All");
   const [decision, setDecision] = useState("Not decided");
@@ -42,10 +43,10 @@ export default function Home() {
   const [guidedAnswers, setGuidedAnswers] = useState<string[]>([]);
 
   const assessmentDate = new Date().toISOString().slice(0, 10);
-  const result = useMemo(() => analyzeWorkload({ task, risk, dataSensitivity, modality, regulated: regulatedStatus === "Yes", requests, inputTokens, outputTokens, cache, calls, budget, assumptions, asOfDate: assessmentDate }), [task, risk, dataSensitivity, modality, regulatedStatus, requests, inputTokens, outputTokens, cache, calls, budget, assumptions, assessmentDate]);
+  const result = useMemo(() => analyzeWorkload({ task, risk, dataSensitivity, modality, regulated: regulatedStatus === "Yes", requests, inputTokens, responseSize, cache, primarySteps, checkerSteps, budget, assumptions, asOfDate: assessmentDate }), [task, risk, dataSensitivity, modality, regulatedStatus, requests, inputTokens, responseSize, cache, primarySteps, checkerSteps, budget, assumptions, assessmentDate]);
   const active = models.find((model) => model.id === selected) ?? result.recommendation ?? models[0];
   const comparisonOnly = Boolean(selected && !active.recommendationReady);
-  const activeScenarios = { low: costFor(active, result.workload, 0.75), expected: costFor(active, result.workload, 1), high: costFor(active, result.workload, 1.35) };
+  const activeScenarios = { low: costFor(active, result.workload, "low"), expected: costFor(active, result.workload, "expected"), high: costFor(active, result.workload, "high") };
   const visibleModels = providerFilter === "All" ? models : models.filter((model) => model.provider === providerFilter);
 
   function markKnown(field: string, value: number, setter: (value: number) => void) {
@@ -58,8 +59,8 @@ export default function Home() {
     if (route === "sample") {
       setIdea("A product team needs a recurring model to analyze product requirements and draft decision briefs.");
       setTask("Product analysis"); setRisk("Medium"); setDataSensitivity("Public"); setModality("text"); setRegulatedStatus("No");
-      setRequests(1000); setInputTokens(2400); setOutputTokens(650); setCache(20); setCalls(1); setBudget(0);
-      setAssumptions(["task", "risk", "dataSensitivity", "modality", "regulated", "requests", "inputTokens", "outputTokens", "cache", "calls", "budget"]);
+      setRequests(1000); setInputTokens(2400); setResponseSize("Detailed answer"); setCache(20); setPrimarySteps(1); setCheckerSteps(1); setBudget(0);
+      setAssumptions(["task", "risk", "dataSensitivity", "modality", "regulated", "requests", "inputTokens", "responseSize", "cache", "primarySteps", "checkerSteps", "budget"]);
       setStage("estimate");
     } else if (route === "known") {
       setStage("estimate");
@@ -77,14 +78,14 @@ export default function Home() {
 
   function applyUsageProfile(profile: "experiment" | "pilot" | "launch" | "unknown") {
     const values = profile === "experiment"
-      ? { requests: 25, input: 800, output: 200, calls: 1 }
+      ? { requests: 25, input: 800, response: "Short answer", primarySteps: 1, checkerSteps: 1 }
       : profile === "launch"
-        ? { requests: 2500, input: 3500, output: 800, calls: 2 }
+        ? { requests: 2500, input: 3500, response: "Detailed answer", primarySteps: 2, checkerSteps: 1 }
         : profile === "pilot"
-          ? { requests: 250, input: 2000, output: 500, calls: 1 }
-          : { requests: 100, input: 1500, output: 400, calls: 1 };
-    setRequests(values.requests); setInputTokens(values.input); setOutputTokens(values.output); setCalls(values.calls); setCache(0);
-    setAssumptions((current) => [...new Set([...current, "requests", "inputTokens", "outputTokens", "cache", "calls"])]);
+          ? { requests: 250, input: 2000, response: "Detailed answer", primarySteps: 1, checkerSteps: 1 }
+          : { requests: 100, input: 1500, response: "Short answer", primarySteps: 1, checkerSteps: 1 };
+    setRequests(values.requests); setInputTokens(values.input); setResponseSize(values.response); setPrimarySteps(values.primarySteps); setCheckerSteps(values.checkerSteps); setCache(0);
+    setAssumptions((current) => [...new Set([...current, "requests", "inputTokens", "responseSize", "cache", "primarySteps", "checkerSteps"])]);
     markGuidedAnswer("usage");
   }
 
@@ -121,7 +122,7 @@ export default function Home() {
         <div className="intake-shell">
           <div className="intake-copy">
             <h2>Describe what you want to build.<br /><em>Get a model starting point.</em></h2>
-            <p>You do not need to know a model, token count, or technical architecture. AI Build Crew turns everyday product choices into a transparent monthly model-usage estimate, then checks the result before you decide.</p>
+            <p>You do not need to know a model, token count, or technical architecture. AI Build Crew turns everyday product choices into a transparent cost-per-completed-task range, then checks the result before you decide.</p>
             <div className="control-line"><b>Fixed sequence</b><span>Facts → assumptions → estimate → evaluation → audit → governance → human decision</span></div>
           </div>
           <div className="prompt-card">
@@ -153,11 +154,12 @@ export default function Home() {
             <div className="field"><label htmlFor="regulated">Regulated or compliance-controlled? {assumptions.includes("regulated") && <em>UNKNOWN</em>}</label><select id="regulated" value={regulatedStatus} onChange={(e) => { const value = e.target.value as "Unknown" | "No" | "Yes"; setRegulatedStatus(value); setAssumptions((current) => value === "Unknown" ? [...new Set([...current, "regulated"])] : current.filter((item) => item !== "regulated")); }}><option>Unknown</option><option>No</option><option>Yes</option></select></div>
             <NumberField label="Uses per day" value={requests} setValue={(v) => markKnown("requests", v, setRequests)} min={1} assumed={assumptions.includes("requests")} hint="How many times people or systems will ask the AI to do this job each day." />
             <NumberField label="Information going in" value={inputTokens} setValue={(v) => markKnown("inputTokens", v, setInputTokens)} min={1} assumed={assumptions.includes("inputTokens")} hint="Measured in tokens. About 750 tokens is roughly one page of ordinary English." />
-            <NumberField label="Answer coming back" value={outputTokens} setValue={(v) => markKnown("outputTokens", v, setOutputTokens)} min={1} assumed={assumptions.includes("outputTokens")} hint="A short answer may be 100–300 tokens; a detailed page may be about 750." />
+            <div className="field"><label htmlFor="response-size">Result needed {assumptions.includes("responseSize") && <em>ASSUMED</em>}</label><select id="response-size" value={responseSize} onChange={(e) => { setResponseSize(e.target.value); setAssumptions((current) => current.filter((item) => item !== "responseSize")); setSelected(null); setDecision("Not decided"); }}>{Object.entries(responseProfiles).map(([name, profile]) => <option key={name} value={name}>{name} · {(profile as { description: string }).description}</option>)}</select><small className="field-hint">You choose the result shape. Each model supplies its own output-token distribution.</small></div>
             <NumberField label="Reusable input" value={cache} setValue={(v) => markKnown("cache", v, setCache)} min={0} max={100} assumed={assumptions.includes("cache")} hint="The percentage of repeated instructions a provider may bill at a cached rate." />
-            <NumberField label="AI steps per use" value={calls} setValue={(v) => markKnown("calls", v, setCalls)} min={1} max={50} assumed={assumptions.includes("calls")} hint="One answer is one step. Tool use or an agent loop may create several charged model calls." />
-            <NumberField label="Maximum monthly budget" value={budget} setValue={(v) => { setBudget(v); setAssumptions((current) => current.filter((item) => item !== "budget")); setSelected(null); setDecision("Not decided"); }} min={0} prefix="$" hint="0 means no budget ceiling" assumed={assumptions.includes("budget")} />
-            <div className="ledger wide"><b>WHAT THIS ESTIMATE ASSUMES</b><span>{assumptions.length ? `Planning assumptions: ${assumptions.map((field) => ({ task: "work to perform", risk: "consequence of error", dataSensitivity: "data class", modality: "content type", regulated: "regulatory status", requests: "uses per day", inputTokens: "information going in", outputTokens: "answer size", cache: "reusable input", calls: "AI steps", budget: "monthly budget" }[field] ?? field)).join(", ")}` : "Known: all planning values were confirmed by the user"}</span><span>Unknown safety fields trigger review; they never default to safe.</span></div>
+            <NumberField label="Primary AI steps" value={primarySteps} setValue={(v) => markKnown("primarySteps", v, setPrimarySteps)} min={1} max={50} assumed={assumptions.includes("primarySteps")} hint="The planned model steps needed to produce one completed result, before retries." />
+            <NumberField label="Checker steps" value={checkerSteps} setValue={(v) => markKnown("checkerSteps", v, setCheckerSteps)} min={0} max={10} assumed={assumptions.includes("checkerSteps")} hint="Verification, critique, or repair calls added to each completed task. Model-specific retries are added automatically." />
+            <NumberField label="Maximum cost per completed task" value={budget} setValue={(v) => { setBudget(v); setAssumptions((current) => current.filter((item) => item !== "budget")); setSelected(null); setDecision("Not decided"); }} min={0} prefix="$" hint="0 means no per-task ceiling" assumed={assumptions.includes("budget")} />
+            <div className="ledger wide"><b>WHAT THIS ESTIMATE ASSUMES</b><span>{assumptions.length ? `Planning assumptions: ${assumptions.map((field) => ({ task: "work to perform", risk: "consequence of error", dataSensitivity: "data class", modality: "content type", regulated: "regulatory status", requests: "completed tasks per day", inputTokens: "information going in", responseSize: "result shape", cache: "reusable input", primarySteps: "primary AI steps", checkerSteps: "checker steps", budget: "cost-per-task ceiling" }[field] ?? field)).join(", ")}` : "Known: all workload values were confirmed by the user"}</span><span>Output length and retry behavior come from the selected model profile. Unknown safety fields trigger review; they never default to safe.</span></div>
           </div>
 
           <aside className="result-card">
@@ -167,30 +169,31 @@ export default function Home() {
             <p>{result.recommendation ? active.lane : "Stop and resolve the capability or policy gap."}</p>
             {selected && selected !== result.recommendation?.id && <div className="override">Comparison only · policy-baseline recommendation: {result.recommendation?.name ?? "none"}</div>}
             <div className="cost-grid">
-              <div><small>LOW / MONTH</small><strong>{money(activeScenarios.low.monthly)}</strong></div>
-              <div><small>EXPECTED / MONTH</small><strong>{money(activeScenarios.expected.monthly)}</strong></div>
-              <div><small>HIGH / MONTH</small><strong>{money(activeScenarios.high.monthly)}</strong></div>
+              <div><small>LOW / COMPLETED TASK</small><strong>{money(activeScenarios.low.perCompletedTask)}</strong></div>
+              <div><small>LIKELY / COMPLETED TASK</small><strong>{money(activeScenarios.expected.perCompletedTask)}</strong></div>
+              <div><small>HIGH / COMPLETED TASK</small><strong>{money(activeScenarios.high.perCompletedTask)}</strong></div>
             </div>
-            <div className={`budget-status ${budget > 0 && activeScenarios.expected.monthly > budget ? "over" : ""}`}><span>{budget > 0 ? `Monthly ceiling ${money(budget)}` : "No monthly budget ceiling set"}</span>{budget > 0 && <strong>{activeScenarios.expected.monthly <= budget ? `${money(budget - activeScenarios.expected.monthly)} remaining` : `${money(activeScenarios.expected.monthly - budget)} over budget`}</strong>}</div>
-            <div className="annual-cost"><span>12-month token forecast</span><strong>{money(costFor(active, result.workload, 1).annual)}</strong></div>
+            <div className={`budget-status ${budget > 0 && activeScenarios.expected.perCompletedTask > budget ? "over" : ""}`}><span>{budget > 0 ? `Per-task ceiling ${money(budget)}` : "No per-task budget ceiling set"}</span>{budget > 0 && <strong>{activeScenarios.expected.perCompletedTask <= budget ? `${money(budget - activeScenarios.expected.perCompletedTask)} remaining` : `${money(activeScenarios.expected.perCompletedTask - budget)} over ceiling`}</strong>}</div>
+            <div className="annual-cost"><span>Scale context · {requests.toLocaleString()} completed tasks/day</span><strong>{money(activeScenarios.expected.monthlyAtPlannedVolume)} / month</strong></div>
+            <div className="behavior-evidence"><span>LIKELY MODEL BEHAVIOR</span><b>{activeScenarios.expected.outputTokensPerPrimary.toLocaleString()} output tokens / primary call · {activeScenarios.expected.retryMultiplier.toFixed(2)}× attempts · {activeScenarios.expected.attemptedCallsPerTask.toFixed(2)} charged calls / completed task</b><small>{active.costBehavior.evidence}</small></div>
             <div className="brief deterministic" aria-live="polite">{activeBrief}</div>
             <div className="version-line">Catalog {result.catalog.version} · Engine {result.audit.engineVersion} · Evidence {active.evidenceStatus}</div>
-            <p className="coverage-boundary"><b>Included:</b> cataloged model token input, cached reads, and output. <b>Not included:</b> build labor, hosting, databases, retrieval, storage, tools, monitoring, or human review.</p>
+            <p className="coverage-boundary"><b>Included:</b> cataloged token prices, model-specific output distribution, retries, primary steps, and checker steps. <b>Not included:</b> build labor, hosting, databases, retrieval, storage, provider tool fees, monitoring, or human review.</p>
           </aside>
         </div>
       </section>
 
       <section className={`pipeline-section ${stage !== "estimate" ? "pre-estimate-hidden" : ""}`} id="governance" aria-hidden={stage !== "estimate"}>
         <div className="section-kicker dark">03 / DOUBLE-CHECK THE RESULT</div>
-        <div className="pipeline-head"><h2>A recommendation<br />does not approve itself.</h2><p>The Alpha produces logically separate deterministic estimate, check, audit, and governance outputs. Independent deployed agents remain future work.</p></div>
+        <div className="pipeline-head"><h2>A recommendation<br />does not approve itself.</h2><p>The deterministic Cost Evaluation Specialist enforces the versioned cost contract and independently recomputes the frozen estimate. A failure blocks governance. Independent deployed LLM agents remain future work.</p></div>
         <div className="pipeline">
           <StatusStep number="01" name="Estimate" status={result.recommendation ? "PASS" : "BLOCK"} detail={result.recommendation ? "Three cost scenarios calculated" : "No rule-eligible model"} />
-          <StatusStep number="02" name="Evaluation" status={comparisonOnly ? "NOT RUN" : result.evaluation.status} detail={comparisonOnly ? "Shared workload evidence is required" : `${result.evaluation.checks.filter((item: { pass: boolean }) => item.pass).length}/${result.evaluation.checks.length} deterministic checks passed`} />
+          <StatusStep number="02" name="Cost evaluation" status={comparisonOnly ? "NOT RUN" : result.costEvaluation.status} detail={comparisonOnly ? "Shared workload evidence is required" : `${result.costEvaluation.checks.filter((item: { pass: boolean }) => item.pass).length}/${result.costEvaluation.checks.length} hard cost checks passed`} />
           <StatusStep number="03" name="Audit" status={comparisonOnly ? "NOT RUN" : result.audit.status} detail={comparisonOnly ? "No evaluated result to audit" : "Expected cost deterministically recomputed"} />
           <StatusStep number="04" name="Governance" status={comparisonOnly ? "NOT APPLIED" : result.governance.status} detail={comparisonOnly ? "Catalog facts are not an approval" : result.governance.findings.length ? result.governance.findings.map((item: { id: string }) => item.id).join(" · ") : "No findings"} />
         </div>
         <div className="governance-findings">
-          <div><h3>Rule findings</h3>{comparisonOnly ? <p><b>EVAL REQUIRED</b>Catalog facts are visible, but baseline rule findings do not transfer to an unevaluated provider model.</p> : result.governance.findings.length ? result.governance.findings.map((finding: { id: string; severity: string; message: string }) => <p key={finding.id}><b>{finding.id} · {finding.severity}</b>{finding.message}</p>) : <p><b>PASS</b>No governance exception detected.</p>}</div>
+          <div><h3>Rule findings</h3>{comparisonOnly ? <p><b>EVAL REQUIRED</b>Catalog facts are visible, but baseline rule findings do not transfer to an unevaluated provider model.</p> : result.governance.findings.length ? result.governance.findings.map((finding: { id: string; severity: string; message: string }) => <p key={finding.id}><b>{finding.id} · {finding.severity}</b>{finding.message}</p>) : <><p><b>PASS</b>No governance exception detected.</p><p><b>{result.costEvaluation.version}</b>Output tokens rejected as workload input · model distributions ordered · retries and checker included · cost per completed task independently matched.</p></>}</div>
           <div className="decision-gate"><h3>Human decision gate</h3><p>The recommendation is evidence—not approval. A person remains accountable for the final judgment.</p><div className="decision-actions"><button disabled={comparisonOnly || result.disposition !== "READY_FOR_HUMAN_DECISION"} onClick={() => setDecision("Approved by decision owner")}>Approve</button><button onClick={() => { setDecision("Edit and rerun"); document.querySelector("#estimator")?.scrollIntoView({ behavior: "smooth" }); }}>Edit & rerun</button><button onClick={() => setDecision("Escalated for review")}>Escalate</button></div><label>Override reason<input value={overrideReason} onChange={(e) => setOverrideReason(e.target.value)} placeholder="Required before recording a permitted override" /></label><button className="record-override" disabled={comparisonOnly || !overrideReason.trim() || result.disposition !== "READY_FOR_HUMAN_DECISION"} onClick={() => setDecision(`Override recorded: ${overrideReason}`)}>Record override</button><strong className="decision-state">{decision}</strong></div>
         </div>
       </section>
@@ -199,9 +202,9 @@ export default function Home() {
         <div className="section-head"><div><div className="section-kicker dark">04 / UNDERSTAND THE TRADE-OFF</div><h2>Published facts first.<br />Shared evals next.</h2></div><p>Catalog fields can be compared now. Cross-provider ranking waits for the same representative workload to measure quality, reliability, latency, and actual cost.</p></div>
         <div className="catalog-control"><div><b>CATALOG COVERAGE</b><span>{result.coverage.providers.length} providers · {models.length} models · {result.coverage.evaluatedProviders.length} provider currently rank-eligible</span></div><div className="provider-filters">{["All", ...result.coverage.providers].map((provider) => <button key={provider} className={providerFilter === provider ? "active" : ""} onClick={() => setProviderFilter(provider)}>{provider}</button>)}</div></div>
         <div className="model-table">
-          <div className="table-row header"><span>MODEL</span><span>PROVIDER</span><span>EXPECTED</span><span>EVIDENCE</span><span>FIT</span></div>
+          <div className="table-row header"><span>MODEL</span><span>PROVIDER</span><span>LIKELY / TASK</span><span>EVIDENCE</span><span>FIT</span></div>
           {visibleModels.map((model) => {
-            const expected = costFor(model, result.workload, 1).monthly;
+            const expected = costFor(model, result.workload, "expected").perCompletedTask;
             const catalogFit = result.catalogEligible.some((item: { id: string }) => item.id === model.id);
             const rankFit = result.eligible.some((item: { id: string }) => item.id === model.id);
             const overBudget = budget > 0 && expected > budget;
@@ -209,7 +212,7 @@ export default function Home() {
             return <button className={`table-row ${active.id === model.id ? "active" : ""}`} key={model.id} onClick={() => setSelected(model.id)}><span><i className={model.accent} />{model.name}</span><span>{model.provider}</span><span>{money(expected)}</span><span>{model.evidenceStatus}</span><span className={rankFit ? "fit" : catalogFit ? "pending" : "miss"}>{status}</span></button>;
           })}
         </div>
-        <p className="source-note">Catalog checked August 8, 2026 against <a href="https://developers.openai.com/api/docs/models">OpenAI</a>, <a href="https://ai.google.dev/api/models">Google Gemini</a>, and <a href="https://platform.claude.com/docs/en/api/models/list">Anthropic Claude</a> model documentation and their published pricing. Expected cost includes token input, cached-read, and output fields shown in the catalog; model-specific cache writes, storage, grounding, tools, batch modes, regional premiums, and infrastructure remain itemized coverage gaps.</p>
+        <p className="source-note">Catalog checked August 9, 2026 against <a href="https://developers.openai.com/api/docs/models/compare">OpenAI</a>, <a href="https://ai.google.dev/gemini-api/docs/pricing">Google Gemini</a>, and <a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic Claude</a> model and pricing documentation. Price fields are published facts. Output-length and retry distributions are versioned planning heuristics until live evaluation replaces them with measured distributions; cache writes, storage, grounding, tools, batch modes, regional premiums, long-context premiums, and infrastructure remain itemized coverage gaps.</p>
       </section>
 
       <section className="method artifacts" id="artifacts">

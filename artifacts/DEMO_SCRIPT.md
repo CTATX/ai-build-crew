@@ -1,37 +1,46 @@
-# AI Build Crew — 2–3 minute overview script
+# AI Build Crew — four-minute product review script
 
-Target length: about 2 minutes 30 seconds.
+Target length: 3 minutes 45 seconds to 4 minutes.
 
-## 0:00–0:25 — Why this matters
+## 0:00–0:30 — Why this matters
 
-“AI model choice looks simple until you have to defend it. Pricing is spread across providers, quality claims are hard to compare, and early in a product idea we often do not even know our token workload. The result is usually one of two bad defaults: choose the strongest model and overspend, or choose the cheapest model and accept risk you did not measure.”
+“AI model choice looks simple until someone has to defend it. Pricing is spread across providers, output length changes by model and run, and the cheapest-looking option can become expensive after retries and verification. The bad default is false precision: one output-token number, one call, and one monthly total that looks certain.”
 
-## 0:25–0:45 — The product
+## 0:30–1:00 — The product
 
-“AI Build Crew is a decision workbench for builders. It turns a rough AI idea into a transparent workload estimate, a rule-eligible model recommendation, and a governed decision record. The first user is a product builder who does not need to know models or tokens, and a human remains the final decision owner.”
+“AI Build Crew is a decision workbench for builders. It turns a rough AI idea into a transparent cost-per-completed-task range, a rule-eligible model starting point, and a governed decision. The first user is a product builder who should not need to know model names or token math. A human remains accountable for the final choice.”
 
-## 0:45–1:15 — Start the demo
+## 1:00–1:35 — Start with the idea
 
-“The experience does not assume I already know all the answers. I can say I know the workload, ask for help shaping it, or load a safe example. In the guided path it asks one Product Factory question at a time: what I am building, the consequence of error, the data class, modality, and expected usage. I can choose ‘I don’t know’ or estimate early. Before calculating, it freezes a ledger of what I supplied, what the scenario assumed, and what is still unknown.”
+“The experience begins with an everyday description. I can take the guided path, enter what I already know, or use a safe example. The guided path asks about the job, consequence of error, data class, modality, and expected use. Before calculation, I review what is known, assumed, or unknown.”
 
-## 1:15–1:45 — Show the result
+## 1:35–2:20 — Show the corrected cost model
 
-“The cost engine produces low, expected, and high scenarios, filters models that do not meet hard requirements, and recommends the least expensive eligible option. It also shows what I gain or lose with each alternative, so cost is not presented without the decision tradeoff.”
+“The user describes the result needed—a label, short answer, detailed answer, or long artifact—but does not enter output tokens. Output length belongs to the model profile and appears as a low, likely, and high distribution. I also state the primary AI steps and checker steps. The model-specific retry multiplier is applied automatically. The main result is cost per completed task; projected monthly volume is secondary context.”
 
-## 1:45–2:10 — Explain governance
+“That distinction matters. The same request can generate materially different output on a reasoning tier, and a cheap first call may need a retry or checker. The range is a planning distribution, not a guarantee.”
 
-“The important part is that the system does not grade its own homework. The estimator creates a frozen result. A separate evaluator checks fixed cases. An auditor verifies the formulas, evidence, and versions. Governance applies absolute rules. High-risk, regulated, sensitive, or unknown-data cases require human review; stale pricing, failed checks, and unsupported workloads block. Only then does the decision return to the accountable person.”
+## 2:20–3:05 — Show the hard evaluation workflow
 
-## 2:10–2:30 — Evidence and next step
+“The estimator freezes the three scenarios. A separate deterministic Cost Evaluation Specialist enforces six absolute rules: output tokens cannot be workload input; output and retry distributions must be ordered; primary and checker steps must be included; cost per completed task is the ranking unit; and the result must remain a range.”
 
-“The productized release candidate passes eleven automated cases and compares published catalog facts across OpenAI, Google, and Anthropic. The system does not invent cross-provider quality: Google and Anthropic remain cost-visible but unranked until the same representative cases measure quality, reliability, latency, and actual cost. The value is not just a cheaper estimate—it is a decision a builder can explain, reproduce, and govern.”
+“The specialist independently recomputes the ledger without calling the estimator formula. A corrupted result fails. That failed evaluation reaches governance as GOV-009 and blocks the decision. Because today’s output and retry profiles are planning heuristics rather than measured distributions, GOV-015 keeps that limitation visible.”
+
+## 3:05–3:35 — Evidence and limits
+
+“Fifteen automated cases pass, including forbidden output-token input, retry and checker inclusion, deliberate ledger corruption, governance propagation, fail-closed risk cases, candidate-order stability, and rendered-page smoke coverage. Published provider prices are dated facts. The behavior distributions are not yet measured provider performance, and Google and Anthropic remain unranked until shared evaluation exists.”
+
+## 3:35–4:00 — Close
+
+“The next increment runs repeated synthetic workloads by task and model and measures completed-task success, p10, p50, and p90 output, retries, latency, and actual charged cost. Those measurements replace heuristics only after the evidence threshold is met. AI Build Crew does not promise the estimate will be exact. It makes the uncertainty visible, tests the math, and gives the builder a decision they can explain.”
 
 ## Demo operator checklist
 
-1. Open with **Help me shape it**.
-2. Answer the first two questions; use **I don’t know** once.
-3. Select **Estimate now** and show the provenance ledger.
-4. Change risk to **High** or data sensitivity to **Unknown** and show REVIEW_REQUIRED.
-5. Show model costs and the alternative delta.
-6. Point to Evaluation, Audit, Governance, and the Human Decision Gate.
-7. Close on the GitHub artifact hub and provider-expansion backlog.
+1. Start with **Guide me to an estimate**.
+2. Show **Result needed** and confirm there is no output-token input.
+3. Point out **Primary AI steps**, **Checker steps**, and the model-owned retry multiplier.
+4. Show low/likely/high **cost per completed task**, then the secondary monthly scale context.
+5. Point to Cost Evaluation Specialist and `cost-contract-1.0.0`.
+6. Show GOV-015 so the heuristic evidence boundary is explicit.
+7. Change risk to High or data to Unknown and show human review.
+8. Close on 15/15 tests and the measured-distribution backlog.

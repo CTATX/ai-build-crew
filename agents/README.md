@@ -10,6 +10,10 @@ Asks the Product Faculty questions in a fixed order. Stops as soon as minimum fa
 
 Runs versioned checks against a frozen decision result. It may pass or fail cases but cannot alter workload inputs, prices, eligibility, ranking, or the recommendation.
 
+## Cost Evaluation Specialist
+
+Rejects user-entered output tokens, validates ordered model-specific output and retry distributions, confirms primary and checker steps are included, and independently recomputes low/likely/high cost per completed task. It cannot change the estimate. Any failure flows to governance as GOV-009; heuristic rather than measured distributions remain visible under GOV-015.
+
 ## Audit agent
 
 Recomputes expected cost and verifies catalog, rule, engine, and evaluation versions. A mismatch is a blocking control failure.

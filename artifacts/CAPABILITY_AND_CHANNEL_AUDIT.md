@@ -17,6 +17,9 @@ The public product, artifact hub, repository main branch, and release-candidate 
 | Unknown-risk review | No | Partial | Yes |
 | Person-neutral reusable UI | No | No | Yes |
 | 12-month forecast | Annual run rate | No | Yes |
+| Cost per completed task | No | No | Unreleased correction |
+| Model-owned output/retry distribution | No | No | Unreleased correction; heuristic evidence |
+| Independent corrupted-ledger detection | No | No | Unreleased correction |
 | Saved estimate history | No | No | No |
 | Actual-cost tracking | No | No | No |
 | Automated catalog refresh | No | No | No |

@@ -1,6 +1,6 @@
 # Self-Test Cycle — AI Build Crew Evaluates AI Build Crew
 
-Cycle date: August 8, 2026
+Cycle date: August 9, 2026
 
 ## Test question
 
@@ -26,24 +26,28 @@ This is a future service, not part of the current deterministic Alpha.
 | Modality | Text |
 | Uses/day | 250 |
 | Input tokens/use | 2,000 |
-| Output tokens/use | 500 |
-| AI steps/use | 1 |
+| Result needed | Detailed answer |
+| Primary AI steps | 1 |
+| Checker steps | 1 |
 | Reusable input | 0% |
 
-Observed deterministic result:
+Required evaluation behavior:
 
-- With a $50 monthly model budget, no evidence-qualified OpenAI baseline fits; the engine blocks with GOV-011.
-- With a $100 monthly model budget, GPT-5.6 Terra is the least expensive evidence-qualified baseline.
-- Expected token charge: $75/month.
-- Planning range: $56.25–$101.25/month.
-- 12-month expected token forecast: $912.50.
+- Any `outputTokens` workload field is rejected by COST-001.
+- Output length comes from the selected model's low/likely/high profile; a reasoning tier can use materially more output than a fast tier for the same requested result shape.
+- Primary and checker steps are included before the model-specific retry multiplier is applied.
+- The main result and budget boundary are cost per completed task. Monthly volume is secondary context.
+- An independent cost specialist recomputes all three scenarios; a one-cent corruption fails and GOV-009 blocks.
+- Current output/retry profiles are planning heuristics and trigger GOV-015 until repeated live runs replace them with measured distributions.
 - Google and Anthropic catalog prices remain comparison-only because no shared workload evaluation exists.
 
 ## Cycle 3 — Release-channel truth
 
-**Input:** “Does the production Alpha have the prompt-first flow described by the release notes?”  
-**Observed:** no. Sites production displays Alpha 01 and begins with structured estimator fields.  
-**Expected governance response:** block the production claim until the reviewed release is deployed and smoke-tested.
+**Input:** “Does production contain the corrected cost contract described by the release notes?”
+
+**Observed before this release:** production v0.2.0-rc.2 has the prompt-first flow, but still exposes the earlier output-token and monthly-first contract.
+
+**Expected governance response:** block the corrected-cost claim until the reviewed v0.2.0-rc.3 commit is deployed to both public channels and smoke-tested.
 
 ## Acceptance for the next cycle
 
@@ -52,3 +56,4 @@ Observed deterministic result:
 - The page says exactly which costs are included and excluded.
 - The same release version and capability claims appear on Sites, GitHub Pages, repository main, release notes, deck, and demo script.
 - At least one budget block, unknown-risk review, unsupported modality block, catalog-only provider selection, and happy path are exercised in the browser.
+- Output-token input rejection, checker/retry inclusion, corrupted-ledger detection, and GOV-015 heuristic disclosure are exercised in automation.

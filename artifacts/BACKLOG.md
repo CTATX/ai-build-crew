@@ -19,6 +19,8 @@ Acceptance: the same normalized workload is evaluated by one published schema; u
 - Bring user-owned provider keys through server-side secret storage only.
 - Run a small, consented evaluation set against eligible models; keep prompts synthetic until data controls are approved.
 - Capture quality, latency, error type, and full system cost—not token price alone.
+- Replace heuristic output/retry profiles with repeated task-by-model measurements: completed-task success rate, p10/p50/p90 output tokens, retry rate, checker rate, latency, and actual charged cost.
+- Require minimum sample size and confidence before changing a model's cost-behavior evidence from planning heuristic to measured distribution.
 - Add confidence and “insufficient evidence” outcomes.
 - Add replayable eval fixtures for classification, extraction, generation, RAG, tool use, and agent loops.
 

@@ -1,6 +1,6 @@
 # Alpha evaluation
 
-Evaluation date: August 8, 2026
+Evaluation date: August 9, 2026
 
 ## Acceptance criteria
 
@@ -12,10 +12,13 @@ Evaluation date: August 8, 2026
 6. A manual comparison does not silently replace the recommended starting point.
 7. Stale pricing, failed evaluation, audit mismatch, unsafe loops, or no eligible model blocks finalization.
 8. Assumptions remain visible and create a warning.
-9. Candidate ordering cannot change the deterministic recommendation, and a stated monthly ceiling cannot be exceeded.
+9. Candidate ordering cannot change the deterministic recommendation, and a stated cost-per-completed-task ceiling cannot be exceeded.
 10. No AI key or generative endpoint is required.
 11. Unknown consequences of error require human review rather than inheriting a safe default.
-12. The displayed 12-month forecast equals twelve 30-day monthly planning periods.
+12. Output tokens are rejected as user/workload input; every model supplies an ordered low/likely/high output distribution.
+13. Retry multipliers and checker steps are included in cost per completed task.
+14. The Cost Evaluation Specialist independently recomputes all three scenarios and any mismatch fails evaluation, which blocks governance.
+15. Monthly volume is secondary scale context and cannot replace the cost-per-completed-task decision unit.
 
 ## Results
 
@@ -32,9 +35,10 @@ Evaluation date: August 8, 2026
 | Budget boundary | Pass | A ceiling below every evidence-qualified option blocks with GOV-011; a sufficient ceiling permits the same deterministic recommendation. |
 | Provider neutrality | Pass | Three providers are cost-visible; unevaluated Google and Anthropic entries cannot enter the recommendation ranking. |
 | Secret boundary | Pass | No key or generative route is required by the app or static hub. |
-| Forecast label/math | Pass | The 12-month forecast equals expected monthly cost × 12. |
+| Cost contract | Pass | COST-001 through COST-006 enforce model-owned output, ordered retry/output distributions, checker inclusion, and cost per completed task. |
+| Independent cost ledger | Pass | The Cost Evaluation Specialist recomputes low, likely, and high results without calling the estimator formula. |
 
-Automated suite: **11 tests passed, 0 failed**. This includes ten decision/governance regression cases and one rendered-app smoke test.
+Automated suite: **15 tests passed, 0 failed**. This includes the hard cost-contract checks, deliberate ledger corruption, governance failure propagation, decision/governance regressions, and one rendered-app smoke test.
 
 ## Browser test cycles
 

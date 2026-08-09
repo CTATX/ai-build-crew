@@ -1,36 +1,34 @@
 # AI Build Crew
 
-**Describe an AI workload. Get a monthly model-usage cost range and a model starting point.**
+**Describe an AI workload. Get a cost-per-completed-task range and a model starting point.**
 
 AI Build Crew is a governed decision workbench for product builders. It guides an incomplete idea into a transparent model-usage estimate, recommends the least expensive rule-eligible model, and produces separate evaluation, audit, and governance findings before a human decision owner decides. It does not yet estimate software labor or complete application infrastructure cost.
 
 ## Alpha scope
 
 - Prompt-first fast, guided, and synthetic-example routes.
-- A persistent workload prompt with explicit input/output tokens per call.
-- An optional hard monthly budget ceiling; the system blocks rather than recommends an over-budget model.
+- A persistent workload prompt with explicit input size, result shape, primary steps, and checker steps. Output tokens are never accepted as workload input.
+- An optional hard cost-per-completed-task ceiling; the system blocks rather than recommends an over-budget model.
 - A visible field-level assumption ledger; a richer per-field provenance record remains planned.
-- Low, expected, and high workload scenarios.
+- Model-specific low, likely, and high output/retry scenarios.
 - Explainable model eligibility based on task requirements and hard capability constraints.
 - Published catalog comparison across three OpenAI, two Google Gemini, and three Anthropic Claude models.
 - Cross-provider quality ranking held back until every provider runs the same workload evaluation.
-- Independent deterministic evaluation, audit, and governance stages.
+- A hard deterministic Cost Evaluation Specialist, plus separate audit and governance outputs.
 - A human decision gate; high-risk and uncertain safety cases fail closed.
 
-Every model record carries a source date and evidence state, with provider-level source references. Field-level price provenance remains planned. The catalog was checked against published [OpenAI](https://developers.openai.com/api/docs/models), [Google Gemini](https://ai.google.dev/api/models), and [Anthropic Claude](https://platform.claude.com/docs/en/api/models/list) documentation on August 8, 2026.
+Every model record carries a source date and evidence state, with provider-level source references. Field-level price provenance remains planned. The catalog was checked against published [OpenAI](https://developers.openai.com/api/docs/models/compare), [Google Gemini](https://ai.google.dev/gemini-api/docs/pricing), and [Anthropic Claude](https://platform.claude.com/docs/en/about-claude/pricing) documentation on August 9, 2026. That release audit corrected drift in the OpenAI Luna and Terra price rows before deployment.
 
 ## Cost method
 
 ```text
-cost per request = calls × ((uncached input tokens × input price)
-                  + (cached input tokens × cached-input price)
-                  + (output tokens × output price)) ÷ 1,000,000
-
-monthly cost = cost per request × requests per day × 30
-low / expected / high = versioned workload scenarios
+model output = chosen result shape × model low/likely/high output multiplier
+attempted calls = (primary steps + checker steps) × model retry multiplier
+cost per completed task = primary-call cost + checker-call cost, including retries
+monthly scale context = cost per completed task × completed tasks per day × 30
 ```
 
-The normalized estimate includes standard token input, cached-read, and output fields. Provider-specific cache writes, cache storage, grounding/search, tools, batch modes, regional premiums, infrastructure, and human review remain explicit coverage gaps.
+Published token prices remain catalog facts. Output and retry distributions are versioned planning heuristics until live evaluations replace them with measured distributions. Provider-specific cache writes, cache storage, grounding/search, tools, batch modes, regional premiums, infrastructure, and human review remain explicit coverage gaps.
 
 ## Run locally
 
@@ -59,13 +57,14 @@ The complete governed workflow works without an API key. The recommendation and 
 - [Future-state requirements](FUTURE_STATE.md)
 - [Original product requirements document](artifacts/ORIGINAL_PRD.md)
 - [Maven / Product Faculty PRD](artifacts/MAVEN_AGENTIC_AI_PRD.md)
-- [Builder Badge workbook](artifacts/AI_Build_Crew_Agentic_AI_PRD.xlsx)
+- [Builder Badge workbook — corrected cost contract](artifacts/AI_Build_Crew_Agentic_AI_PRD_COST_CONTRACT.xlsx)
 - [Repeatable governed workflow](WORKFLOW.md)
 - [Governance and evaluation specification](governance/GOVERNANCE_AND_EVALUATION.md)
 - [Feedback register](governance/FEEDBACK_REGISTER.md)
 - [Product backlog](artifacts/BACKLOG.md)
-- [Overview presentation](artifacts/AI_BUILD_CREW_OVERVIEW.pptx)
-- [2–3 minute demo script](artifacts/DEMO_SCRIPT.md)
+- [Recording-ready presentation — corrected cost contract](artifacts/AI_BUILD_CREW_COST_CONTRACT_VIDEO_REVIEW.pptx)
+- [Four-minute demo script](artifacts/DEMO_SCRIPT.md)
+- [Cost-contract artifact alignment audit](artifacts/COST_CONTRACT_ARTIFACT_AUDIT.md)
 
 ## Publishing model
 

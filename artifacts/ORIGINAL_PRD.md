@@ -24,7 +24,7 @@ When considering an AI feature, the user wants to move from a rough idea to a co
 - Produce a first estimate in under three minutes.
 - Distinguish user facts, named assumptions, and unknowns.
 - Recommend the least expensive rule-eligible model from a versioned catalog.
-- Show low, expected, and high workload scenarios and alternative-model deltas.
+- Show low, likely, and high cost-per-completed-task scenarios and alternative-model deltas.
 - Run independent evaluation, audit, and governance checks before a human decides.
 - Reproduce the same result for the same normalized input, catalog, and rule versions.
 
@@ -48,20 +48,21 @@ The guided route asks about the job, consequence of error, data class, modality,
 
 The deterministic pipeline then runs:
 
-`Estimate → Eligibility → Evaluation → Audit → Governance → human decision`
+`Estimate → Cost Evaluation Specialist → Eligibility → Evaluation → Audit → Governance → human decision`
 
-Results show the recommendation, alternatives, low/expected/high cost, exclusion reasons, evaluation evidence, governance rule IDs, and the human decision actions.
+Results show the recommendation, alternatives, low/likely/high cost per completed task, secondary volume scaling, exclusion reasons, evaluation evidence, governance rule IDs, and the human decision actions.
 
 ## Functional requirements
 
-- Capture task, risk, data class, regulatory status, modality, volume, tokens, cache rate, calls, context, and source provenance.
+- Capture task, risk, data class, regulatory status, modality, planned completed-task volume, input size, result shape, cache rate, primary steps, checker steps, context, and source provenance. Output tokens are not a user input.
 - Validate numeric ranges and never silently classify an unknown safety field as safe.
-- Calculate uncached input, cached input, and output cost separately.
+- Apply a versioned model-specific low/likely/high output-length and retry distribution; calculate uncached input, cached input, primary steps, checker steps, and retries separately.
 - Filter unsupported modality, context, and quality candidates before price ranking.
-- Rank eligible candidates by expected monthly cost with a stable tie-breaker.
+- Rank eligible candidates by likely cost per completed task with a stable tie-breaker. Show monthly volume only as secondary scale context.
 - Preserve catalog version, rule version, engine version, assumptions, and input hash.
 - Require human review for high-risk, regulated, sensitive, or unknown-data work.
 - Block stale pricing, failed evaluation, audit mismatch, no eligible model, or unsafe loop counts.
+- Reject any workload contract containing user-entered output tokens. Independently recompute all three cost scenarios before governance.
 - Require a rationale for an override; an override never erases warnings or blocks.
 - Export a deterministic decision brief and evidence record.
 
@@ -73,6 +74,7 @@ The recommendation and approval path contains no generative model call. The same
 
 - **Intake Orchestrator:** asks versioned questions and records provenance; cannot recommend.
 - **Estimator/Selector:** performs pure calculations and ranking; cannot approve.
+- **Cost Evaluation Specialist:** enforces COST-001 through COST-006 and independently recomputes the frozen low/likely/high ledger; cannot change the estimate.
 - **Evaluation Agent:** tests a frozen result; cannot mutate it.
 - **Audit Agent:** verifies formulas, versions, and evidence; cannot waive findings.
 - **Governance Agent:** applies absolute rules and returns PASS, WARN, REVIEW_REQUIRED, or BLOCKED; cannot choose a model.
@@ -90,7 +92,7 @@ The recommendation and approval path contains no generative model call. The same
 
 1. A credential-free production build renders the full workflow.
 2. Same input and versions produce identical results.
-3. Low, expected, and high costs are ordered and transparent.
+3. Low, likely, and high cost-per-completed-task results are ordered and transparent.
 4. Candidate ordering does not alter the recommendation.
 5. Unsupported modality or no eligible candidate blocks recommendation.
 6. High-risk, regulated, sensitive, or unknown-data cases require review.
@@ -98,6 +100,8 @@ The recommendation and approval path contains no generative model call. The same
 8. Assumptions remain visible and create at least a warning.
 9. A human—not the system—owns the final decision.
 10. The repository publishes the PRDs, workflow, evaluation, governance, backlog, deck, and demo script.
+11. Output tokens are rejected as workload input; model-owned output and retry distributions are versioned and visibly labeled as measured or heuristic.
+12. Checker steps and retry multipliers are included, and a deliberately corrupted ledger blocks governance.
 
 ## Launch plan
 

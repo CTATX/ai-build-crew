@@ -26,16 +26,16 @@ Date: August 8, 2026
 | Template prompt | Answer |
 |---|---|
 | Agent definition | A deterministic workload-estimation and model-decision workbench—not an autonomous purchaser or approver. |
-| Agent role | Intake Orchestrator, Estimator/Selector, Evaluator, Auditor, Governance checker, deterministic Presenter, Human Decision Gate. |
-| Target workflow | Prompt → route → guided or fast capture → Known/Assumed/Unknown confirmation → estimate → eligibility → evaluation → audit → governance → human decision → export. |
+| Agent role | Intake Orchestrator, Estimator/Selector, Cost Evaluation Specialist, Evaluator, Auditor, Governance checker, deterministic Presenter, Human Decision Gate. |
+| Target workflow | Prompt → route → guided or fast capture → Known/Assumed/Unknown confirmation → estimate → independent cost evaluation → eligibility → evaluation → audit → governance → human decision → export. |
 | Agent loop | One versioned question at a time; stop when minimum facts are present or the user selects Estimate now. Evaluation, audit, and governance run once against a frozen result. |
-| Inputs/context | Task, consequence of error, data class, regulation, modality, daily requests, input/output tokens, cache rate, calls, context requirement, and field provenance. |
+| Inputs/context | Task, consequence of error, data class, regulation, modality, completed tasks/day, input size, desired result shape, cache rate, primary steps, checker steps, per-task ceiling, context requirement, and field provenance. Output tokens are a model distribution, never a workload input. |
 | Tools/actions | Versioned model catalog, deterministic cost engine, eligibility rules, fixed eval cases, governance rules, audit recorder, and deterministic templates. |
 | Memory | Store only normalized assumptions, decisions, versions, and findings. Never store API keys, secrets, PHI, or production prompts. |
-| Output | Low/expected/high forecast, recommendation and alternatives, cost deltas, exclusions, eval evidence, governance disposition, and decision brief. |
+| Output | Low/likely/high cost per completed task, secondary monthly scale context, recommendation and alternatives, cost deltas, exclusions, cost-contract evidence, governance disposition, and decision brief. |
 | Escalation | BLOCKED for stale catalog, no eligible model, failed evaluation, audit mismatch, or unsafe loops. REVIEW_REQUIRED for high-risk, regulated, sensitive, or unknown data. |
 | Approval | A human can approve only READY_FOR_HUMAN_DECISION. A permitted override requires rationale and never clears an absolute block. |
-| Initial eval plan | Formula boundaries, stable ordering, capability exclusion, risk/data fail-closed rules, stale catalog, assumptions, loop limits, mutation resistance, and synthetic golden cases. |
+| Initial eval plan | COST-001 through COST-006, independent three-scenario recomputation, corrupted-ledger blocking, formula boundaries, stable ordering, capability exclusion, risk/data fail-closed rules, stale catalog, assumptions, loop limits, mutation resistance, and synthetic golden cases. |
 
 ## Develop
 
@@ -44,8 +44,8 @@ Date: August 8, 2026
 | Prototype | Responsive web workbench with prompt-first routing, guided questions, workload freeze, model comparison, four-stage evidence strip, findings, and human decision actions. |
 | User interaction | Mouse or keyboard; every unknown and assumption remains visible; Estimate now provides a fast escape from discovery. |
 | Demo-safe data | A synthetic support-classification workload with Internal data and configurable usage. |
-| Eval cases | Same-input determinism, scenario ordering, high risk, unknown sensitivity, unsupported modality, stale pricing, assumptions, loop thresholds, candidate-order invariance, and render smoke test. |
-| Eval result | 10 passed, 0 failed on August 8, 2026. |
+| Eval cases | Same-input determinism, model-owned output distributions, retry/checker inclusion, corrupted-ledger detection, governance propagation, scenario ordering, high risk, unknown sensitivity, unsupported modality, stale pricing, assumptions, loop thresholds, candidate-order invariance, and render smoke. |
+| Eval result | 15 passed, 0 failed on August 8, 2026. Published prices are dated facts; output and retry distributions remain planning heuristics until repeated live evaluation measures them. |
 | Iteration | Removed the generative recommendation route; added provenance, guided intake, versioned rules/catalog, independent checks, and fail-closed dispositions. |
 | Known limitations | Three-provider catalog comparison is implemented, but only the OpenAI baseline has heuristic rank eligibility. Google and Anthropic remain catalog-only until shared task evals measure quality, reliability, and latency. Tool, storage, retrieval, infrastructure, and human-review costs are incomplete; decisions are not yet persisted. |
 
@@ -69,6 +69,6 @@ Date: August 8, 2026
 - Clear agent actions and boundaries: **Yes.**
 - Human approval point: **Yes — Human Decision Gate.**
 - Synthetic demo-safe data: **Yes.**
-- Defined evaluation plan and result: **Yes — 11/11 pass for the v0.2 release candidate.**
+- Defined evaluation plan and result: **Yes — 15/15 pass for the unreleased cost-contract correction. The deployed v0.2 release remains the prior behavior.**
 - Honest limitations and stop conditions: **Yes.**
 - End-to-end demo and deployment evidence: **Yes.**

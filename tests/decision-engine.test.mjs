@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { analyzeWorkload, deterministicBrief } from "../lib/decision-engine.mjs";
+import { analyzeWorkload, costFor, deterministicBrief, models, runGovernance } from "../lib/decision-engine.mjs";
+import { runCostEvaluator } from "../agents/cost-evaluator.mjs";
 
 const base = Object.freeze({
   task: "Product analysis",
@@ -10,11 +11,12 @@ const base = Object.freeze({
   regulated: false,
   requests: 1000,
   inputTokens: 2400,
-  outputTokens: 650,
+  responseSize: "Detailed answer",
   cache: 20,
-  calls: 1,
+  primarySteps: 1,
+  checkerSteps: 1,
   budget: 0,
-  asOfDate: "2026-08-08",
+  asOfDate: "2026-08-09",
   assumptions: [],
 });
 
@@ -25,12 +27,50 @@ test("same frozen input produces identical structured result", () => {
   assert.equal(deterministicBrief(first), deterministicBrief(second));
 });
 
-test("low expected and high scenarios are ordered", () => {
+test("model-behavior low likely and high task-cost scenarios are ordered", () => {
   const result = analyzeWorkload(base);
   assert.equal(result.evaluation.status, "PASS");
-  assert.ok(result.scenarios.low.monthly < result.scenarios.expected.monthly);
-  assert.ok(result.scenarios.expected.monthly < result.scenarios.high.monthly);
-  assert.equal(result.scenarios.expected.annual, result.scenarios.expected.monthly * 12);
+  assert.ok(result.scenarios.low.perCompletedTask < result.scenarios.expected.perCompletedTask);
+  assert.ok(result.scenarios.expected.perCompletedTask < result.scenarios.high.perCompletedTask);
+  assert.ok(Math.abs(result.scenarios.expected.monthlyAtPlannedVolume - (result.scenarios.expected.perCompletedTask * base.requests * 30)) < 0.000001);
+  assert.ok(result.scenarios.expected.attemptedCallsPerTask > base.primarySteps);
+});
+
+test("output tokens are a model property rather than a user input", () => {
+  const baseline = analyzeWorkload(base);
+  assert.throws(() => analyzeWorkload({ ...base, outputTokens: 999999 }), /COST-001/);
+  assert.equal(baseline.costEvaluation.status, "PASS");
+
+  const luna = models.find((model) => model.id === "gpt-5.6-luna");
+  const sol = models.find((model) => model.id === "gpt-5.6-sol");
+  assert.ok(costFor(sol, baseline.workload, "high").outputTokensPerPrimary > costFor(luna, baseline.workload, "high").outputTokensPerPrimary);
+});
+
+test("checker steps and retry profiles increase cost per completed task", () => {
+  const withoutChecker = analyzeWorkload({ ...base, checkerSteps: 0 });
+  const withChecker = analyzeWorkload(base);
+  assert.ok(withChecker.scenarios.expected.perCompletedTask > withoutChecker.scenarios.expected.perCompletedTask);
+  assert.ok(withChecker.scenarios.high.retryMultiplier > withChecker.scenarios.low.retryMultiplier);
+  assert.ok(withChecker.scenarios.high.attemptedCallsPerTask > withChecker.scenarios.low.attemptedCallsPerTask);
+  assert.ok(withChecker.governance.findings.some((finding) => finding.id === "GOV-015"));
+});
+
+test("cost specialist fails a corrupted frozen estimate", () => {
+  const result = analyzeWorkload(base);
+  const corrupted = {
+    ...result.scenarios,
+    expected: { ...result.scenarios.expected, perCompletedTask: result.scenarios.expected.perCompletedTask + 0.01 },
+  };
+  const report = runCostEvaluator({ rawInput: base, workload: result.workload, model: result.recommendation, estimatedScenarios: corrupted });
+  assert.equal(report.status, "FAIL");
+  assert.equal(report.checks.find((check) => check.id === "COST-AUDIT-EXPECTED").pass, false);
+});
+
+test("failed cost evaluation blocks at governance", () => {
+  const result = analyzeWorkload(base);
+  const governance = runGovernance(result.workload, result.eligible, { status: "FAIL" }, result.audit, base.asOfDate, []);
+  assert.equal(governance.status, "BLOCK");
+  assert.ok(governance.findings.some((finding) => finding.id === "GOV-009"));
 });
 
 test("high-risk work requires review and cannot be ready", () => {
@@ -54,8 +94,8 @@ test("unknown consequence of error fails closed to human review", () => {
   assert.ok(uncertainJob.governance.findings.some((finding) => finding.id === "GOV-014"));
 });
 
-test("unsupported modality blocks instead of forcing a model", () => {
-  const result = analyzeWorkload({ ...base, modality: "image" });
+test("modality without an evaluated baseline blocks instead of forcing a model", () => {
+  const result = analyzeWorkload({ ...base, modality: "audio" });
   assert.equal(result.recommendation, null);
   assert.equal(result.disposition, "BLOCKED");
   assert.ok(result.governance.findings.some((finding) => finding.id === "GOV-001"));
@@ -77,8 +117,8 @@ test("assumptions remain visible and create a warning", () => {
 });
 
 test("excessive agent loops warn and unsafe loops block", () => {
-  assert.equal(analyzeWorkload({ ...base, calls: 9 }).governance.status, "WARN");
-  assert.equal(analyzeWorkload({ ...base, calls: 21 }).disposition, "BLOCKED");
+  assert.equal(analyzeWorkload({ ...base, primarySteps: 8, checkerSteps: 1 }).governance.status, "WARN");
+  assert.equal(analyzeWorkload({ ...base, primarySteps: 20, checkerSteps: 1 }).disposition, "BLOCKED");
 });
 
 test("candidate ordering cannot change deterministic recommendation", () => {
@@ -90,12 +130,12 @@ test("candidate ordering cannot change deterministic recommendation", () => {
   assert.ok(result.catalogEligible.some((model) => model.id === "gemini-3.6-flash"));
   assert.ok(!result.eligible.some((model) => model.provider !== "OpenAI"));
 
-  const blocked = analyzeWorkload({ ...base, budget: 1 });
+  const blocked = analyzeWorkload({ ...base, budget: 0.001 });
   assert.equal(blocked.recommendation, null);
   assert.equal(blocked.disposition, "BLOCKED");
   assert.ok(blocked.governance.findings.some((finding) => finding.id === "GOV-011"));
 
-  const allowed = analyzeWorkload({ ...base, budget: 400 });
+  const allowed = analyzeWorkload({ ...base, budget: 1 });
   assert.equal(allowed.recommendation.id, "gpt-5.6-terra");
-  assert.ok(allowed.scenarios.expected.monthly <= 400);
+  assert.ok(allowed.scenarios.expected.perCompletedTask <= 1);
 });

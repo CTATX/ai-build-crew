@@ -1,87 +1,73 @@
-# AI Build Crew v0.2.0-rc.2 — Productized Alpha
+# AI Build Crew v0.2.0-rc.3 — Governed Cost Contract
 
-Status: **Deployed and smoke-tested release candidate**
-
-Prepared: August 8, 2026
+Prepared and release-audited: August 9, 2026
 
 Developed by [BadLabz.com](https://badlabz.com)
 
-AI Build Crew is a prompt-first, pre-build decision workbench for product builders. It converts a rough AI workload into visible assumptions, reproducible model-usage cost scenarios, evidence-gated eligibility, separate evaluation/audit/governance findings, and a human-owned decision.
+## Why this release matters
 
-## Channel status
+Evaluation found that the earlier estimator treated output tokens as a user workload input, held generation length constant across unlike model tiers, and allowed one call per request to hide retries and checker cost. That produced false precision in a monthly number.
 
-| Channel | Version observed | Status |
-|---|---|---|
-| Sites production | v0.2.0-rc.2 | Prompt-first Alpha 02 deployed and browser smoke-tested |
-| GitHub Pages | v0.2.0-rc.2 | Person-neutral public product/about page; internal work-step checklist removed |
-| GitHub `main` | v0.2.0-rc.2 | Same reviewed application, public page, and release evidence |
-| Custom domain | v0.2.0-rc.2 | Active with HTTPS; access remains owner-controlled pending an explicit public-access decision |
+This candidate corrects the decision contract. The user describes the result needed and the workflow steps. Each model supplies an evidence-labeled low, likely, and high output/retry profile. AI Build Crew reports and ranks low, likely, and high **cost per completed task**, with monthly volume shown only as secondary scale context.
 
-The immutable tag `v0.2.0-rc.2` resolves the exact source deployed to GitHub Pages and Sites. The earlier `alpha-baseline-2026-08-08` tag remains the rollback reference.
+## What changed
 
-## Included in this candidate
+- Removed output tokens as a user input; COST-001 rejects the field if it reaches the engine.
+- Added result-shape inputs: label or field, short answer, detailed answer, and long artifact.
+- Separated primary AI steps from checker steps.
+- Added model-specific output-length and retry distributions.
+- Added a cost-per-completed-task ceiling instead of a monthly model budget.
+- Added a hard-bordered Cost Evaluation Specialist that independently recomputes all three cost ledgers without calling the estimator formula.
+- Added deliberate corruption testing: a one-cent mismatch fails evaluation and GOV-009 blocks governance.
+- Added GOV-015 so heuristic behavior profiles remain visibly unmeasured until repeated live evaluations replace them.
+- Updated the original PRD, Maven/Product Faculty PRD, Builder Badge workbook, TeamOS workflow, governance documents, four-minute script, and eight-slide recording deck.
+- Added release-gate automation for build, test, lint, and drift checks.
 
-- An idea prompt with guided, known-usage, and synthetic-example routes.
-- A beginner-first path that does not require the user to know models, tokens, or architecture before starting.
-- Explicit unanswered states and visible planning assumptions; unknown safety fields never silently become safe defaults.
-- Plain-language Experiment, Pilot, Launch, and Not sure workload profiles.
-- Editable uses/day, input tokens/use, output tokens/use, reusable-input percentage, AI steps/use, and an optional monthly model-usage budget.
-- Deterministic low, expected, and high token-cost scenarios plus a 12-month token-cost forecast.
-- A dated catalog containing three OpenAI, two Google Gemini, and three Anthropic Claude entries.
-- Evidence-gated ranking: Google and Anthropic costs are visible but those models remain unranked until shared workload evaluations exist.
-- Logically separate deterministic estimate, evaluation, audit, governance, and human-decision outputs. These are currently modules in one application, not independently deployed autonomous agents.
-- Fail-closed controls for unsupported capabilities, stale pricing, unsafe loops, unknown or sensitive data, high-risk work, audit mismatch, failed evaluation, and budget conflict.
-- Person-neutral product and governance language.
-- Original PRD, Maven/Product Faculty PRD, Builder Badge workbook, workflow, TeamOS operating model, governance specification, evaluation report, backlog, presentation, and 2–3 minute demo script.
+## Catalog release audit
 
-## Verified candidate evidence
+The August 9 release audit checked the catalog against official provider documentation. It corrected OpenAI Luna and Terra price and context-window drift before release. Google Gemini and Anthropic Claude standard token prices remained aligned.
 
-- 11 automated deterministic, governance, provider-neutrality, budget-boundary, unknown-risk, and rendered-app checks pass.
-- The candidate production build and lint complete successfully in the local release workspace.
-- The calculation and recommendation path requires no AI credential and contains no generative model call.
-- A person-neutral scan passes across active text, workbook, and presentation content.
-- PowerPoint overflow checks pass.
+The catalog is still a reviewed snapshot—not an automatic live feed. Published token prices are facts as of the source date. Output and retry profiles are planning heuristics. Cache writes, cache storage, grounding, searches, tools, batch and priority modes, long-context premiums, regional premiums, infrastructure, and human-review cost remain explicit coverage gaps unless a row says otherwise.
 
-Production browser verification confirmed the prompt control, Alpha 02 marker, guided first question, explicit-answer gate, person-neutral copy, and the public landing-page capability story. The unused hosted OpenAI API secret was removed before the final deployment.
+## Verified evidence
 
-## Service capability boundary
+- 15 automated checks pass and 0 fail.
+- Production build and lint pass.
+- Same-input deterministic results and stable ranking pass.
+- COST-001 through COST-006 pass.
+- Checker/retry monotonicity, independent three-scenario recomputation, deliberate corruption, and GOV-009 propagation pass.
+- High-risk, unknown-risk, sensitive, unsupported, stale, and excessive-loop cases fail closed.
+- Workbook formula scan and visual review pass.
+- Presentation overflow and template-fidelity checks pass with eight source-note blocks.
+- Active-artifact person-neutral and claim-drift scans pass.
+- The decision path makes zero generative model calls and needs no AI credential.
 
-The current product estimates **model inference token charges** for a described workload. It does not yet estimate software-development labor, hosting, databases, retrieval, storage, networking, monitoring, vendor tools, or human-review cost. It also does not currently parse free text into authoritative workload facts; the user confirms every field used by the decision engine.
+## Honest capability boundary
 
-## Known limitations
+- OpenAI is the only policy-eligible heuristic baseline. Google and Anthropic are cost-visible but not rank-eligible until the same measured workload evaluation runs across providers.
+- Behavior distributions are not measured production facts yet.
+- Free text remains context; the user confirms every fact used by the engine.
+- Ideas and workload values remain in browser memory and clear on refresh. There is no application database or saved history in this release.
+- The estimator covers modeled inference-token charges. It does not yet cover software-development labor, hosting, retrieval, databases, storage, networking, monitoring, provider tool fees, or human review.
+- The application does not purchase, provision, route production traffic, or approve regulated workloads.
 
-- Only the current OpenAI baseline is rank-eligible. Google and Anthropic remain catalog-only until the same measured evaluation is run.
-- Catalog values are reviewed snapshots, not automated live feeds.
-- Model-list APIs do not provide every price component; pricing refresh remains a separately reviewed process.
-- Provider-specific cache writes, storage, grounding/search, tools, batch modes, regional premiums, infrastructure, and human-review cost remain explicit coverage gaps.
-- Forecasts and decision records are not persisted across devices.
-- The 12-month value is a projection from the confirmed workload, not actual-spend tracking.
-- Live catalog refresh, saved price history, forecast-versus-actual reconciliation, and live multi-provider evaluation are planned—not shipped.
-- AI Build Crew does not purchase, provision, deploy, or approve regulated workloads.
+## Release channels
 
-## Release gate
+The release is complete only when immutable tag `v0.2.0-rc.3`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.2` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
 
-1. Complete the final claim, catalog, secret, accessibility, and failure-path checks.
-2. Review and merge the release candidate.
-3. Record the exact release commit and artifact hashes.
-4. Tag the immutable v0.2.0 release.
-5. Deploy that exact commit to GitHub Pages and Sites.
-6. Verify the prompt-first path, custom domain, HTTPS, artifact links, and rollback target.
-7. Record the deployment evidence and publish the final release notes.
+## Next increments
 
-## Next product increments
-
-1. Run first-time-builder usability cycles and capture where users cannot translate an idea into workload assumptions.
-2. Add governed provider inventory refresh and reviewed pricing changes.
-3. Add authenticated saved forecasts and decisions.
-4. Add price history and forecast-versus-actual cost tracking.
-5. Add budget-capped shared live evaluations for Google Gemini, then Anthropic Claude.
+1. Measure task-by-model output, retry, checker, success, latency, and actual-charge distributions using budget-capped synthetic cases.
+2. Add reviewed catalog refresh and price-change history.
+3. Add explicit local export and clear-session controls before any cloud persistence.
+4. Add authenticated saved forecasts and user-owned deletion/export.
+5. Add forecast-versus-actual tracking, then shared Google and Anthropic live evaluation.
 
 ## Evidence
 
-- [Audited v0.1.0 record](artifacts/RELEASE_v0.1.0_AUDIT.md)
+- [Cost-contract artifact audit](artifacts/COST_CONTRACT_ARTIFACT_AUDIT.md)
 - [Capability and channel audit](artifacts/CAPABILITY_AND_CHANNEL_AUDIT.md)
-- [Market discovery](artifacts/MARKET_DISCOVERY.md)
 - [Self-test cycle](artifacts/SELF_TEST_CYCLE.md)
 - [Evaluation evidence](EVALUATION.md)
 - [Governance specification](governance/GOVERNANCE_AND_EVALUATION.md)
+- [Audited v0.1.0 record](artifacts/RELEASE_v0.1.0_AUDIT.md)

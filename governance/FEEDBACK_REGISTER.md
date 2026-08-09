@@ -13,10 +13,14 @@ Review date: August 8, 2026
 | Stop asking when the user knows enough. | Requirement | A completeness check runs after each answer; Estimate now is always available. | Intake transition tests (next iteration). |
 | Product authority must not be hard-coded to a named person. | Absolute content rule | Reusable product controls use user, human reviewer, or human decision owner. | Repository text scan. |
 | Original and Maven PRDs were missing from GitHub. | Release blocker | Both Markdown PRDs and the workbook live under `artifacts/`; README links are internal. | Link and file check. |
-| Workflow, PPT, and a 2–3 minute script are required. | Deliverable | Publish all three as versioned repository artifacts. | Release checklist. |
+| Workflow, PPT, and a concise recorded-review script are required. | Deliverable | Publish the workflow, eight-slide deck, and current four-minute talk track as versioned repository artifacts. | Release checklist and slide-notes audit. |
 | Other providers must be preserved. | Requirement delivered in catalog alpha | Google Gemini and Anthropic Claude are now cost-visible with evidence states; neither can enter ranking before shared evals. | Provider-neutral regression assertion and catalog review. |
 | Imported GitHub agents may create supply-chain risk. | Absolute governance | Pin, inspect, sandbox, adversarially test, hard-border, approve, and re-review. | Import checklist. |
 | Medical billing is a valid high-value future use case. | Safety constraint | High-risk, regulated, sensitive, and unknown-data work requires human review; alpha is not a medical production decision tool. | Governance regression cases. |
+| Output tokens cannot be a user input; generation length varies by model and run. | Absolute cost rule | COST-001 rejects the field. Each model carries an evidence-labeled low/likely/high output distribution. | Forbidden-input and tier-distribution tests. |
+| One call per request hides retries and checker cost. | Absolute cost rule | Primary steps and checker steps are explicit workflow fields; model-specific retry multipliers apply before completed-task cost. | Checker/retry monotonicity test. |
+| Monthly cost creates false precision and hides unit economics. | Absolute reporting rule | Rank and headline low/likely/high cost per completed task; show monthly volume only as secondary scale context. | COST-005 and rendered-copy test. |
+| Cost evaluation must not reuse the estimator formula. | Absolute audit rule | Cost Evaluation Specialist uses an independent ledger implementation and a corrupted estimate must fail into GOV-009. | Corruption-injection and governance-propagation tests. |
 
 ## Documentation evaluation
 

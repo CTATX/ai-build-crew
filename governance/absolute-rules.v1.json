@@ -1,6 +1,6 @@
 {
-  "version": "governance-1.2.0",
-  "effectiveDate": "2026-08-08",
+  "version": "governance-1.3.0",
+  "effectiveDate": "2026-08-09",
   "owner": "Human decision owner",
   "rules": [
     { "id": "GOV-001", "severity": "BLOCK", "condition": "noEligibleModel", "message": "No model clears the capability and policy gates." },
@@ -9,13 +9,14 @@
     { "id": "GOV-004", "severity": "REVIEW_REQUIRED", "condition": "sensitiveData", "message": "Sensitive or protected data requires privacy and security review." },
     { "id": "GOV-005", "severity": "BLOCK", "condition": "staleCatalog", "message": "Pricing is outside the approved freshness window." },
     { "id": "GOV-006", "severity": "WARN", "condition": "assumptionsPresent", "message": "The estimate contains assumptions that the decision owner must confirm." },
-    { "id": "GOV-007", "severity": "WARN", "condition": "excessiveLoops", "message": "The workflow uses more than eight model calls per request." },
-    { "id": "GOV-008", "severity": "BLOCK", "condition": "unsafeLoops", "message": "More than twenty model calls per request exceeds the alpha control limit." },
+    { "id": "GOV-007", "severity": "WARN", "condition": "excessiveLoops", "message": "The workflow defines more than eight primary and checker steps per completed task before retries." },
+    { "id": "GOV-008", "severity": "BLOCK", "condition": "unsafeLoops", "message": "More than twenty primary and checker steps per completed task before retries exceeds the alpha control limit." },
     { "id": "GOV-009", "severity": "BLOCK", "condition": "evaluationFailed", "message": "One or more deterministic evaluation cases failed." },
     { "id": "GOV-010", "severity": "BLOCK", "condition": "auditMismatch", "message": "Independent cost recomputation did not match." },
-    { "id": "GOV-011", "severity": "BLOCK", "condition": "budgetExceeded", "message": "No evidence-qualified model fits the stated monthly budget. Change the workload, budget, or requirements before proceeding." },
+    { "id": "GOV-011", "severity": "BLOCK", "condition": "budgetExceeded", "message": "No evidence-qualified model fits the stated cost-per-completed-task ceiling. Change the workflow, ceiling, or requirements before proceeding." },
     { "id": "GOV-012", "severity": "REVIEW_REQUIRED", "condition": "unknownRisk", "message": "Unknown consequences of error require human review before approval." },
     { "id": "GOV-013", "severity": "REVIEW_REQUIRED", "condition": "unknownRegulatoryStatus", "message": "Unknown regulatory status requires human review before approval." },
-    { "id": "GOV-014", "severity": "REVIEW_REQUIRED", "condition": "unknownTask", "message": "An uncertain model job requires human review before approval." }
+    { "id": "GOV-014", "severity": "REVIEW_REQUIRED", "condition": "unknownTask", "message": "An uncertain model job requires human review before approval." },
+    { "id": "GOV-015", "severity": "WARN", "condition": "unmeasuredCostBehavior", "message": "Output-length and retry distributions are planning heuristics, not measured production behavior. Calibrate them with repeated live evaluations before using the range as a committed budget." }
   ]
 }

@@ -22,17 +22,18 @@ Exit when the workflow has no dead end and all assumptions are visible.
 
 ## 4. Build deterministic logic first
 
-Normalize input, calculate scenarios, filter hard constraints, rank eligible choices, and serialize results with version identifiers. Keep generative prose outside the decision and approval path.
+Normalize input, reject user-entered output tokens, apply model-specific output/retry distributions, price primary and checker steps, calculate cost per completed task, filter hard constraints, rank eligible choices, and serialize results with version identifiers. Keep generative prose outside the decision and approval path.
 
 Exit when the same input plus versions produces the same result and hash.
 
 ## 5. Run hard-bordered checks
 
-1. Estimator produces a frozen result.
-2. Evaluator checks fixed formulas and cases; it cannot edit the result.
-3. Auditor verifies evidence, versions, invariants, and non-mutation.
-4. Governance applies absolute rules; it cannot recommend or waive findings.
-5. The human decision owner approves, edits, rejects, escalates, or records a permitted override.
+1. Estimator produces a frozen low/likely/high cost-per-completed-task result.
+2. Cost Evaluation Specialist enforces COST-001 through COST-006 and independently recomputes all three scenarios; it cannot edit the result.
+3. Evaluator checks the wider fixed cases; it cannot edit the result.
+4. Auditor verifies evidence, versions, invariants, and non-mutation.
+5. Governance applies absolute rules; a failed cost evaluation blocks through GOV-009 and unmeasured behavior warns through GOV-015.
+6. The human decision owner approves, edits, rejects, escalates, or records a permitted override.
 
 Exit only when evaluation passes, audit matches, governance does not block, and the human decision is explicit.
 
@@ -58,6 +59,9 @@ Publish a private or narrow alpha, use synthetic/non-sensitive data, monitor sto
 - [ ] Known, assumed, and unknown fields are visible.
 - [ ] Catalog, rules, and engine versions are recorded.
 - [ ] Deterministic and governance regression cases pass.
+- [ ] Output tokens are rejected as workload input; model output/retry profiles are ordered and evidence-labeled.
+- [ ] Checker steps and retries are included in cost per completed task.
+- [ ] Independent low/likely/high recomputation matches; deliberate corruption blocks governance.
 - [ ] High-risk and unknown-data cases fail closed.
 - [ ] No secrets or protected content enter static assets or logs.
 - [ ] A human owns the final decision.

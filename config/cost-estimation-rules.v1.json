@@ -1,0 +1,18 @@
+{
+  "version": "cost-contract-1.0.0",
+  "checkerOutputShare": 0.2,
+  "responseProfiles": {
+    "Label or field": { "baseTokens": 60, "description": "A classification, extraction, or short structured field." },
+    "Short answer": { "baseTokens": 250, "description": "A few paragraphs or a compact structured response." },
+    "Detailed answer": { "baseTokens": 750, "description": "A page-scale analysis, brief, or explanation." },
+    "Long artifact": { "baseTokens": 2000, "description": "A substantial document, code change, or multi-part artifact." }
+  },
+  "rules": [
+    { "id": "COST-001", "severity": "BLOCK", "statement": "Output tokens are a model-behavior distribution and must not be accepted as user input." },
+    { "id": "COST-002", "severity": "BLOCK", "statement": "Every cost-visible model must have ordered low, likely, and high output multipliers." },
+    { "id": "COST-003", "severity": "BLOCK", "statement": "Every cost-visible model must have ordered retry multipliers of at least one." },
+    { "id": "COST-004", "severity": "BLOCK", "statement": "Primary and checker steps must be included before computing cost per completed task." },
+    { "id": "COST-005", "severity": "BLOCK", "statement": "The primary result and ranking unit is cost per completed task; volume projections are secondary." },
+    { "id": "COST-006", "severity": "BLOCK", "statement": "A cost result is a planning distribution, never a guaranteed single generation length or charge." }
+  ]
+}
