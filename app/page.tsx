@@ -5,13 +5,16 @@ import { analyzeWorkload, costFor, deterministicBrief, models, responseProfiles,
 import { buildDecisionReport } from "@/lib/decision-report.mjs";
 
 type Stage = "start" | "guided" | "estimate";
+type Persona = "product" | "advanced";
 
 const guidedQuestions = [
-  { id: "task", number: "01", prompt: "What job must the model perform?" },
-  { id: "risk", number: "02", prompt: "What is the impact if the model fails?" },
-  { id: "data", number: "03", prompt: "What kind of data will it handle?" },
-  { id: "modality", number: "04", prompt: "What must the model understand?" },
-  { id: "usage", number: "05", prompt: "Do you know the workload size?" },
+  { id: "task", number: "01", prompt: "What should AI do most often?" },
+  { id: "response", number: "02", prompt: "What should a successful result look like?" },
+  { id: "risk", number: "03", prompt: "What is the impact if the model fails?" },
+  { id: "data", number: "04", prompt: "What kind of information is involved?" },
+  { id: "modality", number: "05", prompt: "What formats appear in the typical task?" },
+  { id: "input", number: "06", prompt: "How much information goes into one typical task?" },
+  { id: "usage", number: "07", prompt: "How many completed tasks happen on an average day?" },
 ];
 
 function money(value: number) {
@@ -22,8 +25,11 @@ function money(value: number) {
 
 export default function Home() {
   const [stage, setStage] = useState<Stage>("start");
+  const [persona, setPersona] = useState<Persona>("product");
   const [question, setQuestion] = useState(0);
   const [idea, setIdea] = useState("");
+  const [averageDay, setAverageDay] = useState("");
+  const [inputSize, setInputSize] = useState("A few pages");
   const [task, setTask] = useState("Product analysis");
   const [risk, setRisk] = useState("Unknown");
   const [dataSensitivity, setDataSensitivity] = useState("Unknown");
@@ -49,6 +55,9 @@ export default function Home() {
   const comparisonOnly = Boolean(selected && selected !== result.recommendation?.id);
   const activeScenarios = active ? { low: costFor(active, result.workload, "low"), expected: costFor(active, result.workload, "expected"), high: costFor(active, result.workload, "high") } : null;
   const visibleModels = providerFilter === "All" ? models : models.filter((model) => model.provider === providerFilter);
+  const responseBaseTokens = (responseProfiles[responseSize] as { baseTokens: number }).baseTokens;
+  const inputRange = { low: Math.max(1, Math.round(inputTokens * 0.7)), high: Math.round(inputTokens * 1.4) };
+  const likelyContextNeed = Math.ceil(inputTokens * 1.35 + responseBaseTokens);
 
   function markKnown(field: string, value: number, setter: (value: number) => void) {
     setter(value);
@@ -64,16 +73,18 @@ export default function Home() {
       setAssumptions(["task", "risk", "dataSensitivity", "modalities", "regulated", "requests", "inputTokens", "responseSize", "cache", "primarySteps", "checkerSteps"]);
       setStage("estimate");
     } else if (route === "known") {
+      setPersona("advanced");
       setStage("estimate");
       setTimeout(() => document.querySelector("#estimator")?.scrollIntoView({ behavior: "smooth" }), 50);
     } else {
+      setPersona("product");
       setStage("guided"); setQuestion(0); setGuidedAnswers([]);
     }
   }
 
   function markGuidedAnswer(id: string) {
     setGuidedAnswers((current) => current.includes(id) ? current : [...current, id]);
-    const field = id === "data" ? "dataSensitivity" : id === "modality" ? "modalities" : id;
+    const field = id === "data" ? "dataSensitivity" : id === "modality" ? "modalities" : id === "response" ? "responseSize" : id;
     setAssumptions((current) => current.filter((item) => item !== field));
   }
 
@@ -88,6 +99,24 @@ export default function Home() {
     setRequests(values.requests); setInputTokens(values.input); setResponseSize(values.response); setPrimarySteps(0); setCheckerSteps(-1); setCache(0);
     setAssumptions((current) => [...new Set([...current, "requests", "inputTokens", "responseSize", "cache", "primarySteps", "checkerSteps"])]);
     markGuidedAnswer("usage");
+  }
+
+  function applyInputProfile(profile: "short" | "page" | "fewpages" | "document" | "collection" | "unknown") {
+    const values = profile === "short"
+      ? { label: "Short message or form", tokens: 300 }
+      : profile === "page"
+        ? { label: "About one page", tokens: 750 }
+        : profile === "fewpages"
+          ? { label: "A few pages", tokens: 2400 }
+        : profile === "document"
+          ? { label: "A long document", tokens: 6000 }
+          : profile === "collection"
+            ? { label: "Many documents or code", tokens: 18000 }
+            : { label: "Not sure", tokens: 2000 };
+    setInputSize(values.label);
+    setInputTokens(values.tokens);
+    setAssumptions((current) => [...new Set([...current, "inputTokens"])]);
+    markGuidedAnswer("input");
   }
 
   function advanceGuided() {
@@ -122,7 +151,7 @@ export default function Home() {
       <nav className="topbar">
         <a className="brand" href="#top" aria-label="AI Build Crew home"><span className="brand-mark">A</span> AI Build Crew</a>
         <div className="nav-links"><a href="#intake">Guided start</a><a href="#estimator">Estimate</a><a href="/compare">Compare models</a><a href="#about">About</a></div>
-        <span className="alpha">Release candidate · 10</span>
+        <span className="alpha">Phase 2 · guided</span>
       </nav>
 
       <section className="hero" id="top">
@@ -143,16 +172,23 @@ export default function Home() {
           </div>
           <div className="prompt-card">
             {stage === "start" && <>
-              <label htmlFor="idea">What are you thinking about building?</label>
-              <textarea id="idea" value={idea} onChange={(event) => setIdea(event.target.value)} placeholder="Example: A tool that reviews product requirements and drafts a decision brief for my team…" />
-              <p className="prompt-help">Use everyday language. This description stays context until you confirm the workload assumptions. The workbench estimates model token charges—not development labor or complete application infrastructure.</p>
-              <div className="route-buttons">
-                <button onClick={() => startEstimate("assisted")}>Guide me to an estimate</button>
-                <button onClick={() => startEstimate("known")}>I already know my usage</button>
-                <button onClick={() => startEstimate("sample")}>Show me an example</button>
+              <div className="persona-picker" role="group" aria-label="Choose your starting experience">
+                <button type="button" className={persona === "product" ? "selected" : ""} onClick={() => setPersona("product")}><b>Product guided</b><small>I know the user and outcome—not the tokens.</small></button>
+                <button type="button" className={persona === "advanced" ? "selected" : ""} onClick={() => setPersona("advanced")}><b>Advanced builder</b><small>I know the workload and want direct controls.</small></button>
               </div>
+              <label htmlFor="idea">{persona === "product" ? "Describe one ideal starting task" : "Describe the workload you want to estimate"}</label>
+              <textarea id="idea" value={idea} onChange={(event) => setIdea(event.target.value)} placeholder={persona === "product" ? "Walk through what comes in, what the system should do, and what a useful result looks like…" : "Describe the model workload, architecture, inputs, and expected result…"} />
+              {persona === "product" && <><label className="secondary-prompt-label" htmlFor="average-day">Describe an average day</label><textarea className="secondary-prompt" id="average-day" value={averageDay} onChange={(event) => setAverageDay(event.target.value)} placeholder="Example: A small team completes about 50 routine tasks, with a few larger or more complicated cases…" /></>}
+              <p className="prompt-help">Your description provides context. The guided path proposes visible workload assumptions for you to confirm; it never silently turns prose into a cost. The workbench estimates model usage—not development labor or full infrastructure.</p>
+              <div className="route-buttons">{persona === "product" ? <>
+                <button onClick={() => startEstimate("assisted")}>Guide me conversationally</button>
+                <button onClick={() => startEstimate("sample")}>Show me an example</button>
+              </> : <>
+                <button onClick={() => startEstimate("known")}>Open advanced estimate</button>
+                <button onClick={() => startEstimate("assisted")}>Use guided checks</button>
+              </>}</div>
             </>}
-            {stage === "guided" && <GuidedQuestion index={question} answered={guidedAnswers.includes(guidedQuestions[question].id)} markAnswered={markGuidedAnswer} applyUsageProfile={applyUsageProfile} task={task} setTask={setTask} risk={risk} setRisk={setRisk} dataSensitivity={dataSensitivity} setDataSensitivity={setDataSensitivity} modalities={modalities} setModalities={setModalities} regulatedStatus={regulatedStatus} setRegulatedStatus={(value) => { setRegulatedStatus(value); setAssumptions((current) => value === "Unknown" ? [...new Set([...current, "regulated"])] : current.filter((item) => item !== "regulated")); }} advance={advanceGuided} estimateNow={() => setStage("estimate")} />}
+            {stage === "guided" && <GuidedQuestion index={question} answered={guidedAnswers.includes(guidedQuestions[question].id)} markAnswered={markGuidedAnswer} applyUsageProfile={applyUsageProfile} applyInputProfile={applyInputProfile} task={task} setTask={setTask} responseSize={responseSize} setResponseSize={setResponseSize} requests={requests} setRequests={(value) => { setRequests(value); setAssumptions((current) => current.filter((item) => item !== "requests")); markGuidedAnswer("usage"); }} risk={risk} setRisk={setRisk} dataSensitivity={dataSensitivity} setDataSensitivity={setDataSensitivity} modalities={modalities} setModalities={setModalities} regulatedStatus={regulatedStatus} setRegulatedStatus={(value) => { setRegulatedStatus(value); setAssumptions((current) => value === "Unknown" ? [...new Set([...current, "regulated"])] : current.filter((item) => item !== "regulated")); }} advance={advanceGuided} estimateNow={() => setStage("estimate")} />}
             {stage === "estimate" && <div className="ready-card"><span>INTAKE READY</span><h3>{idea || "Workload details captured"}</h3><p>{assumptions.length ? `${assumptions.length} planning assumptions remain visible for your review.` : "All planning fields are currently treated as user-supplied."}</p><a href="#estimator">Review assumptions and run the checks ↓</a></div>}
           </div>
         </div>
@@ -162,6 +198,7 @@ export default function Home() {
         <div className="section-kicker">02 / FREEZE THE WORKLOAD</div>
         <div className="workbench">
           <div className="inputs">
+            {persona === "product" && <div className="product-translation wide"><b>WHAT AI BUILD CREW TRANSLATED</b><strong>{inputSize} · {requests.toLocaleString()} completed tasks/day</strong><span>Planning input range: {inputRange.low.toLocaleString()}–{inputRange.high.toLocaleString()} tokens per task. Likely context need: about {likelyContextNeed.toLocaleString()} tokens, including instruction and result allowance.</span><small>These are visible planning assumptions—not facts. Edit the product choices below or open Technical assumptions to inspect the derived values.</small></div>}
             <div className="field wide prompt-input"><label htmlFor="workload-prompt">What are you building?</label><textarea id="workload-prompt" value={idea} onChange={(e) => { setIdea(e.target.value); setDecision("Not decided"); }} placeholder="Describe the product, user, workflow, and what the model needs to do." /><small>Your description provides context. Only the choices and assumptions you confirm below drive the calculation.</small></div>
             <div className="field wide"><label htmlFor="task">Work to perform {assumptions.includes("task") && <em>ASSUMED</em>}</label><select id="task" value={task} onChange={(e) => { setTask(e.target.value); setAssumptions((current) => current.filter((item) => item !== "task")); setSelected(null); setDecision("Not decided"); }}>{Object.keys(taskRequirements).map((item) => <option key={item}>{item}</option>)}</select></div>
             <div className="field"><label htmlFor="risk">Impact if the model fails {assumptions.includes("risk") && <em>ASSUMED</em>}</label><select id="risk" value={risk} onChange={(e) => { setRisk(e.target.value); setAssumptions((current) => current.filter((item) => item !== "risk")); setSelected(null); setDecision("Not decided"); }}><option>Unknown</option><option>Low</option><option>Medium</option><option>High</option></select><small className="field-hint">Failure includes an incorrect, incomplete, unreliable, or unavailable result.</small></div>
@@ -169,11 +206,14 @@ export default function Home() {
             <div className="field wide"><label>Required formats for one model step {assumptions.includes("modalities") && <em>ASSUMED</em>}</label><div className="multi-select" role="group" aria-label="Required formats for one model step">{[["text", "Text"], ["image", "Images"], ["audio", "Audio"], ["video", "Video"]].map(([value, label]) => <button type="button" key={value} className={modalities.includes(value) ? "selected" : ""} aria-pressed={modalities.includes(value)} onClick={() => { const next = modalities.includes(value) ? modalities.filter((item) => item !== value) : [...modalities, value]; if (next.length) { setModalities(next); setAssumptions((current) => current.filter((item) => item !== "modalities")); setSelected(null); setDecision("Not decided"); } }}>{label}</button>)}</div><small className="field-hint">Select formats one model must understand together. If specialist stages handle speech, barcode/OCR, retrieval, and reasoning separately, estimate each stage for now; multi-model pipeline costing is a planned capability.</small></div>
             <div className="field"><label htmlFor="regulated">Regulated or compliance-controlled? {assumptions.includes("regulated") && <em>UNKNOWN</em>}</label><select id="regulated" value={regulatedStatus} onChange={(e) => { const value = e.target.value as "Unknown" | "No" | "Yes"; setRegulatedStatus(value); setAssumptions((current) => value === "Unknown" ? [...new Set([...current, "regulated"])] : current.filter((item) => item !== "regulated")); }}><option>Unknown</option><option>No</option><option>Yes</option></select></div>
             <NumberField label="Uses per day" value={requests} setValue={(v) => markKnown("requests", v, setRequests)} min={1} assumed={assumptions.includes("requests")} hint="How many times people or systems will ask the AI to do this job each day." />
-            <NumberField label="Information going in" value={inputTokens} setValue={(v) => markKnown("inputTokens", v, setInputTokens)} min={1} assumed={assumptions.includes("inputTokens")} hint="Measured in tokens. About 750 tokens is roughly one page of ordinary English." />
+            {persona === "product" && <div className="field"><label htmlFor="input-size">Typical information per task</label><select id="input-size" value={inputSize} onChange={(event) => { const selected = event.target.value; const profile = selected === "Short message or form" ? "short" : selected === "About one page" ? "page" : selected === "A few pages" ? "fewpages" : selected === "A long document" ? "document" : selected === "Many documents or code" ? "collection" : "unknown"; applyInputProfile(profile); }}><option>Short message or form</option><option>About one page</option><option>A few pages</option><option>A long document</option><option>Many documents or code</option><option>Not sure</option></select><small className="field-hint">We convert this product-language choice into a visible token range and context requirement.</small></div>}
             <div className="field"><label htmlFor="response-size">Result needed {assumptions.includes("responseSize") && <em>ASSUMED</em>}</label><select id="response-size" value={responseSize} onChange={(e) => { setResponseSize(e.target.value); setAssumptions((current) => current.filter((item) => item !== "responseSize")); setSelected(null); setDecision("Not decided"); }}>{Object.entries(responseProfiles).map(([name, profile]) => <option key={name} value={name}>{name} · {(profile as { description: string }).description}</option>)}</select><small className="field-hint">You choose the result shape. Each model supplies its own output-token distribution.</small></div>
-            <NumberField label="Reusable input" value={cache} setValue={(v) => markKnown("cache", v, setCache)} min={0} max={100} assumed={assumptions.includes("cache")} hint="The percentage of repeated instructions a provider may bill at a cached rate." />
-            <WorkflowStepField label="Primary AI steps" value={primarySteps} resolved={result.workload.primarySteps} setValue={(v) => { setPrimarySteps(v); setAssumptions((current) => v <= 0 ? [...new Set([...current, "primarySteps"])] : current.filter((item) => item !== "primarySteps")); setDecision("Not decided"); }} max={50} assumed={assumptions.includes("primarySteps")} hint="Choose Not sure and the workflow rule will recommend a visible starting architecture." />
-            <WorkflowStepField label="Checker steps" value={checkerSteps} resolved={result.workload.checkerSteps} setValue={(v) => { setCheckerSteps(v); setAssumptions((current) => v < 0 ? [...new Set([...current, "checkerSteps"])] : current.filter((item) => item !== "checkerSteps")); setDecision("Not decided"); }} max={10} assumed={assumptions.includes("checkerSteps")} hint="Verification, critique, or repair calls per completed task. Retries are added separately by model profile." />
+            <details className="technical-assumptions wide" open={persona === "advanced"}><summary>Technical assumptions <span>{persona === "product" ? "Optional · derived for you" : "Advanced controls"}</span></summary><div className="technical-grid">
+              <NumberField label="Information going in" value={inputTokens} setValue={(v) => markKnown("inputTokens", v, setInputTokens)} min={1} assumed={assumptions.includes("inputTokens")} hint="Measured in tokens. About 750 tokens is roughly one page of ordinary English." />
+              <NumberField label="Reusable input" value={cache} setValue={(v) => markKnown("cache", v, setCache)} min={0} max={100} assumed={assumptions.includes("cache")} hint="The percentage of repeated instructions a provider may bill at a cached rate." />
+              <WorkflowStepField label="Primary AI steps" value={primarySteps} resolved={result.workload.primarySteps} setValue={(v) => { setPrimarySteps(v); setAssumptions((current) => v <= 0 ? [...new Set([...current, "primarySteps"])] : current.filter((item) => item !== "primarySteps")); setDecision("Not decided"); }} max={50} assumed={assumptions.includes("primarySteps")} hint="Choose Not sure and the workflow rule will recommend a visible starting architecture." />
+              <WorkflowStepField label="Checker steps" value={checkerSteps} resolved={result.workload.checkerSteps} setValue={(v) => { setCheckerSteps(v); setAssumptions((current) => v < 0 ? [...new Set([...current, "checkerSteps"])] : current.filter((item) => item !== "checkerSteps")); setDecision("Not decided"); }} max={10} assumed={assumptions.includes("checkerSteps")} hint="Verification, critique, or repair calls per completed task. Retries are added separately by model profile." />
+            </div></details>
             <NumberField label="Optional spending ceiling per completed task" value={budget} setValue={(v) => { setBudget(v); setSelected(null); setDecision("Not decided"); }} min={0} prefix="$" hint="Leave at 0 to discover the range. Set this only when you already have a hard affordability limit; it filters results but never creates the estimate." />
             <div className="ledger wide"><b>WHAT THIS ESTIMATE ASSUMES</b><span>{assumptions.length ? `Planning assumptions: ${assumptions.map((field) => ({ task: "work to perform", risk: "impact if the model fails", dataSensitivity: "data class", modalities: "required formats", regulated: "regulatory status", requests: "completed tasks per day", inputTokens: "information going in", responseSize: "result shape", cache: "reusable input", primarySteps: "primary AI steps", checkerSteps: "checker steps" }[field] ?? field)).join(", ")}` : "Known: all workload values were confirmed by the user"}</span><span>{result.workflowSuggestion.applied ? `Workflow recommendation applied: ${result.workflowSuggestion.rationale}` : "Workflow steps were supplied by the user."} Output length and retry behavior come from the selected model profile.</span></div>
           </div>
@@ -253,10 +293,10 @@ export default function Home() {
   );
 }
 
-function GuidedQuestion(props: { index: number; answered: boolean; markAnswered: (id: string) => void; applyUsageProfile: (profile: "experiment" | "pilot" | "launch" | "unknown") => void; task: string; setTask: (v: string) => void; risk: string; setRisk: (v: string) => void; dataSensitivity: string; setDataSensitivity: (v: string) => void; modalities: string[]; setModalities: (v: string[]) => void; regulatedStatus: "Unknown" | "No" | "Yes"; setRegulatedStatus: (v: "Unknown" | "No" | "Yes") => void; advance: () => void; estimateNow: () => void }) {
+function GuidedQuestion(props: { index: number; answered: boolean; markAnswered: (id: string) => void; applyUsageProfile: (profile: "experiment" | "pilot" | "launch" | "unknown") => void; applyInputProfile: (profile: "short" | "page" | "fewpages" | "document" | "collection" | "unknown") => void; task: string; setTask: (v: string) => void; responseSize: string; setResponseSize: (v: string) => void; requests: number; setRequests: (v: number) => void; risk: string; setRisk: (v: string) => void; dataSensitivity: string; setDataSensitivity: (v: string) => void; modalities: string[]; setModalities: (v: string[]) => void; regulatedStatus: "Unknown" | "No" | "Yes"; setRegulatedStatus: (v: "Unknown" | "No" | "Yes") => void; advance: () => void; estimateNow: () => void }) {
   const current = guidedQuestions[props.index];
   const choose = (value: string, setter: (value: string) => void) => { setter(value); props.markAnswered(current.id); };
-  return <div className="guided-card"><span>QUESTION {current.number} OF 05</span><h3>{current.id === "modality" ? "Which formats must one model understand together?" : current.prompt}</h3>{current.id === "task" && <select value={props.answered ? props.task : ""} onChange={(e) => choose(e.target.value, props.setTask)}><option value="" disabled>Choose the closest job</option><option>Not sure</option>{Object.keys(taskRequirements).map((item) => <option key={item}>{item}</option>)}</select>}{current.id === "risk" && <><p>Choose the consequence of an incorrect, incomplete, or unreliable result.</p><select value={props.answered ? props.risk : ""} onChange={(e) => choose(e.target.value, props.setRisk)}><option value="" disabled>Choose the impact of failure</option><option value="Unknown">Unknown — I need help assessing it</option><option value="Low">Low — easy to detect and correct</option><option value="Medium">Medium — causes rework, delay, or added cost</option><option value="High">High — could cause harm, financial loss, rights, or compliance impact</option></select></>}{current.id === "data" && <><select value={props.answered ? props.dataSensitivity : ""} onChange={(e) => choose(e.target.value, props.setDataSensitivity)}><option value="" disabled>Choose a data type—even “Unknown”</option><option>Unknown</option><option>Public</option><option>Internal</option><option>Sensitive</option><option>Protected</option></select><label className="guided-check">Regulated or compliance-controlled?<select value={props.regulatedStatus} onChange={(e) => props.setRegulatedStatus(e.target.value as "Unknown" | "No" | "Yes")}><option>Unknown</option><option>No</option><option>Yes</option></select></label></>}{current.id === "modality" && <><p>Select all formats that one model must process in the same step.</p><div className="profile-buttons">{[["text", "Text"], ["image", "Images"], ["audio", "Audio"], ["video", "Video"]].map(([value, label]) => <button type="button" key={value} aria-pressed={props.modalities.includes(value)} className={props.modalities.includes(value) && props.answered ? "selected" : ""} onClick={() => { const currentValues = props.answered ? props.modalities : []; const next = currentValues.includes(value) ? currentValues.filter((item) => item !== value) : [...currentValues, value]; if (next.length) { props.setModalities(next); props.markAnswered(current.id); } }}>{label}<small>{value === "text" ? "documents, prompts, code" : value === "image" ? "photos, scans, diagrams" : value === "audio" ? "speech or sound" : "moving image"}</small></button>)}</div></>}{current.id === "usage" && <><p>Choose a planning stage. You can inspect and edit every technical assumption before the calculation.</p><div className="profile-buttons"><button onClick={() => props.applyUsageProfile("experiment")}>Experiment<small>About 25 uses/day</small></button><button onClick={() => props.applyUsageProfile("pilot")}>Pilot<small>About 250 uses/day</small></button><button onClick={() => props.applyUsageProfile("launch")}>Launch<small>About 2,500 uses/day</small></button><button onClick={() => props.applyUsageProfile("unknown")}>Not sure<small>Use a visible starter profile</small></button></div></>}<div className="guided-actions"><button disabled={!props.answered} onClick={props.advance}>Continue</button><button onClick={props.estimateNow}>Estimate now with visible assumptions</button></div></div>;
+  return <div className="guided-card"><span>QUESTION {current.number} OF {String(guidedQuestions.length).padStart(2, "0")}</span><h3>{current.prompt}</h3>{current.id === "task" && <select value={props.answered ? props.task : ""} onChange={(e) => choose(e.target.value, props.setTask)}><option value="" disabled>Choose what happens most often</option><option value="Not sure">Not sure — help me choose</option><option value="Classification & extraction">Sort, label, or pull out facts</option><option value="Content & summarization">Read, summarize, or write</option><option value="Product analysis">Analyze and recommend</option><option value="Coding & agent workflow">Use tools, code, or complete a workflow</option><option value="Complex reasoning">Work through a complex multi-step decision</option></select>}{current.id === "response" && <div className="profile-buttons">{Object.entries(responseProfiles).map(([name, profile]) => <button type="button" key={name} className={props.answered && props.responseSize === name ? "selected" : ""} onClick={() => choose(name, props.setResponseSize)}>{name}<small>{(profile as { description: string }).description}</small></button>)}</div>}{current.id === "risk" && <><p>Choose the consequence of an incorrect, incomplete, or unreliable result.</p><select value={props.answered ? props.risk : ""} onChange={(e) => choose(e.target.value, props.setRisk)}><option value="" disabled>Choose the impact of failure</option><option value="Unknown">Unknown — I need help assessing it</option><option value="Low">Low — easy to detect and correct</option><option value="Medium">Medium — causes rework, delay, or added cost</option><option value="High">High — could cause harm, financial loss, rights, or compliance impact</option></select></>}{current.id === "data" && <><select value={props.answered ? props.dataSensitivity : ""} onChange={(e) => choose(e.target.value, props.setDataSensitivity)}><option value="" disabled>Choose a data type—even “Unknown”</option><option>Unknown</option><option>Public</option><option>Internal</option><option>Sensitive</option><option>Protected</option></select><label className="guided-check">Regulated or compliance-controlled?<select value={props.regulatedStatus} onChange={(e) => props.setRegulatedStatus(e.target.value as "Unknown" | "No" | "Yes")}><option>Unknown</option><option>No</option><option>Yes</option></select></label></>}{current.id === "modality" && <><p>Select every format involved in the typical task. If a separate scanner or speech service handles a format first, you can leave that format out of the model step.</p><div className="profile-buttons">{[["text", "Text"], ["image", "Images"], ["audio", "Audio"], ["video", "Video"]].map(([value, label]) => <button type="button" key={value} aria-pressed={props.modalities.includes(value)} className={props.modalities.includes(value) && props.answered ? "selected" : ""} onClick={() => { const currentValues = props.answered ? props.modalities : []; const next = currentValues.includes(value) ? currentValues.filter((item) => item !== value) : [...currentValues, value]; if (next.length) { props.setModalities(next); props.markAnswered(current.id); } }}>{label}<small>{value === "text" ? "documents, prompts, code" : value === "image" ? "photos, scans, diagrams" : value === "audio" ? "speech or sound" : "moving image"}</small></button>)}</div></>}{current.id === "input" && <><p>Choose what feels familiar. AI Build Crew converts it to a planning range; you do not need to estimate tokens or a context window.</p><div className="profile-buttons"><button onClick={() => props.applyInputProfile("short")}>Short message or form<small>About 300 input tokens</small></button><button onClick={() => props.applyInputProfile("page")}>About one page<small>About 750 input tokens</small></button><button onClick={() => props.applyInputProfile("fewpages")}>A few pages<small>About 2,400 input tokens</small></button><button onClick={() => props.applyInputProfile("document")}>A long document<small>About 6,000 input tokens</small></button><button onClick={() => props.applyInputProfile("collection")}>Many documents or code<small>About 18,000 input tokens</small></button><button onClick={() => props.applyInputProfile("unknown")}>Not sure<small>Use a visible middle-range assumption</small></button></div></>}{current.id === "usage" && <><p>Enter a daily volume if you know it, or choose the closest planning stage.</p><label className="daily-volume">Completed tasks per day<input type="number" min="1" value={props.requests} onChange={(event) => props.setRequests(Math.max(1, Number(event.target.value)))} /></label><div className="profile-buttons"><button onClick={() => props.applyUsageProfile("experiment")}>Experiment<small>About 25 completed tasks/day</small></button><button onClick={() => props.applyUsageProfile("pilot")}>Pilot<small>About 250 completed tasks/day</small></button><button onClick={() => props.applyUsageProfile("launch")}>Launch<small>About 2,500 completed tasks/day</small></button><button onClick={() => props.applyUsageProfile("unknown")}>Not sure<small>Use a visible starter profile</small></button></div></>}<div className="guided-actions"><button disabled={!props.answered} onClick={props.advance}>Continue</button><button onClick={props.estimateNow}>Estimate now with visible assumptions</button></div></div>;
 }
 
 function WorkflowStepField({ label, value, resolved, setValue, max, assumed, hint }: { label: string; value: number; resolved: number; setValue: (value: number) => void; max: number; assumed?: boolean; hint: string }) {

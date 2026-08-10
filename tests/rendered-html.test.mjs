@@ -18,11 +18,11 @@ test("renders the AI Build Crew estimator", async () => {
   assert.match(html, /Know the cost/);
   assert.match(html, /Describe what you want to build/);
   assert.match(html, /Get a model starting point/);
-  assert.match(html, /Release candidate · 10/);
+  assert.match(html, /Phase 2 · guided/);
   assert.doesNotMatch(html, /01 \/ START WITH WHAT YOU KNOW/);
   assert.doesNotMatch(html, /ABOUT THE LAB/);
   assert.match(html, /1\.3/);
-  assert.match(html, /What are you thinking about building/);
+  assert.match(html, /Describe one ideal starting task/);
   assert.match(html, /Uses per day/);
   assert.match(html, /Result needed/);
   assert.match(html, /Checker steps/);
@@ -30,7 +30,11 @@ test("renders the AI Build Crew estimator", async () => {
   assert.doesNotMatch(html, /REVIEW THE EVIDENCE/);
   assert.doesNotMatch(html, /AI_Build_Crew_Agentic_AI_PRD_COST_CONTRACT\.xlsx/);
   assert.doesNotMatch(html, /Answer coming back/);
-  assert.match(html, /Guide me to an estimate/);
+  assert.match(html, /Guide me conversationally/);
+  assert.match(html, /Product guided/);
+  assert.match(html, /Advanced builder/);
+  assert.match(html, /Describe one ideal starting task/);
+  assert.match(html, /Describe an average day/);
   assert.match(html, /Impact if the model fails/);
   assert.match(html, /Point-in-time decision report/);
   assert.match(html, /Download point-in-time report/);
@@ -43,9 +47,22 @@ test("renders the AI Build Crew estimator", async () => {
 
 test("guided intake scopes formats to one model step", async () => {
   const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
-  assert.match(source, /Which formats must one model understand together\?/);
-  assert.match(source, /Select all formats that one model must process in the same step\./);
+  assert.match(source, /What formats appear in the typical task\?/);
+  assert.match(source, /Select every format involved in the typical task\./);
   assert.doesNotMatch(source, /Which formats must the workflow understand\?/);
+});
+
+test("product-guided intake derives tokens and context instead of asking for them", async () => {
+  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  assert.match(source, /How much information goes into one typical task\?/);
+  assert.match(source, /you do not need to estimate tokens or a context window/);
+  assert.match(source, /Planning input range:/);
+  assert.match(source, /Likely context need:/);
+  assert.match(source, /Technical assumptions/);
+  assert.match(source, /Short message or form/);
+  assert.match(source, /Many documents or code/);
+  assert.match(source, /What should a successful result look like\?/);
+  assert.match(source, /Completed tasks per day/);
 });
 
 test("renders the approval-gated comparative model analysis page", async () => {

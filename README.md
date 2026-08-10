@@ -9,6 +9,9 @@ AI Build Crew is a governed decision workbench for product builders. It guides a
 ## Current prototype scope
 
 - Prompt-first fast, guided, and synthetic-example routes.
+- Persona-based entry: a product-guided experience for people who know the user and outcome, plus an advanced-builder path for direct technical controls.
+- Conversational task and average-day prompts followed by explicit product-language questions for job, result, risk, data, formats, information size, and daily volume.
+- Derived input-token range and context requirement; technical values stay collapsed and optional for product-guided users.
 - A persistent workload prompt with explicit input size, result shape, primary steps, and checker steps. Output tokens are never accepted as workload input.
 - An optional hard cost-per-completed-task ceiling; the system blocks rather than recommends an over-budget model.
 - A visible field-level assumption ledger; a richer per-field provenance record remains planned.
@@ -33,6 +36,7 @@ Every model record carries a source date and evidence state, with provider-level
 - The OpenAI Responses API adapter is implemented with `store: false`, hash-only output retention, a 300-output-token limit per case, no retries, a predicted maximum, and a hard $1 circuit breaker.
 - Paid execution is guarded by the reviewed policy, protected provider secret, stable site-owner allowlist, explicit per-run approval, predicted maximum, and hard-dollar circuit breaker.
 - Each completed provider case returns the approved structured evidence contract: provider/model, request/workload hashes, case/status, token classes, tool calls, latency, retries, charge reconciliation, retention flags, and output hash.
+- The product-guided estimator translates familiar choices such as pages, documents, and completed daily tasks into visible token/context assumptions before deterministic costing.
 
 ## Cost method
 
