@@ -13,7 +13,7 @@ Review date: August 8, 2026
 | Stop asking when the user knows enough. | Requirement | A completeness check runs after each answer; Estimate now is always available. | Intake transition tests (next iteration). |
 | Product authority must not be hard-coded to a named person. | Absolute content rule | Reusable product controls use user, human reviewer, or human decision owner. | Repository text scan. |
 | Original and Maven PRDs were missing from GitHub. | Release blocker | Both Markdown PRDs and the workbook live under `artifacts/`; README links are internal. | Link and file check. |
-| Workflow, PPT, and a concise recorded-review script are required. | Deliverable | Publish the workflow, eight-slide deck, and current four-minute talk track as versioned repository artifacts. | Release checklist and slide-notes audit. |
+| Workflow, PPT, and a concise recorded-review script are required. | Deliverable | Publish the workflow, twelve-slide deck, and current four-minute talk track as versioned repository artifacts. | Release checklist and slide-notes audit. |
 | Other providers must be preserved. | Requirement delivered in catalog alpha | Google Gemini and Anthropic Claude are now cost-visible with evidence states; neither can enter ranking before shared evals. | Provider-neutral regression assertion and catalog review. |
 | Imported GitHub agents may create supply-chain risk. | Absolute governance | Pin, inspect, sandbox, adversarially test, hard-border, approve, and re-review. | Import checklist. |
 | Medical billing is a valid high-value future use case. | Safety constraint | High-risk, regulated, sensitive, and unknown-data work requires human review; alpha is not a medical production decision tool. | Governance regression cases. |
