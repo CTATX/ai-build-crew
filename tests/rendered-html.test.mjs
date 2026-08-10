@@ -60,4 +60,6 @@ test("renders the zero-spend comparative model analysis page", async () => {
   assert.match(html, /Claude Opus 5/);
   assert.match(html, /Live evaluation locked/);
   assert.match(html, /Your idea is not the database/);
+  assert.match(html, /OpenAI adapter ready/);
+  assert.match(html, /Execution locked/);
 });

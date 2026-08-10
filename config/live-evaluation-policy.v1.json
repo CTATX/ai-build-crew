@@ -1,6 +1,8 @@
 {
   "version": "live-evaluation-policy-1.0.0",
   "executionEnabled": false,
+  "firstConnectedProvider": "OpenAI",
+  "firstLiveFixture": "INVENTORY-ASSISTANT-PREVIEW-001",
   "defaultMode": "catalog",
   "levels": {
     "catalog": { "models": 0, "cases": 0, "repeats": 0, "maxSpendUsd": 0, "maxConcurrency": 0, "maxRetries": 0 },

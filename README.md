@@ -30,7 +30,9 @@ Every model record carries a source date and evidence state, with provider-level
 - Raw ideas, prompts, and outputs are rejected from the run contract; only aggregate usage is enabled for future retention by default.
 - The synthetic inventory-assistant workload now rehearses all three adapters against the same frozen request without content retention or spending.
 - The provider-result contract requires token usage, retry count, latency, provider-reported charge, calculated charge, and reconciliation status.
-- The next gate is one explicitly approved provider connection behind the same $1 preview ceiling.
+- The OpenAI Responses API adapter is implemented with `store: false`, hash-only output retention, a 300-output-token limit per case, no retries, a predicted maximum, and a hard $1 circuit breaker.
+- The first provider-boundary check reached OpenAI successfully and stopped before generation with `credit_balance_exhausted`; no evaluation ran and no model charge was recorded.
+- Public execution remains locked behind authentication, an approval token, a hosted secret, and available provider billing.
 
 ## Cost method
 

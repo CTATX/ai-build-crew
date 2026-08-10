@@ -59,6 +59,7 @@ export default function ComparePage() {
     <section className="live-section" id="live">
       <div className="section-kicker dark">02 / CONTROLLED LIVE EVALUATION</div>
       <div className="live-grid"><div><h2>One workload.<br />Same test.<br /><em>No surprise spend.</em></h2><p>The live comparison remains unavailable until sign-in, synthetic cases, provider credentials, predicted maximum cost, and explicit approval are in place.</p></div><div className="level-stack">
+        <div className="provider-lane-status"><small>FIRST PROVIDER LANE</small><b>OpenAI adapter ready</b><span>Execution locked · synthetic fixture · $1 maximum · hash-only retention</span></div>
         <article><span>0</span><div><b>Catalog</b><p>No model calls. Available now.</p></div><strong>$0</strong></article>
         <article><span>1</span><div><b>Preview</b><p>3 models × 3 cases × 1 run</p></div><strong>cap ${liveEvaluationPolicy.levels.preview.maxSpendUsd}</strong></article>
         <article><span>2</span><div><b>Comparison</b><p>Up to 6 models × 10 cases × 3 repeats</p></div><strong>cap ${liveEvaluationPolicy.levels.comparison.maxSpendUsd}</strong></article>
@@ -77,6 +78,6 @@ export default function ComparePage() {
       ].map(([number, title, copy]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
       <div className="privacy-callout"><div><small>PRIVACY DEFAULT</small><h2>Your idea is not the database.</h2></div><p>The public catalog makes no provider call. Future live runs default to synthetic cases and retain aggregate usage—not raw ideas, prompts, or outputs. Download or delete remains part of the report contract.</p></div>
     </section>
-    <footer><span>AI BUILD CREW · BADLABZ.COM</span><p><b>Current:</b> reviewed catalog comparison and no-network runner rehearsal. <b>Next:</b> one explicitly capped provider connection.</p><Link href="/">Open estimator →</Link></footer>
+    <footer><span>AI BUILD CREW · BADLABZ.COM</span><p><b>Current:</b> reviewed catalog comparison, no-network runner rehearsal, and a locked OpenAI preview adapter. <b>Next:</b> enable authenticated preview after provider billing is available.</p><Link href="/">Open estimator →</Link></footer>
   </main>;
 }
