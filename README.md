@@ -21,6 +21,15 @@ AI Build Crew is a governed decision workbench for product builders. It guides a
 
 Every model record carries a source date and evidence state, with provider-level source references. Field-level price provenance remains planned. The catalog was checked against published [OpenAI](https://developers.openai.com/api/docs/models/compare), [Google Gemini](https://ai.google.dev/gemini-api/docs/pricing), and [Anthropic Claude](https://platform.claude.com/docs/en/about-claude/pricing) documentation on August 9, 2026. That release audit corrected drift in the OpenAI Luna and Terra price rows before deployment.
 
+## Phase 2 implementation status
+
+- `/compare` provides a public, zero-spend catalog comparison with provider, format, context, price, and evidence filters.
+- Live evaluation is visibly locked; the public page makes no provider call.
+- The versioned live-run policy caps preview mode at three models, three synthetic cases, one repeat, one retry, two concurrent calls, and $1.
+- OpenAI, Google, and Anthropic runner adapters currently execute as no-network mocks against the same frozen request hash.
+- Raw ideas, prompts, and outputs are rejected from the run contract; only aggregate usage is enabled for future retention by default.
+- The next gate is a complete mocked workload rehearsal and actual-charge schema, followed by one explicitly approved provider connection.
+
 ## Cost method
 
 ```text

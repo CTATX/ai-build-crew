@@ -2,6 +2,14 @@ Yes—design-ready, but not yet safe to turn on unrestricted provider calls.
 
 The current estimator can become the deterministic control plane. The models and agents should operate inside its limits, not replace its rules.
 
+## Implementation status — controlled increment 1
+
+- Built the public `/compare` catalog-only experience.
+- Locked the preview policy at three models, three synthetic cases, one repeat, one retry, two concurrent calls, and a $1 maximum.
+- Added deterministic frozen-request and provider-envelope contracts.
+- Added no-network OpenAI, Google, and Anthropic runner rehearsals.
+- Kept live execution disabled until authentication, credentials, predicted maximum cost, explicit approval, and an actual-charge ledger exist.
+
 ## The right architecture
 
 ```mermaid

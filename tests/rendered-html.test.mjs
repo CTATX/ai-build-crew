@@ -47,3 +47,17 @@ test("guided intake scopes formats to one model step", async () => {
   assert.match(source, /Select all formats that one model must process in the same step\./);
   assert.doesNotMatch(source, /Which formats must the workflow understand\?/);
 });
+
+test("renders the zero-spend comparative model analysis page", async () => {
+  const response = await render("/compare");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Compare the facts/);
+  assert.match(html, /Measure the rest/);
+  assert.match(html, /LIVE SPEND/);
+  assert.match(html, /\$0 · locked/);
+  assert.match(html, /Gemini 3\.6 Flash/);
+  assert.match(html, /Claude Opus 5/);
+  assert.match(html, /Live evaluation locked/);
+  assert.match(html, /Your idea is not the database/);
+});

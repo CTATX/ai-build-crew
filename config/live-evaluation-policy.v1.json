@@ -1,0 +1,24 @@
+{
+  "version": "live-evaluation-policy-1.0.0",
+  "executionEnabled": false,
+  "defaultMode": "catalog",
+  "levels": {
+    "catalog": { "models": 0, "cases": 0, "repeats": 0, "maxSpendUsd": 0, "maxConcurrency": 0, "maxRetries": 0 },
+    "preview": { "models": 3, "cases": 3, "repeats": 1, "maxSpendUsd": 1, "maxConcurrency": 2, "maxRetries": 1 },
+    "comparison": { "models": 6, "cases": 10, "repeats": 3, "maxSpendUsd": 10, "maxConcurrency": 3, "maxRetries": 1 }
+  },
+  "requiredBeforeExecution": [
+    "authenticated user",
+    "synthetic cases or explicit content-sharing consent",
+    "predicted maximum cost",
+    "explicit spend approval",
+    "provider timeout",
+    "hard-dollar circuit breaker"
+  ],
+  "privacy": {
+    "retainRawIdeaByDefault": false,
+    "retainRawPromptsByDefault": false,
+    "retainRawOutputsByDefault": false,
+    "retainAggregateUsageByDefault": true
+  }
+}
