@@ -1,10 +1,16 @@
-# AI Build Crew v0.3.0-rc.1 — Phase 2 Provider Preview
+# AI Build Crew v0.3.0-rc.2 — Persona-Guided Costing
 
 Prepared and release-audited: August 10, 2026
 
 Developed by [BadLabz.com](https://badlabz.com)
 
 ## Why this release matters
+
+First-user feedback found that the estimator still asked product people to reason about tokens, context windows, cache percentages, and AI-call architecture. This candidate adds two intentional entry experiences without replacing the governed cost engine.
+
+**Product guided** starts with one ideal task and the average day, then asks seven product questions: what AI should do, what success looks like, failure impact, information sensitivity, formats involved, familiar input size, and daily task volume. AI Build Crew derives and displays an input-token range and likely context need. Technical assumptions remain collapsed but inspectable.
+
+**Advanced builder** keeps the existing direct workload controls. Both routes feed the same deterministic cost contract; free text remains context and never silently becomes a pricing fact.
 
 Phase 2 adds a provider-neutral comparison experience without pretending that catalog prices are measured model quality. The public `/compare` page shows eight reviewed models across OpenAI, Google, and Anthropic. It filters published price, format, context, availability, and evidence facts without making a provider call.
 
@@ -33,6 +39,15 @@ The guided format question now explicitly asks which formats one model must proc
 The cost-check explanation now uses product language: AI Build Crew calculates the cost twice using fixed rules and stops when the answers disagree. It also states directly that these checks are software rules, not separate AI-model calls.
 
 ## What changed
+
+- Added Product guided and Advanced builder persona entry points.
+- Added conversational prompts for an ideal starting task and an average day.
+- Replaced technical task labels in the guided flow with product-language outcomes.
+- Added a guided successful-result question because result shape drives model output cost.
+- Added familiar information-size choices from short forms through document/code collections.
+- Added an editable completed-tasks-per-day field to the guided flow.
+- Added a visible derived input range and context requirement before the estimate.
+- Collapsed token, cache, primary-step, and checker-step controls under optional Technical assumptions for product-guided users.
 
 - Added the responsive comparative model analysis page at `/compare`.
 - Added an eight-model, three-provider reviewed catalog view with conjunctive format and context filtering.
@@ -67,7 +82,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Verified evidence
 
-- 35 automated checks pass and 0 fail.
+- 36 automated checks pass and 0 fail.
 - Production build and lint pass.
 - Same-input deterministic results and stable ranking pass.
 - COST-001 through COST-006 pass.
@@ -91,7 +106,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Release channels
 
-The release is complete only when immutable tag `v0.3.0-rc.1`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.10` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
+The release is complete only when immutable tag `v0.3.0-rc.2`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.3.0-rc.1` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
 
 ## Next increments
 

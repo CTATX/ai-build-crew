@@ -1,11 +1,11 @@
 {
-  "release": "v0.3.0-rc.1",
+  "release": "v0.3.0-rc.2",
   "status": "release-candidate-locked",
   "preparedAt": "2026-08-10",
-  "baselineTag": "v0.2.0-rc.10",
-  "baselineCommit": "d2a22d4d6f56b540a6ef994235b7fa66d6215d5d",
+  "baselineTag": "v0.3.0-rc.1",
+  "baselineCommit": "65ac7622170e14bd9fc209a2ee53a9781dab7865",
   "releaseBranch": "main",
-  "releaseCommit": "resolved-by-immutable-tag:v0.3.0-rc.1",
+  "releaseCommit": "resolved-by-immutable-tag:v0.3.0-rc.2",
   "versions": {
     "catalog": "provider-neutral-catalog-2026-08-09",
     "costContract": "cost-contract-1.0.0",
@@ -16,7 +16,7 @@
     "teamOS": "1.0"
   },
   "verification": {
-    "automatedTestsPassed": 35,
+    "automatedTestsPassed": 36,
     "automatedTestsFailed": 0,
     "productionBuild": "pass",
     "lint": "pass",
@@ -29,6 +29,7 @@
     "liveSitesDeployment": "required-after-publish",
     "customDomainHttps": "required-after-publish",
     "responsiveVisualQa": "pass",
+    "personaGuidedFlow": "pass",
     "providerResultContract": "pass",
     "ownerPaidRunAuthorization": "pass",
     "hostedProviderSecret": "protected-server-only"
