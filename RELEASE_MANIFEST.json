@@ -29,15 +29,15 @@
     "unusedHostedApiSecret": "absent"
   },
   "sha256": {
-    "artifacts/AI_BUILD_CREW_COST_CONTRACT_VIDEO_REVIEW.pptx": "4defca4b1fff0a6a5ea95b936d03478bf58b15e3d31f6ce129770f375c040f6f",
+    "artifacts/AI_BUILD_CREW_COST_CONTRACT_VIDEO_REVIEW.pptx": "fce837da8ff5bbd7fab55e4b34dd19f83082168c16bc1eebda343db37c7c6a0c",
     "artifacts/AI_Build_Crew_Agentic_AI_PRD_COST_CONTRACT.xlsx": "1b9fd5ac633ef2aa265ab08e50c49493a1fbb44caad47183e21e5971210e669f",
     "artifacts/ORIGINAL_PRD.md": "b726ddc4bd1c7df25eb27b289f9dfb03fc0792723f31c79b9ea8d031960ba2a7",
-    "artifacts/MAVEN_AGENTIC_AI_PRD.md": "0d372b36620ccef029eaa1bf1a167ff156a61cc6ca6488ce733f7b95350b9662",
+    "artifacts/MAVEN_AGENTIC_AI_PRD.md": "5866518793cf79d34ceec8147833948edc75640acc19ec5befda86142a31c67a",
     "governance/absolute-rules.v1.json": "2b03096c24b77adb6c1be234b8060d47e6741ab219a471a96243812611f49e84",
     "config/cost-estimation-rules.v1.json": "b86e83cac9a215553dd4ff8f5c148f877a7480963305f4e16ec8868d6004c490",
     "data/model-catalog.v1.json": "424a410817790ddc08c66604421b227e0c405e766e97279c2e81f516da128cd4",
     "TEAM_OS.md": "0188bac0a52a9ec01c9c8abf2b18a24e8ebe3bb8da4c20a857f454e314b95ba0",
-    "artifacts/DEMO_SCRIPT.md": "21765126088d35ce027bd03e669013bde2d7c891f2d3798804303510a4e9db99",
-    "artifacts/COST_CONTRACT_ARTIFACT_AUDIT.md": "63ecccb9d718eb365dfd8755d0722e22733ae4aea8ded55a2dd9d64b01d9d9c4"
+    "artifacts/DEMO_SCRIPT.md": "f177a88577cabff04cedcb6b8ebe6ea2d4e23e7eec7484838309fcd61ef35539",
+    "artifacts/COST_CONTRACT_ARTIFACT_AUDIT.md": "e9db1c7e5eda003da6ea0bd9104e933b0977e6f6260a139a7b4489ab12e4492d"
   }
 }

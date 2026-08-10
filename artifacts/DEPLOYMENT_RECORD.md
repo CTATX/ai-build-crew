@@ -18,7 +18,7 @@ Prepared: August 9, 2026
 | Cost contract | `cost-contract-1.0.0` |
 | Governance | `governance-1.3.0` |
 | Engine | `decision-engine-1.4.1` |
-| Local release gates | 18/18 tests, build, lint, workbook QA, deck QA, drift scan, and official catalog check pass |
+| Local release gates | 22/22 tests, build, lint, workbook QA, deck QA, drift scan, and official catalog check pass |
 | Browser smoke target | Prompt, multi-format selection, workflow-step guidance, optional ceiling, model-switch explanation, cost-per-completed-task spread, COST-001, GOV-009/GOV-015 language, artifact links, and public access |
 | Hosted secrets | No application secret required by the deterministic release |
 
