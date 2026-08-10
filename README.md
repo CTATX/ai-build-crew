@@ -21,6 +21,19 @@ AI Build Crew is a governed decision workbench for product builders. It guides a
 
 Every model record carries a source date and evidence state, with provider-level source references. Field-level price provenance remains planned. The catalog was checked against published [OpenAI](https://developers.openai.com/api/docs/models/compare), [Google Gemini](https://ai.google.dev/gemini-api/docs/pricing), and [Anthropic Claude](https://platform.claude.com/docs/en/about-claude/pricing) documentation on August 9, 2026. That release audit corrected drift in the OpenAI Luna and Terra price rows before deployment.
 
+## Phase 2 implementation status
+
+- `/compare` provides a public, zero-spend catalog comparison with provider, format, context, price, and evidence filters.
+- Live evaluation remains explicit and off by default for visitors; the public catalog makes no provider call.
+- The owner-only OpenAI preview caps execution at one model, three synthetic cases, one repeat, zero retries, one concurrent call, and $1 per approved run.
+- OpenAI, Google, and Anthropic runner adapters rehearse as no-network mocks against the same frozen request hash; only the OpenAI owner preview has a live provider path.
+- Raw ideas, prompts, and outputs are rejected from the run contract; only aggregate usage is enabled for future retention by default.
+- The synthetic inventory-assistant workload now rehearses all three adapters against the same frozen request without content retention or spending.
+- The provider-result contract requires token usage, retry count, latency, provider-reported charge, calculated charge, and reconciliation status.
+- The OpenAI Responses API adapter is implemented with `store: false`, hash-only output retention, a 300-output-token limit per case, no retries, a predicted maximum, and a hard $1 circuit breaker.
+- Paid execution is guarded by the reviewed policy, protected provider secret, stable site-owner allowlist, explicit per-run approval, predicted maximum, and hard-dollar circuit breaker.
+- Each completed provider case returns the approved structured evidence contract: provider/model, request/workload hashes, case/status, token classes, tool calls, latency, retries, charge reconciliation, retention flags, and output hash.
+
 ## Cost method
 
 ```text

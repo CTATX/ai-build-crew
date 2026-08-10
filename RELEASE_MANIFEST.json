@@ -1,20 +1,22 @@
 {
-  "release": "v0.2.0-rc.10",
+  "release": "v0.3.0-rc.1",
   "status": "release-candidate-locked",
-  "preparedAt": "2026-08-09",
-  "baselineTag": "v0.2.0-rc.9",
-  "baselineCommit": "0e5a6bf47136b07707db618f6eb4216a14669aa7",
+  "preparedAt": "2026-08-10",
+  "baselineTag": "v0.2.0-rc.10",
+  "baselineCommit": "d2a22d4d6f56b540a6ef994235b7fa66d6215d5d",
   "releaseBranch": "main",
-  "releaseCommit": "resolved-by-immutable-tag:v0.2.0-rc.10",
+  "releaseCommit": "resolved-by-immutable-tag:v0.3.0-rc.1",
   "versions": {
     "catalog": "provider-neutral-catalog-2026-08-09",
     "costContract": "cost-contract-1.0.0",
     "governance": "governance-1.3.0",
     "engine": "decision-engine-1.4.1",
+    "providerPlatform": "provider-platform-0.1.0",
+    "liveEvaluationPolicy": "live-evaluation-policy-1.1.0",
     "teamOS": "1.0"
   },
   "verification": {
-    "automatedTestsPassed": 22,
+    "automatedTestsPassed": 35,
     "automatedTestsFailed": 0,
     "productionBuild": "pass",
     "lint": "pass",
@@ -26,7 +28,10 @@
     "githubPagesDeployment": "required-after-publish",
     "liveSitesDeployment": "required-after-publish",
     "customDomainHttps": "required-after-publish",
-    "unusedHostedApiSecret": "absent"
+    "responsiveVisualQa": "pass",
+    "providerResultContract": "pass",
+    "ownerPaidRunAuthorization": "pass",
+    "hostedProviderSecret": "protected-server-only"
   },
   "sha256": {
     "artifacts/AI_BUILD_CREW_COST_CONTRACT_VIDEO_REVIEW.pptx": "fce837da8ff5bbd7fab55e4b34dd19f83082168c16bc1eebda343db37c7c6a0c",
@@ -38,6 +43,8 @@
     "data/model-catalog.v1.json": "424a410817790ddc08c66604421b227e0c405e766e97279c2e81f516da128cd4",
     "TEAM_OS.md": "0188bac0a52a9ec01c9c8abf2b18a24e8ebe3bb8da4c20a857f454e314b95ba0",
     "artifacts/DEMO_SCRIPT.md": "f177a88577cabff04cedcb6b8ebe6ea2d4e23e7eec7484838309fcd61ef35539",
-    "artifacts/COST_CONTRACT_ARTIFACT_AUDIT.md": "e9db1c7e5eda003da6ea0bd9104e933b0977e6f6260a139a7b4489ab12e4492d"
+    "artifacts/COST_CONTRACT_ARTIFACT_AUDIT.md": "e9db1c7e5eda003da6ea0bd9104e933b0977e6f6260a139a7b4489ab12e4492d",
+    "config/live-evaluation-policy.v1.json": "7fe68ac448ea9a8b3f212824e3b22d5f0a61ea82ca8f9392d0ed03c768943305",
+    "contracts/provider-run-result.schema.json": "0f5d40a193ff5998fc7fe75367c1d6a8ebb9479e8a1ca1fecf853ddc40fa5ecb"
   }
 }

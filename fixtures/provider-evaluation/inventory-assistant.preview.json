@@ -1,0 +1,9 @@
+{
+  "fixtureId": "INVENTORY-ASSISTANT-PREVIEW-001",
+  "description": "Synthetic multimodal inventory-assistant rehearsal; contains no user idea, prompt, or output content.",
+  "level": "preview",
+  "workloadHash": "fnv1a-inventory-assistant-v1",
+  "modelIds": ["gpt-5.6-terra", "gemini-3.6-flash", "claude-sonnet-5"],
+  "caseIds": ["synthetic-barcode-match", "synthetic-photo-identification", "synthetic-spoken-stock-query"],
+  "scoringRubricId": "inventory-assistant-rubric-v1"
+}

@@ -2,6 +2,18 @@ Yes—design-ready, but not yet safe to turn on unrestricted provider calls.
 
 The current estimator can become the deterministic control plane. The models and agents should operate inside its limits, not replace its rules.
 
+## Implementation status — controlled increment 1
+
+- Built the public `/compare` catalog-only experience.
+- Locked the preview policy at three models, three synthetic cases, one repeat, one retry, two concurrent calls, and a $1 maximum.
+- Added deterministic frozen-request and provider-envelope contracts.
+- Added no-network OpenAI, Google, and Anthropic runner rehearsals.
+- Rehearsed the synthetic inventory-assistant fixture through all three runner contracts with no raw content and no charge.
+- Locked the future provider-result schema around usage, latency, retries, actual charge, calculated charge, and reconciliation status.
+- Implemented the first real provider adapter with OpenAI Responses API, synthetic-only cases, `store: false`, hash-only retention, fixed output limits, zero retries, predicted maximum cost, and a $1 circuit breaker.
+- Verified the request reached OpenAI; the selected project returned `credit_balance_exhausted` before generation, so the evidence run and charge reconciliation remain pending with no model charge incurred.
+- Kept live execution disabled until authentication, credentials, predicted maximum cost, explicit approval, and an actual-charge ledger exist.
+
 ## The right architecture
 
 ```mermaid
