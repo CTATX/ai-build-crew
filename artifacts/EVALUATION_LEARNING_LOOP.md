@@ -42,3 +42,7 @@ The first funded OpenAI preview used `gpt-5.6-terra` against three synthetic inv
 ## Storage contract
 
 Until governed persistence is connected, the user downloads the point-in-time JSON report. Future storage must be append-only and retain aggregate evidence, hashes, versions, and decisions—never raw product ideas or provider outputs by default.
+
+## Approved provider-run result contract
+
+Every completed or stopped provider case uses `provider-run-result-1.0.0` and records: provider and model; request and workload hashes; case ID and status; input, cached-input, output, and reasoning tokens; tool calls; latency; retry count; provider-reported and calculated charge; charge-reconciliation status; raw-prompt and raw-output retention flags; and an output hash. The application keeps these details collapsed by default for readability and includes the complete structured record in the downloadable point-in-time report.

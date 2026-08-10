@@ -1,6 +1,6 @@
-# Alpha evaluation
+# Phase 2 release-candidate evaluation
 
-Evaluation date: August 9, 2026
+Evaluation date: August 10, 2026
 
 ## Acceptance criteria
 
@@ -34,7 +34,7 @@ Evaluation date: August 9, 2026
 | Workflow guidance | Pass | Unknown primary/checker steps receive a visible deterministic recommendation based on task, consequence, data boundary, and regulation. |
 | Recommendation sensitivity | Pass | Classification/Low selects Luna, Product Analysis/Medium selects Terra, and Complex Reasoning/High selects Sol. |
 
-The current suite contains 18 passing automated checks. It validates the decision contract; it does not claim measured cross-provider task quality.
+The current suite contains 35 passing automated checks. It validates the decision contract, provider-run schema, spend boundaries, owner authorization control, and rendered pages; it does not claim measured cross-provider task quality.
 | Ranking stability | Pass | Candidate order does not change the recommendation. |
 | Budget boundary | Pass | A ceiling below every evidence-qualified option blocks with GOV-011; a sufficient ceiling permits the same deterministic recommendation. |
 | Provider neutrality | Pass | Three providers are cost-visible; unevaluated Google and Anthropic entries cannot enter the recommendation ranking. |
@@ -42,7 +42,7 @@ The current suite contains 18 passing automated checks. It validates the decisio
 | Cost contract | Pass | COST-001 through COST-006 enforce model-owned output, ordered retry/output distributions, checker inclusion, and cost per completed task. |
 | Independent cost ledger | Pass | The Cost Evaluation Specialist recomputes low, likely, and high results without calling the estimator formula. |
 
-Automated suite: **15 tests passed, 0 failed**. This includes the hard cost-contract checks, deliberate ledger corruption, governance failure propagation, decision/governance regressions, and one rendered-app smoke test.
+Automated suite: **35 tests passed, 0 failed**. This includes the hard cost-contract checks, deliberate ledger corruption, governance failure propagation, provider contracts, the bounded OpenAI preview runner, owner authorization source control, and rendered-app smoke tests.
 
 ## Browser test cycles
 
@@ -55,6 +55,9 @@ Automated suite: **15 tests passed, 0 failed**. This includes the hard cost-cont
 | Provider isolation | Pass | Selecting Gemini shows NOT EVALUATED / NOT RUN / NOT APPLIED, hides baseline findings, and disables approval. |
 | Budget failure | Pass | A $1 ceiling blocks the sample with GOV-011. |
 | Public landing page | Pass | The retained design renders cleanly with person-neutral copy and without the public internal-artifact checklist. |
+| Phase 2 desktop visual | Pass | The comparison hero, catalog controls, provider rows, evaluation lane, and privacy boundary render without overlap. |
+| Phase 2 mobile visual | Pass | A 390×844 viewport shows no horizontal overflow; the comparison hero and navigation remain legible. |
+| Paid-run approval | Pass | The run control is disabled until the user explicitly checks the spending approval. |
 
 These are controlled Alpha browser checks. They are not a substitute for moderated usability testing with first-time builders.
 

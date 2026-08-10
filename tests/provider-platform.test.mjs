@@ -11,7 +11,7 @@ test("catalog comparison is provider-neutral and makes no live claim", () => {
   const readiness = catalogReadiness();
   assert.deepEqual(readiness.providers, ["Anthropic", "Google", "OpenAI"]);
   assert.equal(readiness.modelCount, 8);
-  assert.equal(readiness.liveEvaluation, "LOCKED");
+  assert.equal(readiness.liveEvaluation, "ENABLED");
   assert.equal(buildCatalogComparison().length, 8);
   assert.ok(buildCatalogComparison({ modalities: ["audio", "video"] }).every((model) => model.provider === "Google"));
 });
@@ -31,20 +31,19 @@ test("preview contract locks spend, cases, repeats, and provider envelopes", () 
   const request = freezeEvaluationRequest({
     level: "preview",
     workloadHash: "fnv1a-workload",
-    modelIds: ["gpt-5.6-terra", "gemini-3.6-flash", "claude-sonnet-5"],
+    modelIds: ["gpt-5.6-terra"],
     caseIds: ["case-03", "case-01", "case-02"],
     scoringRubricId: "rubric-1",
   });
   assert.equal(request.limits.maxSpendUsd, 1);
-  assert.equal(request.limits.maxRetries, 1);
+  assert.equal(request.limits.maxConcurrency, 1);
+  assert.equal(request.limits.maxRetries, 0);
   assert.equal(request.retention.rawPrompts, false);
   assert.deepEqual(request.caseIds, ["case-01", "case-02", "case-03"]);
   const runs = planMockProviderRuns(request);
-  assert.equal(runs.length, 3);
+  assert.equal(runs.length, 1);
   assert.ok(runs.every((run) => run.requestHash === request.requestHash && run.networkAllowed === false));
   assert.equal(runOpenAIMock(runs.find((run) => run.provider === "OpenAI")).status, "MOCKED_NO_NETWORK");
-  assert.equal(runGoogleMock(runs.find((run) => run.provider === "Google")).status, "MOCKED_NO_NETWORK");
-  assert.equal(runAnthropicMock(runs.find((run) => run.provider === "Anthropic")).status, "MOCKED_NO_NETWORK");
 });
 
 test("bounded levels reject oversized or unknown runs", () => {
@@ -55,7 +54,7 @@ test("bounded levels reject oversized or unknown runs", () => {
 });
 
 test("inventory assistant fixture rehearses all three provider runners without content or spend", () => {
-  const request = freezeEvaluationRequest(inventoryFixture);
+  const request = freezeEvaluationRequest({ ...inventoryFixture, level: "comparison" });
   const runs = planMockProviderRuns(request);
   const results = runs.map((run) => run.provider === "OpenAI" ? runOpenAIMock(run) : run.provider === "Google" ? runGoogleMock(run) : runAnthropicMock(run));
   assert.deepEqual(results.map((result) => result.provider).sort(), ["Anthropic", "Google", "OpenAI"]);
@@ -66,8 +65,10 @@ test("inventory assistant fixture rehearses all three provider runners without c
 
 test("live result contract requires usage, charge reconciliation, and no raw-content retention", () => {
   assert.equal(runResultSchema.additionalProperties, false);
-  assert.ok(runResultSchema.required.includes("usage"));
-  assert.ok(runResultSchema.required.includes("charge"));
+  assert.deepEqual(runResultSchema.required, ["contractVersion", "provider", "modelId", "requestHash", "workloadHash", "caseId", "status", "usage", "latencyMs", "retryCount", "evaluation", "charge", "retention"]);
+  assert.deepEqual(runResultSchema.properties.usage.required, ["inputTokens", "cachedInputTokens", "outputTokens", "reasoningTokens", "toolCalls"]);
+  assert.deepEqual(runResultSchema.properties.charge.required, ["currency", "providerReportedUsd", "calculatedUsd", "reconciliationStatus"]);
+  assert.deepEqual(runResultSchema.properties.retention.required, ["rawPromptStored", "rawOutputStored", "outputHash"]);
   assert.equal(runResultSchema.properties.retryCount.maximum, 1);
   assert.equal(runResultSchema.properties.retention.properties.rawPromptStored.const, false);
   assert.equal(runResultSchema.properties.retention.properties.rawOutputStored.const, false);

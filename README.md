@@ -24,15 +24,15 @@ Every model record carries a source date and evidence state, with provider-level
 ## Phase 2 implementation status
 
 - `/compare` provides a public, zero-spend catalog comparison with provider, format, context, price, and evidence filters.
-- Live evaluation is visibly locked; the public page makes no provider call.
-- The versioned live-run policy caps preview mode at three models, three synthetic cases, one repeat, one retry, two concurrent calls, and $1.
-- OpenAI, Google, and Anthropic runner adapters currently execute as no-network mocks against the same frozen request hash.
+- Live evaluation remains explicit and off by default for visitors; the public catalog makes no provider call.
+- The owner-only OpenAI preview caps execution at one model, three synthetic cases, one repeat, zero retries, one concurrent call, and $1 per approved run.
+- OpenAI, Google, and Anthropic runner adapters rehearse as no-network mocks against the same frozen request hash; only the OpenAI owner preview has a live provider path.
 - Raw ideas, prompts, and outputs are rejected from the run contract; only aggregate usage is enabled for future retention by default.
 - The synthetic inventory-assistant workload now rehearses all three adapters against the same frozen request without content retention or spending.
 - The provider-result contract requires token usage, retry count, latency, provider-reported charge, calculated charge, and reconciliation status.
 - The OpenAI Responses API adapter is implemented with `store: false`, hash-only output retention, a 300-output-token limit per case, no retries, a predicted maximum, and a hard $1 circuit breaker.
-- The first provider-boundary check reached OpenAI successfully and stopped before generation with `credit_balance_exhausted`; no evaluation ran and no model charge was recorded.
-- Public execution remains locked behind authentication, an approval token, a hosted secret, and available provider billing.
+- Paid execution is guarded by the reviewed policy, protected provider secret, stable site-owner allowlist, explicit per-run approval, predicted maximum, and hard-dollar circuit breaker.
+- Each completed provider case returns the approved structured evidence contract: provider/model, request/workload hashes, case/status, token classes, tool calls, latency, retries, charge reconciliation, retention flags, and output hash.
 
 ## Cost method
 

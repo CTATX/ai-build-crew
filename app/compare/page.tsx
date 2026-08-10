@@ -19,7 +19,20 @@ type PreviewResult = {
   casesPassed: number;
   casesRun: number;
   contentRetention: string;
-  results: Array<{ caseId: string; status: string; latencyMs: number; evaluation: { rubricVersion: string; passed: boolean; checksPassed: number; checksRequired: number; missingChecks: string[] }; usage: { inputTokens: number; outputTokens: number }; charge: { calculatedUsd: number }; retention: { outputHash: string } }>;
+  results: Array<{
+    provider: string;
+    modelId: string;
+    requestHash: string;
+    workloadHash: string;
+    caseId: string;
+    status: string;
+    latencyMs: number;
+    retryCount: number;
+    evaluation: { rubricVersion: string; passed: boolean; checksPassed: number; checksRequired: number; missingChecks: string[] };
+    usage: { inputTokens: number; cachedInputTokens: number; outputTokens: number; reasoningTokens: number | null; toolCalls: number };
+    charge: { currency: string; providerReportedUsd: number | null; calculatedUsd: number; reconciliationStatus: string };
+    retention: { rawPromptStored: false; rawOutputStored: false; outputHash: string };
+  }>;
 };
 
 function price(value: number) { return `$${value.toFixed(value < 1 ? 2 : 2)}`; }
@@ -116,8 +129,8 @@ export default function ComparePage() {
 
     <section className="live-section" id="live">
       <div className="section-kicker dark">02 / CONTROLLED LIVE EVALUATION</div>
-      <div className="live-grid"><div><h2>One workload.<br />Same test.<br /><em>No surprise spend.</em></h2><p>The first provider lane uses three synthetic inventory cases. Review the limit, explicitly approve the run, and receive a point-in-time evidence report. The API key stays on the protected server.</p></div><div className="level-stack">
-        <div className="provider-lane-status"><small>FIRST PROVIDER LANE</small><b>OpenAI preview ready</b><span>1 model · 3 synthetic cases · $1 hard ceiling · hash-only retention</span></div>
+      <div className="live-grid"><div><h2>One workload.<br />Same test.<br /><em>No surprise spend.</em></h2><p>The first provider lane uses three synthetic inventory cases. Review the limit, explicitly approve the run, and receive a point-in-time evidence report. The API key stays on the protected server. During this release-candidate test, only the site owner can start a paid run.</p></div><div className="level-stack">
+        <div className="provider-lane-status"><small>OWNER TEST LANE</small><b>OpenAI preview ready</b><span>1 model · 3 synthetic cases · no retries · $1 hard ceiling · hash-only retention</span></div>
         <article><span>0</span><div><b>Catalog</b><p>No model calls. Available now.</p></div><strong>$0</strong></article>
         <article><span>1</span><div><b>First preview</b><p>GPT-5.6 Terra × 3 cases × 1 run</p></div><strong>cap ${liveEvaluationPolicy.levels.preview.maxSpendUsd}</strong></article>
         <article><span>2</span><div><b>Comparison</b><p>Up to 6 models × 10 cases × 3 repeats</p></div><strong>cap ${liveEvaluationPolicy.levels.comparison.maxSpendUsd}</strong></article>
@@ -130,7 +143,22 @@ export default function ComparePage() {
           {previewResult && <div className="preview-report" aria-live="polite">
             <div className="report-head"><div><small>POINT-IN-TIME REPORT</small><h3>{previewResult.casesPassed}/{previewResult.casesRun} cases passed</h3></div><strong>${previewResult.calculatedSpendUsd.toFixed(6)}</strong></div>
             <div className="report-metrics"><span>Model<b>{previewResult.modelId}</b></span><span>Duration<b>{(previewResult.durationMs / 1000).toFixed(2)}s</b></span><span>Maximum approved<b>${previewResult.ceilingUsd.toFixed(2)}</b></span><span>Raw content retained<b>No</b></span></div>
-            <div className="report-cases">{previewResult.results.map((item) => <article key={item.caseId}><div><b>{item.caseId.replaceAll("-", " ")}</b><small>{item.evaluation.passed ? "PASS" : `CHECK REQUIRED · missing ${item.evaluation.missingChecks.join(", ")}`}</small></div><span>{item.usage.inputTokens} in · {item.usage.outputTokens} out</span><span>{item.latencyMs} ms</span><span>${item.charge.calculatedUsd.toFixed(6)}</span></article>)}</div>
+            <div className="report-cases">{previewResult.results.map((item) => <article key={item.caseId}>
+              <div><b>{item.caseId.replaceAll("-", " ")}</b><small>{item.evaluation.passed ? "PASS" : `CHECK REQUIRED · missing ${item.evaluation.missingChecks.join(", ")}`}</small></div>
+              <span>{item.usage.inputTokens} in · {item.usage.outputTokens} out</span><span>{item.latencyMs} ms</span><span>${item.charge.calculatedUsd.toFixed(6)}</span>
+              <details className="technical-run-evidence"><summary>Technical evidence</summary><dl>
+                <div><dt>Provider · model</dt><dd>{item.provider} · {item.modelId}</dd></div>
+                <div><dt>Status · case</dt><dd>{item.status} · {item.caseId}</dd></div>
+                <div><dt>Request hash</dt><dd>{item.requestHash}</dd></div>
+                <div><dt>Workload hash</dt><dd>{item.workloadHash}</dd></div>
+                <div><dt>Tokens</dt><dd>{item.usage.inputTokens} input · {item.usage.cachedInputTokens} cached · {item.usage.outputTokens} output · {item.usage.reasoningTokens ?? "not reported"} reasoning</dd></div>
+                <div><dt>Calls · attempts</dt><dd>{item.usage.toolCalls} tool calls · {item.retryCount} retries</dd></div>
+                <div><dt>Latency</dt><dd>{item.latencyMs} ms</dd></div>
+                <div><dt>Charge</dt><dd>{item.charge.providerReportedUsd == null ? "Provider charge unavailable" : `$${item.charge.providerReportedUsd.toFixed(6)} provider`} · ${item.charge.calculatedUsd.toFixed(6)} calculated · {item.charge.reconciliationStatus}</dd></div>
+                <div><dt>Raw content retained</dt><dd>Prompt {item.retention.rawPromptStored ? "yes" : "no"} · output {item.retention.rawOutputStored ? "yes" : "no"}</dd></div>
+                <div><dt>Output hash</dt><dd>{item.retention.outputHash}</dd></div>
+              </dl></details>
+            </article>)}</div>
             <p className="report-evidence">Request {previewResult.requestHash} · Workload {previewResult.workloadHash} · Output retained as hashes only. Passing means the required inventory facts appeared; it is not yet a blinded quality evaluation.</p>
             <button type="button" className="report-download" onClick={downloadPreviewReport}>Download point-in-time report</button>
           </div>}

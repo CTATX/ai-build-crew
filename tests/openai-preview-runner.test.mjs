@@ -33,6 +33,10 @@ test("OpenAI preview sends only synthetic cases and retains hashes rather than c
   assert.ok(result.results.every((item) => item.retention.rawPromptStored === false && item.retention.rawOutputStored === false));
   assert.ok(result.results.every((item) => typeof item.retention.outputHash === "string" && item.retention.outputHash.length === 64));
   assert.ok(result.results.every((item) => item.evaluation.rubricVersion === "required-facts-1.0.0" && item.evaluation.missingChecks.length === 0));
+  assert.ok(result.results.every((item) => Object.keys(item).sort().join(",") === ["caseId", "charge", "contractVersion", "evaluation", "latencyMs", "modelId", "provider", "requestHash", "retention", "retryCount", "status", "usage", "workloadHash"].sort().join(",")));
+  assert.ok(result.results.every((item) => Object.keys(item.usage).sort().join(",") === ["inputTokens", "cachedInputTokens", "outputTokens", "reasoningTokens", "toolCalls"].sort().join(",")));
+  assert.ok(result.results.every((item) => Object.keys(item.charge).sort().join(",") === ["currency", "providerReportedUsd", "calculatedUsd", "reconciliationStatus"].sort().join(",")));
+  assert.ok(result.results.every((item) => Object.keys(item.retention).sort().join(",") === ["rawPromptStored", "rawOutputStored", "outputHash"].sort().join(",")));
   assert.doesNotMatch(JSON.stringify(result), /ALT-104 is in stock|water pump kit/i);
 });
 

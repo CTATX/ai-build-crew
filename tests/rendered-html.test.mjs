@@ -63,3 +63,11 @@ test("renders the approval-gated comparative model analysis page", async () => {
   assert.match(html, /OpenAI preview ready/);
   assert.match(html, /\$1 hard ceiling/);
 });
+
+test("paid provider route is policy-locked and owner-restricted", async () => {
+  const source = await readFile(new URL("../app/api/evaluations/openai/route.ts", import.meta.url), "utf8");
+  assert.match(source, /liveEvaluationPolicy\.executionEnabled/);
+  assert.match(source, /PHASE2_PREVIEW_ALLOWED_ACCOUNT_USER_IDS/);
+  assert.match(source, /OWNER_APPROVAL_REQUIRED/);
+  assert.match(source, /ownerIds\.has\(authenticatedUser\.userId\)/);
+});

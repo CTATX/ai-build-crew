@@ -1,10 +1,16 @@
-# AI Build Crew v0.2.0-rc.10 — Useful Decision Output
+# AI Build Crew v0.3.0-rc.1 — Phase 2 Provider Preview
 
-Prepared and release-audited: August 9, 2026
+Prepared and release-audited: August 10, 2026
 
 Developed by [BadLabz.com](https://badlabz.com)
 
 ## Why this release matters
+
+Phase 2 adds a provider-neutral comparison experience without pretending that catalog prices are measured model quality. The public `/compare` page shows eight reviewed models across OpenAI, Google, and Anthropic. It filters published price, format, context, availability, and evidence facts without making a provider call.
+
+The first controlled provider lane is an owner-only OpenAI release-candidate preview: one reviewed model, three synthetic inventory cases, one run per approval, sequential execution, no automatic retries, hash-only output retention, and a hard $1 per-run ceiling. Every completed case exposes the approved point-in-time result contract: provider/model, request/workload hashes, case/status, input/cached/output/reasoning tokens, tool calls, latency, retry count, provider-reported and calculated charge, reconciliation status, raw-content retention flags, and output hash.
+
+Google and Anthropic live execution, public self-funded keys, durable rate/budget accounting, and blinded cross-provider quality scoring are not shipped in this candidate. Their adapters and common frozen-run contracts are rehearsed without network calls.
 
 Evaluation found that the earlier estimator treated output tokens as a user workload input, held generation length constant across unlike model tiers, and allowed one call per request to hide retries and checker cost. That produced false precision in a monthly number.
 
@@ -27,6 +33,15 @@ The guided format question now explicitly asks which formats one model must proc
 The cost-check explanation now uses product language: AI Build Crew calculates the cost twice using fixed rules and stops when the answers disagree. It also states directly that these checks are software rules, not separate AI-model calls.
 
 ## What changed
+
+- Added the responsive comparative model analysis page at `/compare`.
+- Added an eight-model, three-provider reviewed catalog view with conjunctive format and context filtering.
+- Added a bounded OpenAI Responses API preview using only locked synthetic cases and `store: false`.
+- Restricted paid preview execution to the site owner using a server-side stable-user allowlist; public catalog use remains credential-free.
+- Locked the preview contract to one model, three cases, one repeat, one concurrent call, zero retries, and a $1 per-run circuit breaker.
+- Added the complete provider-run structured result contract and a downloadable point-in-time JSON report.
+- Added provider mocks for OpenAI, Google, and Anthropic against the same frozen request and workload hashes.
+- Added desktop and mobile visual QA, including a 390×844 no-horizontal-overflow check.
 
 - Removed output tokens as a user input; COST-001 rejects the field if it reaches the engine.
 - Added result-shape inputs: label or field, short answer, detailed answer, and long artifact.
@@ -52,7 +67,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 
 ## Verified evidence
 
-- 22 automated checks pass and 0 fail.
+- 35 automated checks pass and 0 fail.
 - Production build and lint pass.
 - Same-input deterministic results and stable ranking pass.
 - COST-001 through COST-006 pass.
@@ -62,6 +77,7 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 - Presentation overflow and template-fidelity checks pass with eight source-note blocks.
 - Active-artifact person-neutral and claim-drift scans pass.
 - The decision path makes zero generative model calls and needs no AI credential.
+- The public estimator and catalog paths make zero model calls. The owner-only OpenAI preview makes a provider call only after explicit approval.
 
 ## Honest capability boundary
 
@@ -71,10 +87,11 @@ The catalog is still a reviewed snapshot—not an automatic live feed. Published
 - Ideas and workload values remain in browser memory and clear on refresh. There is no application database or saved history in this release.
 - The estimator covers modeled inference-token charges. It does not yet cover software-development labor, hosting, retrieval, databases, storage, networking, monitoring, provider tool fees, or human review.
 - The application does not purchase, provision, route production traffic, or approve regulated workloads.
+- The paid preview is a controlled synthetic evidence run, not a production routing service or a cross-provider winner declaration.
 
 ## Release channels
 
-The release is complete only when immutable tag `v0.2.0-rc.10`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.9` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
+The release is complete only when immutable tag `v0.3.0-rc.1`, GitHub `main`, GitHub Pages, Sites, and the custom domain resolve the same reviewed source. The previous `v0.2.0-rc.10` tag remains the immediate rollback target and `alpha-baseline-2026-08-08` remains the original baseline.
 
 ## Next increments
 
