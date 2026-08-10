@@ -77,6 +77,6 @@ export default function ComparePage() {
       ].map(([number, title, copy]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
       <div className="privacy-callout"><div><small>PRIVACY DEFAULT</small><h2>Your idea is not the database.</h2></div><p>The public catalog makes no provider call. Future live runs default to synthetic cases and retain aggregate usage—not raw ideas, prompts, or outputs. Download or delete remains part of the report contract.</p></div>
     </section>
-    <footer><span>AI BUILD CREW · BADLABZ.COM</span><p><b>Current:</b> reviewed catalog comparison. <b>Next:</b> mocked runner rehearsal, then one explicitly capped provider connection.</p><Link href="/">Open estimator →</Link></footer>
+    <footer><span>AI BUILD CREW · BADLABZ.COM</span><p><b>Current:</b> reviewed catalog comparison and no-network runner rehearsal. <b>Next:</b> one explicitly capped provider connection.</p><Link href="/">Open estimator →</Link></footer>
   </main>;
 }

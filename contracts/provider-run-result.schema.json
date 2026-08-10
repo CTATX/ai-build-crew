@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aibuildcrew.badlabz.com/contracts/provider-run-result.schema.json",
+  "title": "AI Build Crew Provider Run Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "provider", "modelId", "requestHash", "workloadHash", "caseId", "status", "usage", "latencyMs", "retryCount", "charge", "retention"],
+  "properties": {
+    "contractVersion": { "const": "provider-run-result-1.0.0" },
+    "provider": { "enum": ["OpenAI", "Google", "Anthropic", "AWS Bedrock"] },
+    "modelId": { "type": "string", "minLength": 1 },
+    "requestHash": { "type": "string", "pattern": "^fnv1a-" },
+    "workloadHash": { "type": "string", "minLength": 1 },
+    "caseId": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["SUCCEEDED", "FAILED", "TIMED_OUT", "BUDGET_STOP", "REFUSED"] },
+    "usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inputTokens", "cachedInputTokens", "outputTokens", "reasoningTokens", "toolCalls"],
+      "properties": {
+        "inputTokens": { "type": "integer", "minimum": 0 },
+        "cachedInputTokens": { "type": "integer", "minimum": 0 },
+        "outputTokens": { "type": "integer", "minimum": 0 },
+        "reasoningTokens": { "type": ["integer", "null"], "minimum": 0 },
+        "toolCalls": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "latencyMs": { "type": "integer", "minimum": 0 },
+    "retryCount": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "charge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currency", "providerReportedUsd", "calculatedUsd", "reconciliationStatus"],
+      "properties": {
+        "currency": { "const": "USD" },
+        "providerReportedUsd": { "type": ["number", "null"], "minimum": 0 },
+        "calculatedUsd": { "type": ["number", "null"], "minimum": 0 },
+        "reconciliationStatus": { "enum": ["MATCH", "MISMATCH", "PROVIDER_CHARGE_UNAVAILABLE", "NOT_CALCULATED"] }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rawPromptStored", "rawOutputStored", "outputHash"],
+      "properties": {
+        "rawPromptStored": { "const": false },
+        "rawOutputStored": { "const": false },
+        "outputHash": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -28,7 +28,9 @@ Every model record carries a source date and evidence state, with provider-level
 - The versioned live-run policy caps preview mode at three models, three synthetic cases, one repeat, one retry, two concurrent calls, and $1.
 - OpenAI, Google, and Anthropic runner adapters currently execute as no-network mocks against the same frozen request hash.
 - Raw ideas, prompts, and outputs are rejected from the run contract; only aggregate usage is enabled for future retention by default.
-- The next gate is a complete mocked workload rehearsal and actual-charge schema, followed by one explicitly approved provider connection.
+- The synthetic inventory-assistant workload now rehearses all three adapters against the same frozen request without content retention or spending.
+- The provider-result contract requires token usage, retry count, latency, provider-reported charge, calculated charge, and reconciliation status.
+- The next gate is one explicitly approved provider connection behind the same $1 preview ceiling.
 
 ## Cost method
 

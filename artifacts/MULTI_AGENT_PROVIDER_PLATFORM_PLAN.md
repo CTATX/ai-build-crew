@@ -8,6 +8,8 @@ The current estimator can become the deterministic control plane. The models and
 - Locked the preview policy at three models, three synthetic cases, one repeat, one retry, two concurrent calls, and a $1 maximum.
 - Added deterministic frozen-request and provider-envelope contracts.
 - Added no-network OpenAI, Google, and Anthropic runner rehearsals.
+- Rehearsed the synthetic inventory-assistant fixture through all three runner contracts with no raw content and no charge.
+- Locked the future provider-result schema around usage, latency, retries, actual charge, calculated charge, and reconciliation status.
 - Kept live execution disabled until authentication, credentials, predicted maximum cost, explicit approval, and an actual-charge ledger exist.
 
 ## The right architecture

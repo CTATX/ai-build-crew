@@ -4,6 +4,8 @@ import { buildCatalogComparison, catalogReadiness, freezeEvaluationRequest, plan
 import { runOpenAIMock } from "../agents/provider-runners/openai.mjs";
 import { runGoogleMock } from "../agents/provider-runners/google.mjs";
 import { runAnthropicMock } from "../agents/provider-runners/anthropic.mjs";
+import inventoryFixture from "../fixtures/provider-evaluation/inventory-assistant.preview.json" with { type: "json" };
+import runResultSchema from "../contracts/provider-run-result.schema.json" with { type: "json" };
 
 test("catalog comparison is provider-neutral and makes no live claim", () => {
   const readiness = catalogReadiness();
@@ -50,4 +52,23 @@ test("bounded levels reject oversized or unknown runs", () => {
   assert.throws(() => freezeEvaluationRequest({ ...base, modelIds: [] }), /RUN-002/);
   assert.throws(() => freezeEvaluationRequest({ ...base, modelIds: ["made-up-model"] }), /RUN-004/);
   assert.throws(() => freezeEvaluationRequest({ ...base, modelIds: ["gpt-5.6-terra"], caseIds: ["1", "2", "3", "4"] }), /RUN-003/);
+});
+
+test("inventory assistant fixture rehearses all three provider runners without content or spend", () => {
+  const request = freezeEvaluationRequest(inventoryFixture);
+  const runs = planMockProviderRuns(request);
+  const results = runs.map((run) => run.provider === "OpenAI" ? runOpenAIMock(run) : run.provider === "Google" ? runGoogleMock(run) : runAnthropicMock(run));
+  assert.deepEqual(results.map((result) => result.provider).sort(), ["Anthropic", "Google", "OpenAI"]);
+  assert.ok(results.every((result) => result.status === "MOCKED_NO_NETWORK"));
+  assert.ok(results.every((result) => result.actualChargeUsd === null && result.outputs === null));
+  assert.doesNotMatch(JSON.stringify({ request, results }), /private|serial number|spoken prompt/i);
+});
+
+test("live result contract requires usage, charge reconciliation, and no raw-content retention", () => {
+  assert.equal(runResultSchema.additionalProperties, false);
+  assert.ok(runResultSchema.required.includes("usage"));
+  assert.ok(runResultSchema.required.includes("charge"));
+  assert.equal(runResultSchema.properties.retryCount.maximum, 1);
+  assert.equal(runResultSchema.properties.retention.properties.rawPromptStored.const, false);
+  assert.equal(runResultSchema.properties.retention.properties.rawOutputStored.const, false);
 });
