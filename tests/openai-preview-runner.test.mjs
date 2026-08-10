@@ -27,8 +27,12 @@ test("OpenAI preview sends only synthetic cases and retains hashes rather than c
   assert.equal(result.casesPassed, 3);
   assert.ok(result.calculatedSpendUsd < result.ceilingUsd);
   assert.equal(result.contentRetention, "HASH_ONLY");
+  assert.match(result.requestHash, /^fnv1a-/);
+  assert.match(result.workloadHash, /^fnv1a-/);
+  assert.ok(result.results.every((item) => item.requestHash === result.requestHash && item.workloadHash === result.workloadHash));
   assert.ok(result.results.every((item) => item.retention.rawPromptStored === false && item.retention.rawOutputStored === false));
   assert.ok(result.results.every((item) => typeof item.retention.outputHash === "string" && item.retention.outputHash.length === 64));
+  assert.ok(result.results.every((item) => item.evaluation.rubricVersion === "required-facts-1.0.0" && item.evaluation.missingChecks.length === 0));
   assert.doesNotMatch(JSON.stringify(result), /ALT-104 is in stock|water pump kit/i);
 });
 

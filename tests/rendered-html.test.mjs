@@ -48,18 +48,18 @@ test("guided intake scopes formats to one model step", async () => {
   assert.doesNotMatch(source, /Which formats must the workflow understand\?/);
 });
 
-test("renders the zero-spend comparative model analysis page", async () => {
+test("renders the approval-gated comparative model analysis page", async () => {
   const response = await render("/compare");
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Compare the facts/);
   assert.match(html, /Measure the rest/);
-  assert.match(html, /LIVE SPEND/);
-  assert.match(html, /\$0 · locked/);
+  assert.match(html, /LIVE EVALUATION/);
+  assert.match(html, /\$0 · approval required/);
   assert.match(html, /Gemini 3\.6 Flash/);
   assert.match(html, /Claude Opus 5/);
-  assert.match(html, /Live evaluation locked/);
+  assert.match(html, /Review controlled preview/);
   assert.match(html, /Your idea is not the database/);
-  assert.match(html, /OpenAI adapter ready/);
-  assert.match(html, /Execution locked/);
+  assert.match(html, /OpenAI preview ready/);
+  assert.match(html, /\$1 hard ceiling/);
 });

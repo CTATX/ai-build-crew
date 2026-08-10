@@ -4,7 +4,7 @@
   "title": "AI Build Crew Provider Run Result",
   "type": "object",
   "additionalProperties": false,
-  "required": ["contractVersion", "provider", "modelId", "requestHash", "workloadHash", "caseId", "status", "usage", "latencyMs", "retryCount", "charge", "retention"],
+  "required": ["contractVersion", "provider", "modelId", "requestHash", "workloadHash", "caseId", "status", "usage", "latencyMs", "retryCount", "evaluation", "charge", "retention"],
   "properties": {
     "contractVersion": { "const": "provider-run-result-1.0.0" },
     "provider": { "enum": ["OpenAI", "Google", "Anthropic", "AWS Bedrock"] },
@@ -27,6 +27,18 @@
     },
     "latencyMs": { "type": "integer", "minimum": 0 },
     "retryCount": { "type": "integer", "minimum": 0, "maximum": 1 },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rubricVersion", "passed", "checksPassed", "checksRequired", "missingChecks"],
+      "properties": {
+        "rubricVersion": { "const": "required-facts-1.0.0" },
+        "passed": { "type": "boolean" },
+        "checksPassed": { "type": "integer", "minimum": 0 },
+        "checksRequired": { "type": "integer", "minimum": 1 },
+        "missingChecks": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true }
+      }
+    },
     "charge": {
       "type": "object",
       "additionalProperties": false,

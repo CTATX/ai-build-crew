@@ -1,4 +1,5 @@
 import { runOpenAIPreview } from "@/lib/openai-preview-runner.mjs";
+import { getChatGPTUser } from "@/app/chatgpt-auth";
 
 export async function GET() {
   return Response.json({
@@ -18,7 +19,9 @@ export async function POST(request: Request) {
   if (process.env.PHASE2_LIVE_PREVIEW_ENABLED !== "true") return Response.json({ status: "LOCKED", message: "Live preview is not enabled for this deployment." }, { status: 503 });
   if (!process.env.OPENAI_API_KEY) return Response.json({ status: "LOCKED", message: "The protected provider connection is not configured." }, { status: 503 });
   const approvalToken = process.env.PHASE2_PREVIEW_APPROVAL_TOKEN;
-  if (!approvalToken || request.headers.get("x-ai-build-crew-approval") !== approvalToken) return Response.json({ status: "AUTHENTICATION_REQUIRED", message: "An authenticated, explicitly approved preview session is required." }, { status: 401 });
+  const tokenApproved = Boolean(approvalToken && request.headers.get("x-ai-build-crew-approval") === approvalToken);
+  const authenticatedUser = await getChatGPTUser();
+  if (!authenticatedUser && !tokenApproved) return Response.json({ status: "AUTHENTICATION_REQUIRED", message: "Sign in before approving a paid evaluation. The public catalog and estimator remain available without sign-in.", signInPath: "/signin-with-chatgpt?return_to=%2Fcompare%23live" }, { status: 401, headers: { "cache-control": "no-store" } });
   const body = await request.json().catch(() => null);
   if (!body || body.confirmation !== "RUN_SYNTHETIC_PREVIEW") return Response.json({ status: "CONFIRMATION_REQUIRED", message: "Confirm the synthetic preview before any provider call." }, { status: 400 });
   if (body.fixtureId !== "INVENTORY-ASSISTANT-PREVIEW-001") return Response.json({ status: "REJECTED", message: "Only the locked synthetic fixture is permitted." }, { status: 400 });

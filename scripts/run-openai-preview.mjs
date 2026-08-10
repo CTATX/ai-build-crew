@@ -10,5 +10,7 @@ console.log(JSON.stringify({
   casesPassed: result.casesPassed,
   casesRun: result.casesRun,
   contentRetention: result.contentRetention,
-  usage: result.results.map((item) => ({ caseId: item.caseId, usage: item.usage, charge: item.charge, status: item.status })),
+  requestHash: result.requestHash,
+  workloadHash: result.workloadHash,
+  results: result.results.map((item) => ({ caseId: item.caseId, usage: item.usage, evaluation: item.evaluation, charge: item.charge, status: item.status, outputHash: item.retention.outputHash })),
 }, null, 2));
