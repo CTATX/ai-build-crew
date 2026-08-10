@@ -1,46 +1,121 @@
-# AI Build Crew — four-minute product review script
+# AI Build Crew — four-minute recording script
 
 Target length: 3 minutes 45 seconds to 4 minutes.
 
-## 0:00–0:30 — Why this matters
+Recording objective: show the product problem, complete one real web estimate, download the point-in-time outcome, and close with the governed Phase 2 architecture. The recording should feel like a product story with a live proof—not a narrated tour of every field.
 
-“AI model choice looks simple until someone has to defend it. Pricing is spread across providers, output length changes by model and run, and the cheapest-looking option can become expensive after retries and verification. The bad default is false precision: one output-token number, one call, and one monthly total that looks certain.”
+## Stable demo setup
 
-## 0:30–1:00 — The product
+- Deck: `AI_BUILD_CREW_COST_CONTRACT_VIDEO_REVIEW.pptx`
+- Web experience: `https://aibuildcrew.badlabz.com/`
+- Browser: one clean tab, notifications off, zoom set so the complete result card is readable
+- Download folder: clear enough that the new report is easy to identify
+- Demo idea:
 
-“AI Build Crew is a decision workbench for builders. It turns a rough AI idea into a transparent cost-per-completed-task range, a rule-eligible model starting point, and a governed decision. The first user is a product builder who should not need to know model names or token math. A human remains accountable for the final choice.”
+> A product team needs a recurring assistant to review public product requirements, summarize key risks, and draft a decision brief.
 
-## 1:00–1:35 — Start with the idea
+- Guided answers:
+  - Job: Product analysis
+  - Impact if wrong: Medium — causes rework, delay, or added cost
+  - Data: Public
+  - Regulated: No
+  - Required format: Text
+  - Stage: Pilot — about 250 uses per day
+- Expected stable result from the current rules:
+  - GPT-5.6 Terra
+  - Two primary AI steps plus one checker step
+  - Likely 1,200 output tokens per primary call
+  - 1.15× likely retry multiplier
+  - 3.45 likely charged calls per completed task
+  - Low / likely / high cost per completed task: approximately $0.04 / $0.07 / $0.14
+  - Cost evaluation: 9 of 9 checks pass
+  - Governance: WARN because assumptions and unmeasured behavior distributions remain visible
 
-“The experience begins with an everyday description. I can take the guided path, enter what I already know, or use a safe example. The guided path asks about the job, consequence of error, data class, every required format, and expected use. Before calculation, I review what is known, assumed, or unknown.”
+## Recording map
 
-## 1:35–2:20 — Show the corrected cost model
+| Time | What the viewer sees | Purpose |
+|---|---|---|
+| 0:00–0:35 | Deck slides 1–3 | Establish the problem, audience, and job to be done |
+| 0:35–0:52 | Deck slide 4 | Explain the idea-first experience |
+| 0:52–1:12 | Live site: hero and prompt box | Show that the user starts in ordinary language |
+| 1:12–1:48 | Live site: five guided questions | Show explicit facts, unknowns, and multi-format intake |
+| 1:48–2:25 | Live site: workload and result card | Explain the corrected cost contract and cost spread |
+| 2:25–2:58 | Live site: checks and point-in-time report | Demonstrate the double-check and downloadable outcome |
+| 2:58–3:20 | Deck slides 5–7 | Summarize the evidence behind the prototype |
+| 3:20–3:48 | Deck slides 8, 10, and 12 | Show the controlled path from estimator to provider-neutral platform |
+| 3:48–4:00 | Deck slide 12 | Close on the value and product URL |
 
-“The user describes the result needed—a label, short answer, detailed answer, or long artifact—but does not enter output tokens. If I do not know the number of AI steps, a visible deterministic workflow rule recommends primary and checker steps for confirmation. Output length and retries belong to the model profile and appear as low, likely, and high distributions. The main result is cost per completed task; projected monthly volume is secondary context. An optional spending ceiling filters candidates only when I supply one.”
+Slides 9 and 11 are supporting slides for questions or a longer recording. Do not rush through them merely to show every slide.
 
-“That distinction matters. The same request can generate materially different output on a reasoning tier, and a cheap first call may need a retry or checker. The range is a planning distribution, not a guarantee.”
+## 0:00–0:35 — Problem, user, and job to be done
 
-## 2:20–3:05 — Show the hard evaluation workflow
+**On screen:** slides 1, 2, and 3.
 
-“The estimator freezes the three scenarios. A separate deterministic Cost Evaluation Specialist enforces six absolute rules: output tokens cannot be workload input; output and retry distributions must be ordered; primary and checker steps must be included; cost per completed task is the ranking unit; and the result must remain a range.”
+“AI model choice looks simple until someone has to defend it. Provider prices use different units, output length changes by model and by run, and a cheap first call can become expensive after retries and verification. The bad default is false precision: one output-token number, one call, and one monthly total that looks certain.
 
-“The specialist independently recomputes the ledger without calling the estimator formula. A corrupted result fails. That failed evaluation reaches governance as GOV-009 and blocks the decision. Because today’s output and retry profiles are planning heuristics rather than measured distributions, GOV-015 keeps that limitation visible.”
+AI Build Crew is for the product builder who owns the go or no-go choice but should not need a model name, token count, or workflow design just to begin. The job is to turn an unclear build choice into a reproducible model and cost starting point—so the builder can commit, investigate, or stop.”
 
-## 3:05–3:35 — Evidence and limits
+## 0:35–0:52 — Product experience
 
-“Fifteen automated cases pass, including forbidden output-token input, retry and checker inclusion, deliberate ledger corruption, governance propagation, fail-closed risk cases, candidate-order stability, and rendered-page smoke coverage. Published provider prices are dated facts. The behavior distributions are not yet measured provider performance, and Google and Anthropic remain unranked until shared evaluation exists.”
+**On screen:** slide 4.
 
-## 3:35–4:00 — Close
+“The product deliberately starts with the idea. It then shapes the minimum workload facts and asks the user to confirm them. ‘I don’t know’ remains valid, assumptions stay visible, and the calculation does not run until the user reaches the workload review.”
 
-“The next increment runs repeated synthetic workloads by task and model and measures completed-task success, p10, p50, and p90 output, retries, latency, and actual charged cost. Those measurements replace heuristics only after the evidence threshold is met. AI Build Crew does not promise the estimate will be exact. It makes the uncertainty visible, tests the math, and gives the builder a decision they can explain.”
+## 0:52–1:12 — Begin on the web
 
-## Demo operator checklist
+**On screen:** switch to `aibuildcrew.badlabz.com`. Pause briefly on the headline, then select **Start with an idea**. Paste the stable demo idea and select **Guide me to an estimate**.
 
-1. Start with **Guide me to an estimate**.
-2. Show **Result needed** and confirm there is no output-token input.
-3. Point out **Primary AI steps**, **Checker steps**, and the model-owned retry multiplier.
-4. Show low/likely/high **cost per completed task**, then the secondary monthly scale context.
-5. Point to Cost Evaluation Specialist and `cost-contract-1.0.0`.
-6. Show GOV-015 so the heuristic evidence boundary is explicit.
-7. Change risk to High or data to Unknown and show human review.
-8. Close on 18/18 tests and the measured-distribution backlog.
+“Here is the working experience. I begin in everyday language. This idea provides context, but it does not silently become a pricing fact. I choose the guided path so the workbench can collect the facts its deterministic rules actually use.”
+
+## 1:12–1:48 — Complete the guided questions
+
+**On screen:** answer the five questions using the stable demo answers. On the format question, select **Text**. On the final question, select **Pilot**, then **Continue**.
+
+“The guide asks what job the model performs, what happens if it is wrong, what data it handles, which formats one model must understand together, and the likely operating stage. These are explicit choices. Unknown risk or data never defaults to safe. Format is multi-select because a real workflow may require more than one format; unsupported combinations stop rather than being quietly reduced.”
+
+## 1:48–2:25 — Explain the estimate
+
+**On screen:** in **Freeze the workload**, point to **Result needed**, **Primary AI steps**, **Checker steps**, and the optional ceiling. Then move to the result card and point to the low / likely / high cost range and **Likely model behavior**.
+
+“The user chooses the result needed, but does not enter output tokens. Output length belongs to the model profile because the same prompt can produce a different distribution on a different model. I did not know the workflow depth, so the visible rule recommends two primary steps and one checker step. Retries are added separately.
+
+The result is GPT-5.6 Terra with a low, likely, and high cost per completed task. Monthly scale is secondary context. The optional ceiling is left at zero because this run is discovering the cost; a ceiling filters candidates only when the user already has a real affordability limit.”
+
+## 2:25–2:58 — Double-check and capture the outcome
+
+**On screen:** scroll to **Double-check the result**. Point to Estimate, Cost evaluation, Audit, and Governance. Show the 9/9 cost checks. Point to GOV-006 and GOV-015. Under **Point-in-time decision report**, select **Recommendation selected**, enter `Pilot first; calibrate with measured use.`, and select **Download point-in-time report**.
+
+“AI Build Crew calculates the estimate and independently recomputes the ledger. Six cost-contract rules reject user-authored output tokens, require ordered distributions, include retries and checker steps, and preserve cost per completed task as a range. Three independent ledger checks then match the low, likely, and high results. If they disagree, the workflow stops.
+
+Governance keeps the remaining assumptions and the unmeasured behavior profile visible. The outcome is this point-in-time report: workload, assumptions, cost spread, evidence versions, findings, and decision status—downloaded without saving the idea to a product database.”
+
+## 2:58–3:20 — Evidence behind the prototype
+
+**On screen:** return to the deck and show slides 5, 6, and 7.
+
+“This is a spread, not a promised number. The current product uses one deterministic orchestrator with hard-bordered software specialists. Twenty-two automated cases pass, including output-token rejection, retry and checker inclusion, deliberate ledger corruption, governance propagation, multimodal blocking, deterministic ranking, point-in-time report behavior, and rendered-page coverage. No generative model can change the calculation or approval state.”
+
+## 3:20–3:48 — Phase 2 architecture
+
+**On screen:** show slide 8, then slide 10, then slide 12.
+
+“The next release turns the estimator into the control plane for provider-neutral evidence. One confirmed workload goes to a deterministic orchestrator, then to controlled OpenAI, Gemini, Claude, and Bedrock runners. Results are frozen before blinded evaluation. Cost and governance rules run after scoring, and the outcome is one comparative point-in-time report.
+
+Provider keys stay protected. Evidence can be retained without retaining the user’s idea. RAG may ground sources and explanations, but it never changes cost math or policy.”
+
+## 3:48–4:00 — Close
+
+**On screen:** remain on slide 12 with the product URL visible.
+
+“AI Build Crew does not promise that an estimate will be exact. It makes uncertainty visible, tests the math, and gives the builder a decision they can explain. That is the product today—and the controlled path to the provider-neutral platform next.”
+
+## Operator checklist
+
+1. Rehearse the guided path once before recording; reload the page to clear the state.
+2. Keep the stable demo answers above unchanged so the result remains predictable.
+3. Do not select Google or Anthropic catalog rows during the four-minute recording; they are correctly marked as evaluation required.
+4. Do not use the four-format inventory example as the primary happy path; it correctly blocks because no recommendation-ready model supports that combined requirement.
+5. Pause briefly after the low / likely / high range so viewers can read it.
+6. Show the 9/9 cost checks, GOV-015, and the downloaded report—those are the proof points.
+7. If time runs long, omit slide 5 and move directly from the downloaded report to slides 6, 7, 8, 10, and 12.
+8. End on the custom domain, not an internal deployment URL.

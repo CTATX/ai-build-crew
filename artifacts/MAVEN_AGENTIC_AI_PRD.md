@@ -70,6 +70,6 @@ Date: August 9, 2026
 - Clear agent actions and boundaries: **Yes.**
 - Human approval point: **Yes — Human Decision Gate.**
 - Synthetic demo-safe data: **Yes.**
-- Defined evaluation plan and result: **Yes — 18/18 pass for the corrected decision contract. This proves deterministic selection and controls, not measured cross-provider quality.**
+- Defined evaluation plan and result: **Yes — 22/22 pass for the corrected decision contract. This proves deterministic selection and controls, not measured cross-provider quality.**
 - Honest limitations and stop conditions: **Yes.**
 - End-to-end demo and deployment evidence: **Yes.**

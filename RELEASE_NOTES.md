@@ -39,7 +39,7 @@ The cost-check explanation now uses product language: AI Build Crew calculates t
 - Added a hard-bordered Cost Evaluation Specialist that independently recomputes all three cost ledgers without calling the estimator formula.
 - Added deliberate corruption testing: a one-cent mismatch fails evaluation and GOV-009 blocks governance.
 - Added GOV-015 so heuristic behavior profiles remain visibly unmeasured until repeated live evaluations replace them.
-- Updated the original PRD, Maven/Product Faculty PRD, Builder Badge workbook, TeamOS workflow, governance documents, four-minute script, and eight-slide recording deck.
+- Updated the original PRD, Maven/Product Faculty PRD, Builder Badge workbook, TeamOS workflow, governance documents, four-minute script, and twelve-slide recording deck.
 - Added release-gate automation for build, test, lint, and drift checks.
 - Added a downloadable point-in-time Markdown decision report; the application still stores nothing server-side.
 - Removed fallback costs from blocked results and added a four-format inventory regression case.
