@@ -2,6 +2,8 @@
 
 This is the reusable Product Faculty + TeamOS delivery loop used for AI Build Crew.
 
+The authoritative persona and intake contract is `ABC-INTAKE-001` in [artifacts/PERSONA_GUIDED_INTAKE_DECISION_RECORD.md](artifacts/PERSONA_GUIDED_INTAKE_DECISION_RECORD.md).
+
 ## 1. Discover evidence
 
 Name one user, one recurring decision, its trigger, the current workaround, and the consequence of a wrong answer. Separate facts, assumptions, hypotheses, and unknowns. Do not turn an unknown safety field into a safe default.
@@ -16,7 +18,9 @@ Exit when every high-consequence action has an explicit review or block.
 
 ## 3. Design the smallest path
 
-Offer a fast path for a user who knows the inputs, a guided path for a user who does not, and a safe synthetic example. Ask one question at a time. After each answer, check completeness. Stop when minimum facts are present or the user selects Estimate now.
+Select the experience first: Product guided for a person who knows the task and outcome but not model economics, or Advanced builder for a person who knows the workload details. Product guided starts with an ideal task and average-day volume, then asks one plain-language question at a time. It derives tokens and context as labeled planning assumptions; it never requires them. Advanced builder exposes direct controls. Both routes feed the same normalized workload and deterministic engine. A safe synthetic example remains available.
+
+Conversational descriptions are context evidence, not decision facts. Only explicitly confirmed structured choices may cross the workload-freeze boundary. Unknown safety fields remain unknown and fail closed.
 
 Exit when the workflow has no dead end and all assumptions are visible.
 
@@ -57,6 +61,10 @@ Publish a private or narrow alpha, use synthetic/non-sensitive data, monitor sto
 
 - [ ] User, job, trigger, and success measure are specific.
 - [ ] Known, assumed, and unknown fields are visible.
+- [ ] The persona is selected before technical questions; Product guided does not require tokens or a context window.
+- [ ] Derived token/context values are labeled, inspectable, and confirmed before workload freeze.
+- [ ] Conversational text cannot silently change cost, eligibility, risk, or approval fields.
+- [ ] Product guided and Advanced builder routes match for the same normalized workload.
 - [ ] Catalog, rules, and engine versions are recorded.
 - [ ] Deterministic and governance regression cases pass.
 - [ ] Output tokens are rejected as workload input; model output/retry profiles are ordered and evidence-labeled.

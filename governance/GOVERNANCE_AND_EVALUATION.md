@@ -1,8 +1,10 @@
 # AI Build Crew governance and evaluation
 
-Authoritative version: 1.1  
-Effective date: 2026-08-09
+- Authoritative version: 1.2
+Effective date: 2026-08-10
 Owner and final decision maker: Human decision owner
+
+Persona and intake controls are governed by `ABC-INTAKE-001` in [PERSONA_GUIDED_INTAKE_DECISION_RECORD.md](../artifacts/PERSONA_GUIDED_INTAKE_DECISION_RECORD.md).
 
 ## Control statement
 
@@ -37,12 +39,16 @@ This operating model adapts the TeamOS discovery-first pattern: collect evidence
 15. Retry multipliers and checker steps are included before ranking. A single-call assumption cannot silently stand in for a completed task.
 16. The Cost Evaluation Specialist must independently recompute all three cost scenarios. Any contract or ledger failure blocks through the evaluation-failed governance rule.
 17. User-facing language must explain the decision, consequence, and next action in everyday product terms. Internal role names, orchestration mechanics, rule implementation, and future architecture stay behind a clearly labeled details boundary unless the user needs them to act.
+18. Product guided intake must not require token or context-window expertise. Any derived technical value is a labeled, inspectable planning assumption.
+19. Conversational text is context only until the user confirms a structured field. A future LLM-assisted intake cannot silently set cost, risk, data, eligibility, or approval facts.
+20. Persona affects the questions and level of disclosure only. The same normalized workload must produce the same decision regardless of intake route.
+21. Raw idea content is not retained or sent to a model provider by default; any assisted processing requires explicit consent.
 
 ## Specialist contracts
 
 | Specialist | Fixed responsibility | Cannot do |
 |---|---|---|
-| Intake | Ask Product Faculty questions and record known/assumed/unknown fields | Recommend a model |
+| Intake | Select the guided or advanced experience, ask versioned questions, derive visible planning assumptions, and record provenance | Recommend a model, silently infer safety fields, or send unconfirmed prose into the estimator |
 | Estimator | Calculate low, expected, and high token scenarios | Change inputs or policy |
 | Eligibility | Apply capability and policy gates | Invent capability evidence |
 | Evaluator | Run fixed formula, stability, and boundary checks | Rewrite the recommendation |
@@ -75,6 +81,8 @@ Before release, verify:
 - The PRD, workflow, app, eval report, presentation, and script describe the same behavior.
 - No planned capability is reported as completed.
 - Primary product copy explains what the result means and what the user can do next without requiring knowledge of the internal architecture.
+- Product guided users can complete intake without token or context-window knowledge, and every derivation is visible before freeze.
+- Persona choice cannot change a decision after normalized inputs are equal.
 - Removed controls are classified as consolidated, replaced, retired, weakened, or lost.
 - The authoritative rule, catalog, and evaluation versions are recorded.
 

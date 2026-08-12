@@ -1,9 +1,11 @@
 # AI Build Crew — Product Requirements Document
 
-Version: 1.0  
-Owner: Product owner
-Status: Governed alpha  
-Date: August 8, 2026
+- Version: 1.1
+- Owner: Product owner
+- Status: Phase 2 release candidate
+- Date: August 10, 2026
+
+Authoritative intake decision: `ABC-INTAKE-001` in [PERSONA_GUIDED_INTAKE_DECISION_RECORD.md](PERSONA_GUIDED_INTAKE_DECISION_RECORD.md)
 
 ## Product promise
 
@@ -15,7 +17,7 @@ Model selection is fragmented across pricing pages, capability claims, and perso
 
 ## User and job
 
-The first user is a product builder who is unfamiliar with AI model economics and must rapidly evaluate a build idea, forecast cost, and make a defensible model and budget decision. The broader user is any builder, product manager, or team lead planning an AI-enabled workflow.
+The primary user is a product builder who understands the user, job, and desired outcome but is unfamiliar with AI model economics. The second persona is an advanced builder who already understands workload or architecture details and wants direct technical control.
 
 When considering an AI feature, the user wants to move from a rough idea to a costed, reviewable decision without becoming a pricing or model expert.
 
@@ -38,13 +40,13 @@ When considering an AI feature, the user wants to move from a rough idea to a co
 
 ## Experience
 
-The product opens with: “What are you thinking about building?” The user chooses one route:
+The product opens with: “What are you thinking about building?” The user chooses an experience:
 
-1. **I know the workload** — go directly to structured capture.
-2. **Help me shape it** — answer one Product Factory question at a time.
-3. **Use a safe example** — load a versioned synthetic workload.
+1. **Product guided** — describe one ideal starting task and an average day, then answer plain-language questions. The product derives a visible token range and context need.
+2. **Advanced builder** — go directly to workload and architecture controls.
+3. **Use a safe example** — load a versioned synthetic workload with every preset labeled as an assumption.
 
-The guided route asks about the job, consequence of error, data class, modality, and usage. “I don’t know” is valid. “Estimate now” is always available. When minimum facts are present—or the user chooses to proceed—the intake stops and the product presents a Known / Assumed / Unknown ledger for confirmation.
+The Product guided route asks what AI should do, what result should come back, how much information goes in, the risk of failure, data and required formats, and completed-task volume. “I don’t know” is valid. Free text remains context only; confirmed structured choices create the workload. Technical assumptions stay collapsed but are inspectable before the workload is frozen.
 
 The deterministic pipeline then runs:
 
@@ -54,7 +56,9 @@ Results show the recommendation, alternatives, low/likely/high cost per complete
 
 ## Functional requirements
 
-- Capture task, risk, data class, regulatory status, modality, planned completed-task volume, input size, result shape, cache rate, primary steps, checker steps, context, and source provenance. Output tokens are not a user input.
+- Capture task, risk, data class, regulatory status, every required format, planned completed-task volume, input size, result shape, cache rate, primary steps, checker steps, context, selected persona, and source provenance. Output tokens are not a user input.
+- Never require a Product guided user to estimate tokens or a context window. Derive them through versioned planning profiles, label the derivation, and allow inspection before freeze.
+- Keep conversational descriptions outside the decision contract until the user confirms structured values. Persona changes question language and disclosure, never ranking.
 - Validate numeric ranges and never silently classify an unknown safety field as safe.
 - Apply a versioned model-specific low/likely/high output-length and retry distribution; calculate uncached input, cached input, primary steps, checker steps, and retries separately.
 - Filter unsupported modality, context, and quality candidates before price ranking.
@@ -87,6 +91,7 @@ The recommendation and approval path contains no generative model call. The same
 - Reliability: 100% pass on deterministic and governance regression cases.
 - Safety: zero high-risk or unknown-sensitivity cases marked ready without review.
 - Traceability: every decision includes inputs, assumptions, versions, findings, and disposition.
+- Usability: at least four of five first-time product builders complete Product guided intake in under three minutes and can explain one assumption and one cost driver.
 
 ## Alpha acceptance criteria
 
@@ -102,6 +107,9 @@ The recommendation and approval path contains no generative model call. The same
 10. The repository publishes the PRDs, workflow, evaluation, governance, backlog, deck, and demo script.
 11. Output tokens are rejected as workload input; model-owned output and retry distributions are versioned and visibly labeled as measured or heuristic.
 12. Checker steps and retry multipliers are included, and a deliberately corrupted ledger blocks governance.
+13. Product guided intake never requires tokens or a context window; derived values are labeled and inspectable.
+14. Product guided and Advanced builder routes produce the same result for the same normalized workload and versions.
+15. Free text cannot silently set cost, eligibility, risk, data sensitivity, regulation, or approval fields.
 
 ## Launch plan
 
@@ -109,4 +117,4 @@ Use a first-time product builder on three real planning decisions and at least t
 
 ## Future state
 
-The provider-neutral catalog now includes OpenAI, Google Gemini, and Anthropic Claude with explicit evidence states. Next add measured shared task evaluations, automated refresh, watchlists, price/deprecation alerts, workload imports, full system cost, team policies, and privacy-preserving benchmarking. These remain tracked in [BACKLOG.md](BACKLOG.md).
+The provider-neutral catalog now includes OpenAI, Google Gemini, and Anthropic Claude with explicit evidence states. Next add moderated persona testing, a consented suggestion-only Intake Agent, measured shared task evaluations, automated refresh, watchlists, price/deprecation alerts, workload imports, full system cost, team policies, and privacy-preserving benchmarking. These remain tracked in [BACKLOG.md](BACKLOG.md).

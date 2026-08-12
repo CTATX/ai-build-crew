@@ -2,6 +2,19 @@
 
 The alpha remains intentionally narrow. This backlog preserves future value without weakening current release gates.
 
+## P0 — persona-guided intake (release candidate complete)
+
+- [x] Add Product guided and Advanced builder routes backed by one deterministic engine.
+- [x] Start Product guided intake with an ideal task and average-day description.
+- [x] Derive and disclose an input-token range and likely context requirement from familiar workload choices.
+- [x] Keep technical assumptions collapsed but inspectable in Product guided mode.
+- [ ] Run moderated tests with at least five first-time product builders; target four of five completing in under three minutes and explaining one assumption and one cost driver.
+- [ ] Add explicit per-field provenance for User confirmed, User guess, Profile assumption, Derived planning assumption, and Unknown.
+- [ ] Add a consented, suggestion-only Intake Agent that proposes structured facts with source spans and requires confirmation before freeze.
+- [ ] Add clear/export/delete controls and verify that raw ideas are not retained by default.
+
+Acceptance: a product builder can reach an auditable estimate without knowing tokens or context windows; an advanced builder can inspect the same normalized workload directly; persona choice never changes ranking.
+
 ## P1 — provider-neutral comparison (catalog alpha complete)
 
 - [x] Add Google Gemini and Anthropic Claude records to the versioned normalized catalog with sources, price fields, modalities, context, tools, availability, and evidence status.

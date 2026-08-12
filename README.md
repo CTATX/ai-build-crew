@@ -61,6 +61,7 @@ The complete governed workflow works without an API key. The recommendation and 
 
 ## Evidence and artifacts
 
+- [Persona-guided intake decision record](artifacts/PERSONA_GUIDED_INTAKE_DECISION_RECORD.md)
 - [Governed cost-contract release notes](RELEASE_NOTES.md)
 - [Audited v0.1.0 release record](artifacts/RELEASE_v0.1.0_AUDIT.md)
 - [Capability and channel audit](artifacts/CAPABILITY_AND_CHANNEL_AUDIT.md)

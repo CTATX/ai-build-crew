@@ -1,7 +1,9 @@
 # Feedback and control register
 
 Owner: Product owner
-Review date: August 8, 2026
+Review date: August 10, 2026
+
+Authoritative intake decision: `ABC-INTAKE-001` in [PERSONA_GUIDED_INTAKE_DECISION_RECORD.md](../artifacts/PERSONA_GUIDED_INTAKE_DECISION_RECORD.md)
 
 | Feedback / risk | Classification | Product control | Verification |
 |---|---|---|---|
@@ -22,10 +24,15 @@ Review date: August 8, 2026
 | Monthly cost creates false precision and hides unit economics. | Absolute reporting rule | Rank and headline low/likely/high cost per completed task; show monthly volume only as secondary scale context. | COST-005 and rendered-copy test. |
 | Cost evaluation must not reuse the estimator formula. | Absolute audit rule | Cost Evaluation Specialist uses an independent ledger implementation and a corrupted estimate must fail into GOV-009. | Corruption-injection and governance-propagation tests. |
 | The product experience must be written for the user, not the internal architecture. | Absolute content rule | Primary copy explains the result, consequence, and next action; specialist names, orchestration mechanics, and future-state implementation language stay behind Details. | Rendered-copy regression and per-release content audit. |
+| Product people cannot be expected to estimate tokens or context windows. | Requirement / product-person feedback | Product guided mode asks about familiar task size and derives a labeled token range and context need. Technical values remain optional and inspectable. | Guided-flow, derivation, and rendered-copy tests. |
+| A conversational starting task and average-day description better match how a product person thinks. | Requirement / product-person feedback | Begin Product guided intake with an ideal task story and completed-task volume, then ask explicit plain-language questions. | End-to-end first-time-user test. |
+| Conversational prose can improve relevance but can also introduce unsupported assumptions. | Absolute intake rule | Free text remains context only. Confirmed structured fields alone enter the deterministic workload contract. | Freeze-boundary and same-input tests. |
+| Experienced builders need direct control without the guided explanation. | Persona requirement | Provide Product guided and Advanced builder routes backed by one normalized workload contract and engine. | Cross-route parity test. |
+| Technical detail can overwhelm a first-time user but must remain auditable. | Experience control | Collapse technical assumptions in Product guided mode and keep them visible and editable before freeze. | Progressive-disclosure accessibility test. |
 
 ## Documentation evaluation
 
-- **Strengthened:** determinism, human decision ownership, fail-closed rules, evaluation evidence, provider-neutral backlog.
+- **Strengthened:** determinism, human decision ownership, fail-closed rules, evaluation evidence, provider-neutral backlog, persona-guided intake, and visible derivations.
 - **Consolidated:** PRD, Maven template rendering, workflow, governance, and evaluation now use one shared product vocabulary.
 - **Retained:** cost transparency, model comparison, future watchlist/network-value ideas.
 - **Retired:** optional generative decision brief and duplicated GitHub Pages calculator logic.
