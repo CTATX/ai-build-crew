@@ -79,6 +79,9 @@ test("renders the approval-gated comparative model analysis page", async () => {
   assert.match(html, /Your idea is not the database/);
   assert.match(html, /OpenAI preview ready/);
   assert.match(html, /\$1 hard ceiling/);
+  assert.match(html, /Start with your idea/);
+  assert.match(html, /href="\/#intake"/);
+  assert.match(html, /Not sure what to compare yet/);
 });
 
 test("paid provider route is policy-locked and owner-restricted", async () => {
