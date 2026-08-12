@@ -95,7 +95,7 @@ export default function ComparePage() {
   return <main className="compare-page">
     <nav className="topbar">
       <Link className="brand" href="/" aria-label="AI Build Crew home"><span className="brand-mark">A</span> AI Build Crew</Link>
-      <div className="nav-links"><Link href="/#intake">Start with an idea</Link><a href="#catalog">Catalog</a><a href="#live">Live evaluation</a><a href="#controls">Controls</a></div>
+      <div className="nav-links"><a href="/#intake">Start with an idea</a><a href="#catalog">Catalog</a><a href="#live">Live evaluation</a><a href="#controls">Controls</a></div>
       <span className="alpha">Phase 2 · catalog</span>
     </nav>
 
@@ -104,7 +104,7 @@ export default function ComparePage() {
       <h1>Compare the facts.<br /><em>Measure the rest.</em></h1>
       <p className="lede">Start with published price, context, format, tool, and availability facts. Quality, reliability, latency, and actual cost stay marked as unknown until every model runs the same controlled workload.</p>
       <div className="compare-start">
-        <Link href="/#intake">Start with your idea <span aria-hidden="true">→</span></Link>
+        <a href="/#intake">Start with your idea <span aria-hidden="true">→</span></a>
         <p>Not sure what to compare yet? Describe the task in everyday language and let the guided estimator shape the starting assumptions.</p>
       </div>
       <div className="compare-status"><div><small>CATALOG SNAPSHOT</small><strong>{readiness.sourceDate}</strong></div><div><small>VISIBLE NOW</small><strong>{readiness.modelCount} models · {readiness.providers.length} providers</strong></div><div><small>LIVE EVALUATION</small><strong>{previewResult ? `$${previewResult.calculatedSpendUsd.toFixed(6)} · complete` : "$0 · approval required"}</strong></div></div>
