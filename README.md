@@ -1,4 +1,18 @@
-# AI Build Crew
+# AI Build Crew — Cost Estimator (canonical home)
+
+> **This is the Cost Estimator product repo.**  
+> Course demos and discovery notes point here; they are not separate products.
+
+| Related location | Role |
+|------------------|------|
+| **This repo** (`CTATX/ai-build-crew`) | Canonical Cost Estimator / AI Build Cost Planner |
+| [CTATX/ai-eng-bootcamp](https://github.com/CTATX/ai-eng-bootcamp) | Agentic AI Engineer teaching slice (`POST /estimate` + Streamlit) — **not** the product home |
+| `my-project/projects/ai-cost-planner` | Product Management discovery notes — pointer only |
+| AutoZyte / BraveLabz shop work | **Separate** — not this product |
+
+Product framing docs: [`docs/ai-cost-planner-emergence-review.md`](docs/ai-cost-planner-emergence-review.md)
+
+---
 
 AI Build Crew is one governed Decision Orchestrator with deterministic specialist stages. It does not use an LLM to calculate, rank, audit, or approve an estimate; the current decision workflow therefore costs $0.00 in model tokens.
 
