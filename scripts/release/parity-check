@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Launcher so `scripts/release/parity-check` works in both CJS and ESM repos.
+set -euo pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec node "$DIR/parity-check.mjs" "$@"
