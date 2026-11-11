@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "repo": "CTATX/ai-build-crew",
+  "deployTarget": "github-pages-and-chatgpt-sites",
+  "comment": "No wrangler.toml in this repo. App runtime is vinext / Cloudflare Workers (bindings declared in worker/index.ts and vite.config.ts; .openai/hosting.json d1 and r2 are currently unbound/null). Hosted application is ChatGPT Sites plus custom domain; GitHub Pages serves the docs/ artifact hub. Names only, never values, never project ids.",
+  "previewDeclaredInRepo": false,
+  "hosts": {
+    "githubPages": "https://ctatx.github.io/ai-build-crew/",
+    "sitesApplication": "https://ai-build-crew.ctatx.chatgpt.site/",
+    "customDomain": "https://aibuildcrew.badlabz.com/"
+  },
+  "sources": [
+    { "type": "github-workflow", "file": ".github/workflows/pages.yml", "required": true },
+    { "type": "worker-env-interface", "file": "worker/index.ts", "required": true },
+    { "type": "source-env-names", "file": "db/index.ts", "required": true },
+    { "type": "source-env-names", "file": "app/api/evaluations/openai/route.ts", "required": true },
+    { "type": "source-env-names", "file": "scripts/run-openai-preview.mjs", "required": true },
+    { "type": "source-env-names", "file": "lib/openai-preview-runner.mjs", "required": true },
+    { "type": "hosting-json-bindings", "file": ".openai/hosting.json", "required": true, "expected": { "d1": null, "r2": null } }
+  ],
+  "requireInConfig": [
+    "ASSETS",
+    "DB",
+    "IMAGES",
+    "OPENAI_API_KEY",
+    "PHASE2_LIVE_PREVIEW_ENABLED",
+    "PHASE2_PREVIEW_APPROVAL_TOKEN",
+    "PHASE2_PREVIEW_ALLOWED_ACCOUNT_USER_IDS"
+  ],
+  "ignoreFoundNames": [
+    "CODEX_SANDBOX",
+    "WRANGLER_WRITE_LOGS",
+    "WRANGLER_LOG_PATH",
+    "MINIFLARE_REGISTRY_PATH",
+    "SITE_CREATOR_PLACEHOLDER_DATABASE_ID",
+    "OPENAI_PREVIEW_MAX_OUTPUT_TOKEN"
+  ],
+  "documentedNames": [
+    "CODEX_SANDBOX",
+    "WRANGLER_WRITE_LOGS",
+    "WRANGLER_LOG_PATH",
+    "MINIFLARE_REGISTRY_PATH",
+    "OPENAI_PREVIEW_MAX_OUTPUT_TOKEN"
+  ],
+  "environments": {
+    "production": {
+      "bindings": ["ASSETS", "DB", "IMAGES"],
+      "vars": ["PHASE2_LIVE_PREVIEW_ENABLED"],
+      "secrets": ["OPENAI_API_KEY", "PHASE2_PREVIEW_APPROVAL_TOKEN", "PHASE2_PREVIEW_ALLOWED_ACCOUNT_USER_IDS"],
+      "mustBeUnset": []
+    },
+    "preview": {
+      "bindings": ["ASSETS", "DB", "IMAGES"],
+      "vars": ["PHASE2_LIVE_PREVIEW_ENABLED"],
+      "secrets": ["OPENAI_API_KEY", "PHASE2_PREVIEW_APPROVAL_TOKEN", "PHASE2_PREVIEW_ALLOWED_ACCOUNT_USER_IDS"],
+      "mustBeUnset": []
+    }
+  }
+}
